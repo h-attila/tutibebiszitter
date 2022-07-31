@@ -1,0 +1,13 @@
+@import "../../../styles/colors";
+
+.Img {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-color: $white-color;
+  height: 50px;
+  width: 50px;
+  overflow: hidden;
+  display: inline-block;
+  border-radius: 50%;
+}

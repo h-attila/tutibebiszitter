@@ -1,0 +1,13 @@
+@import "../../../styles/colors";
+
+.SubToolBar {
+  position: fixed;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  font-size: .9rem;
+  font-weight: 300;
+  background-color: $white-color;
+}

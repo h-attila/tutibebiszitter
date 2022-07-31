@@ -1,0 +1,31 @@
+@import "../../../styles/colors";
+
+.NewMember {
+  text-align: center;
+  padding: 30px;
+  background-color: $bg-color;
+  margin-bottom: 30px;
+
+  .Profile {
+    width: 250px;
+    height: 250px;
+    border-radius: 2px;
+  }
+
+  .Name {
+    font-weight: bold;
+    margin-top: 28px;
+    margin-bottom: 8px;
+    color: inherit;
+  }
+
+  .Description {
+    font-size: 15px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
+
+  .Address {
+    font-size: 13px;
+  }
+}

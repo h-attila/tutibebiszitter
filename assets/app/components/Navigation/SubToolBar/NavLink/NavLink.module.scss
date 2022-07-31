@@ -1,0 +1,10 @@
+@import "../../../../styles/colors";
+
+.NavLink {
+  padding: 0.2rem 1rem;
+  color: $purple-color-light75 !important;
+}
+
+.NavLink:hover {
+  color: $purple-color !important;
+}

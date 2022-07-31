@@ -1,0 +1,30 @@
+@import "../../styles/colors";
+
+.MainSearchForm {
+    flex: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 5px;
+    background-color: rgba(96, 19, 94, 0.5);
+    color: $font-color-light;
+    border-radius: 5px;
+}
+
+.SearchResultsContainer {
+    li {
+        display: inline-block;
+
+        a {
+            padding: 5px 10px;
+            color: $purple-color-light75;
+        }
+    }
+
+    .Selected {
+        border-bottom: 1px solid $purple-color-light75;
+
+        a {
+            font-weight: 400!important;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+@import "../../styles/colors";
+
+.Footer {
+  .LightBox {
+    background-color: $purple-color-light50;
+    height: 80px;
+    border-bottom: 1px solid $white-color;
+  }
+
+  .LinkBox {
+    background-color: $purple-color;
+    color: $white-color;
+  }
+
+  .Copyright {
+    background-color: $black;
+    border-top: 1px solid $white-color;
+    color: $white-color;
+    line-height: 20px;
+    font-size: 12px;
+  }
+
+  a {
+    color: $white-color;
+    font-size: 12px;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  hr {
+    background-color: $white-color-light;
+  }
+
+  ul {
+    padding-inline-start: 0;
+
+    li {
+      list-style-type: none;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+@import "../../styles/colors";
+
+.Font {
+    color: $font-color;
+
+    & p{
+        color: $font-color
+    }
+}
+
+.Button {
+    background-color: $purple-color;
+    color: white;
+}

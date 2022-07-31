@@ -1,0 +1,18 @@
+@import "../../../../styles/colors";
+
+.Item {
+  z-index: 3;
+  list-style: none;
+}
+
+.Active .Link {
+  min-width: 20px;
+  background-color: $purple-color;
+  color: $white-color;
+  border: 0;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.2), 0 2px 10px 0 rgba(0,0,0,.1);
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.2), 0 2px 10px 0 rgba(0,0,0,.1);
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
+}

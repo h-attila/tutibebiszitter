@@ -1,3 +1,8 @@
 sensio_framework_extra:
     router:
         annotations: false
+
+    # Symfony bug: SecurityControllerben a #currentuser null, ha nincsen beállítva a lentiek szerint
+    request:
+        converters: true
+        auto_convert: false

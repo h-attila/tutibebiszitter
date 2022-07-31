@@ -1,0 +1,29 @@
+@import "../../../styles/colors";
+
+.Item {
+    max-width: 950px;
+    width: 100%;
+    min-height: 250px;
+    background-color: $bg-color;
+    flex-direction: column;
+
+    .Thumbnail {
+        flex: 0 0 260px;
+        padding: 5px;
+
+        .Img {
+            width: 250px;
+            height: 250px;
+        }
+    }
+
+    .InfoBox {
+        flex: 1;
+    }
+}
+
+@media (min-width: 768px) {
+    .Item {
+        flex-direction: row;
+    }
+}

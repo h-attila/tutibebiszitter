@@ -1,0 +1,13 @@
+@import "../../styles/colors";
+
+.Prices {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.Success {
+  background-color: $purple-color-light50;
+  color: white;
+  padding: 15px;
+  border-radius: 4px;
+}

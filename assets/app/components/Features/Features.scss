@@ -1,0 +1,33 @@
+@import "../../styles/colors";
+
+.Features {
+  .Img {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    min-height: 200px;
+    overflow: hidden;
+  }
+
+  .List {
+    background-color: $bg-color;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  ul li::before {
+    content: "\25B8";
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+  }
+
+  li {
+    margin-top: 5px;
+  }
+}

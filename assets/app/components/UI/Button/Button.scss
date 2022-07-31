@@ -1,0 +1,11 @@
+@import "../../../styles/colors";
+
+.Button {
+  color: $white-color;
+  background-color: $purple-color;
+}
+
+.Button:hover {
+  background-color: $purple-color-light75;
+  color: $white-color!important;
+}
