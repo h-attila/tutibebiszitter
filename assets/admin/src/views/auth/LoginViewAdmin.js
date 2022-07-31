@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 
 import classes from './LoginViewCommon.scss';
 
-class LoginViewProfile extends Component {
+class LoginViewAdmin extends Component {
 
     render() {
 
@@ -29,7 +29,7 @@ class LoginViewProfile extends Component {
                                 color="textPrimary"
                                 variant="h4"
                             >
-                                Bejelentkezés
+                                Adminisztrátor
                             </Typography>
                         </Box>
                         <Box sx={{my: 1}}>
@@ -39,7 +39,7 @@ class LoginViewProfile extends Component {
                                 gutterBottom
                                 variant="body1"
                             >
-                                Saját adatok szerkesztése és tagság áttekintése
+                                Bejelentkezés adminisztrátor részére
                             </Typography>
                         </Box>
                         <Box
@@ -64,7 +64,7 @@ class LoginViewProfile extends Component {
                             name="username"
                             type="email"
                             value={this.props.username}
-                            onChange={(event) => this.props.onProfileLoginFormChange(event, 'username')}
+                            onChange={(event) => this.props.onAdminLoginFormChange(event, 'username')}
                             variant="outlined"
                         />
                         <TextField
@@ -74,7 +74,7 @@ class LoginViewProfile extends Component {
                             name="password"
                             type="password"
                             value={this.props.password}
-                            onChange={(event) => this.props.onProfileLoginFormChange(event, 'password')}
+                            onChange={(event) => this.props.onAdminLoginFormChange(event, 'password')}
                             variant="outlined"
                         />
                         <Box sx={{py: 2}}>
@@ -86,26 +86,10 @@ class LoginViewProfile extends Component {
                                 size="large"
                                 type="submit"
                                 variant="contained"
-                                onClick={() => this.props.onProfileLoginFormSubmit()}
+                                onClick={() => this.props.onAdminLoginFormSubmit()}
                             >
                                 Belépés
                             </Button>
-                        </Box>
-                        <Box sx={{py: 2}}>
-                            <Typography
-                                color="textSecondary"
-                                variant="body2"
-                            >
-                                Még nincs fiókod? {' '} <a href="/jelentkezem-bebiszitternek">Hozz létre egyet</a>
-                            </Typography>
-                        </Box>
-                        <Box sx={{py: 2}}>
-                            <Typography
-                                color="textSecondary"
-                                variant="body2"
-                            >
-                                Elfelejtetted a jelszavad? {' '} <a href="#">Kattints ide</a>
-                            </Typography>
                         </Box>
                     </form>
                 </Container>
@@ -127,9 +111,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onProfileLoginFormChange: (event, target) => dispatch(actionCreators.profileLoginFormChange(event, target)),
-        onProfileLoginFormSubmit: () => dispatch(actionCreators.profileLoginFormSubmit()),
+        onAdminLoginFormChange: (event, target) => dispatch(actionCreators.adminLoginFormChange(event, target)),
+        onAdminLoginFormSubmit: () => dispatch(actionCreators.adminLoginFormSubmit()),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginViewProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginViewAdmin);

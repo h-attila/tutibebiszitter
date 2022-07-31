@@ -49,6 +49,9 @@ const initialState = {
 ;
 
 const reducer = (state = initialState, action) => {
+
+    console.log('»» action type', action, state);
+
     switch (action.type) {
         case actionTypes.SEARCH_FORM_INIT: {
             console.log('### SEARCH_FORM_INIT', action, state);
@@ -186,9 +189,10 @@ const reducer = (state = initialState, action) => {
             return state;
         }
         case actionTypes.PROFILE_LOGIN:
-            // case actionTypes.ADMIN_LOGIN:
+        // case actionTypes.ADMIN_LOGIN:
         {
             console.log('»» PROFILE_LOGIN');
+
             return {
                 ...state,
                 user: {
@@ -197,11 +201,11 @@ const reducer = (state = initialState, action) => {
                 }
             }
         }
-        case actionTypes.PROFILE_LOGIN_SUCCESS: {
-            // case actionTypes.ADMIN_LOGIN_SUCCESS: {
-            console.log('»» PROFILE_LOGIN_SUCCESS', action.result.data.token, action.result.data.profile.isAdmin);
+        case actionTypes.PROFILE_LOGIN_SUCCESS:
+        case actionTypes.ADMIN_LOGIN_SUCCESS: {
+            console.log('»» LOGIN_SUCCESS', action.result.data.token, action.result.data);
             if (!action.result.data.token) {
-                return;
+                return;     // todo: ide kell tenni a sikertelen ágat
             }
 
             AuthService.login(action.result.data);
@@ -229,9 +233,9 @@ const reducer = (state = initialState, action) => {
             return AuthService.getCurrentUser();
         }
         case actionTypes.PROFILE_LOGIN_CHANGED:
-            // case actionTypes.ADMIN_LOGIN_CHANGED:
+        case actionTypes.ADMIN_LOGIN_CHANGED:
         {
-            console.log('»» reducer action', action);
+            console.log('»» login action', action);
             return {
                 ...state,
                 user: {
@@ -241,7 +245,7 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.PROFILE_LOGIN_FAILED:
-            // case actionTypes.ADMIN_LOGIN_FAILED:
+        case actionTypes.ADMIN_LOGIN_FAILED:
         {
             return {
                 ...state,

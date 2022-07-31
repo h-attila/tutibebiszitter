@@ -35,8 +35,6 @@ class AuthService {
 
         return decodedToken.exp * 1000 < currentDate.getTime();
     }
-
-
 }
 
 export default new AuthService();

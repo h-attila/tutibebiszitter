@@ -48,38 +48,54 @@ security:
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        profile_provider:
+        profile_users:
             entity:
                 class: App\Entity\Profile
                 property: username
-
+        admin_users:
+            entity:
+                class: App\Entity\User
+                property: email
+        all_users:
+            chain:
+                providers: ['profile_users', 'admin_users']
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        login:
+        profile_login:
             pattern: ^/api/login
             stateless: true
+            provider: profile_users
             json_login:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        api:
-            pattern: ^/api
+        admin_login:
+            pattern: ^/api/login_admin
             stateless: true
-            jwt: ~
+            provider: admin_users
+            json_login:
+                check_path: /api/login_admin_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        admin:
-            pattern: ^/admin/api
-            stateless: true
-            jwt: ~
-
-        profile:
-            pattern: ^/profilom/api
-            stateless: true
-            jwt: ~
+#        api:
+#            pattern: ^/api
+#            stateless: true
+#            jwt: ~
+#
+#        admin:
+#            pattern: ^/admin/api
+#            stateless: true
+#            jwt: ~
+#
+#        profile:
+#            pattern: ^/profilom/api
+#            stateless: true
+#            jwt: ~
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

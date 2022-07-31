@@ -15,6 +15,7 @@ import Contact from './containers/app/Contact/Contact';
 import Registration from './containers/app/Registration/Registration';
 import ThankYou from './containers/app/ThankYou/ThankYou';
 import LoginViewProfile from './../admin/src/views/auth/LoginViewProfile';
+import LoginViewAdmin from "../admin/src/views/auth/LoginViewAdmin";
 // import LoginViewAdmin from './../admin/src/views/auth/LoginViewAdmin';
 
 class App extends Component {
@@ -73,6 +74,9 @@ class App extends Component {
                         </Route>
                         <Route path="/bejelentkezes" exact>
                             <LoginViewProfile/>
+                        </Route>
+                        <Route path="/admin-bejelentkezes" exact>
+                            <LoginViewAdmin/>
                         </Route>
                     </Switch>
                 </main>
