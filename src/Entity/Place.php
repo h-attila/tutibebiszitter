@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=PlaceRepository::class)
  *
- * @Table(indexes={@Index(name="search_idx", columns={"stateCode", "cityCode", "enabled"})})
+ * @Table(indexes={@Index(name="search_idx", columns={"state_code", "city_code", "enabled"})})
  */
 class Place
 {

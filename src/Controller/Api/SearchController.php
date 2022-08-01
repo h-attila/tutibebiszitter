@@ -2,22 +2,14 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Group;
-use App\Entity\Handicap;
-use App\Entity\Language;
-use App\Entity\Place;
-use App\Entity\Service;
 use App\Repository\ProfileRepository;
 use App\Service\GroupService;
 use App\Service\HandicapService;
 use App\Service\LanguageService;
 use App\Service\PlaceService;
 use App\Service\ServiceService;
-use Doctrine\ORM\Configuration;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Adapter\NullAdapter;
 use Pagerfanta\Pagerfanta;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Class SearchController
@@ -37,11 +31,23 @@ class SearchController extends AbstractController
      * @param SerializerInterface $serializer
      * @param ProfileRepository $profileRepository
      * @param LoggerInterface $logger
+     * @param ServiceService $serviceService
+     * @param GroupService $groupService
+     * @param PlaceService $placeService
+     * @param LanguageService $languageService
+     * @param HandicapService $handicapService
+     * @param CacheInterface $cache
      */
     public function __construct(
         protected SerializerInterface $serializer,
         protected ProfileRepository   $profileRepository,
-        protected LoggerInterface     $logger
+        protected LoggerInterface     $logger,
+        protected ServiceService      $serviceService,
+        protected GroupService        $groupService,
+        protected PlaceService        $placeService,
+        protected LanguageService     $languageService,
+        protected HandicapService     $handicapService,
+        protected CacheInterface      $cache
     )
     {
     }
@@ -49,23 +55,23 @@ class SearchController extends AbstractController
     /**
      * @Route("/search-init", methods={"GET"}, name="init")
      *
-     * @return JsonResponse
+     * @return Response
+     * @throws InvalidArgumentException
      */
-    public function init(
-        ServiceService  $serviceService,
-        GroupService    $groupService,
-        PlaceService    $placeService,
-        LanguageService $languageService,
-        HandicapService $handicapService
-    ): Response
+    public function init(): Response
     {
-        $res = [
-            'service' => $serviceService->getList('active'),
-            'group' => $groupService->getList('active'),
-            'place' => $placeService->getPlaceOptions(),
-            'language' => $languageService->getList('active'),
-            'handicap' => $handicapService->getList('active'),
-        ];
+        // todo: alap cache helyett memcached
+        $res = $this->cache->get('tutibebiszitter_search_init', function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+
+            return [
+                'service' => $this->serviceService->getList('active'),
+                'group' => $this->groupService->getList('active'),
+                'place' => $this->placeService->getPlaceOptions(),
+                'language' => $this->languageService->getList('active'),
+                'handicap' => $this->handicapService->getList('active'),
+            ];
+        });
 
         $json = $this->serializer->serialize($res, 'json', ['groups' => ['public']]);
 
@@ -103,32 +109,37 @@ class SearchController extends AbstractController
      */
     public function getNewMembers(): Response
     {
-        $newMembers = [
-            [
-                'id' => 1,
-                'name' => 'Ben Johnson 1',
-                'description' => 'Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa.',
-                'place' => 'Budapest - Kelenföld és környéke, Százhalombatta',
-                'image' => 'horvath_annamaria.jpg',
-                'url' => '#'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Ben Johnson 2',
-                'description' => 'Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa.',
-                'place' => 'Budapest - Kelenföld és környéke, Százhalombatta',
-                'image' => 'kecskemeti_zsuzsi.jpeg',
-                'url' => '#'
-            ],
-            [
-                'id' => 3,
-                'name' => 'Ben Johnson 3',
-                'description' => 'Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa.',
-                'place' => 'Budapest - Kelenföld és környéke, Százhalombatta',
-                'image' => 'viz_panna.jpg',
-                'url' => '#'
-            ]
-        ];
+        // todo: alap cache helyett memcached
+        $newMembers = $this->cache->get('tutibebiszitter_get_new_members', function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+
+            return [
+                [
+                    'id' => 1,
+                    'name' => 'Ben Johnson 1',
+                    'description' => 'Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa.',
+                    'place' => 'Budapest - Kelenföld és környéke, Százhalombatta',
+                    'image' => 'horvath_annamaria.jpg',
+                    'url' => '#'
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Ben Johnson 2',
+                    'description' => 'Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa.',
+                    'place' => 'Budapest - Kelenföld és környéke, Százhalombatta',
+                    'image' => 'kecskemeti_zsuzsi.jpeg',
+                    'url' => '#'
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Ben Johnson 3',
+                    'description' => 'Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa.',
+                    'place' => 'Budapest - Kelenföld és környéke, Százhalombatta',
+                    'image' => 'viz_panna.jpg',
+                    'url' => '#'
+                ]
+            ];
+        });
 
         return new JsonResponse($newMembers, Response::HTTP_OK);
     }
