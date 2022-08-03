@@ -46,10 +46,8 @@ import Switch from "@material-ui/core/Switch";
 import Button from "@material-ui/core/Button";
 import DropzoneArea from "../../../../../app/components/DropzoneArea/DropzoneArea";
 import ProfileDetails from "./ProfileDetails";
-import AdapterMoment from '@mui/lab/AdapterMoment';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { LocalizationProvider, DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
 import SelectItem from "../../../../../app/components/SearchForm/SelectItem/SelectItem";
 import history from "../../../../../app/store/history/history";
@@ -1037,7 +1035,7 @@ class Account extends Component {
                                                                 </Grid>
 
                                                                 <Grid item xs={6}>
-                                                                    <LocalizationProvider dateAdapter={AdapterMoment} locale="huLocale">
+                                                                    <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="huLocale">
                                                                         <DateTimePicker
                                                                             readOnly
                                                                             variant="outlined"
