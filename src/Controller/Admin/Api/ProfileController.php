@@ -196,10 +196,6 @@ class ProfileController extends AbstractController
         $form = $this->createForm(AdminProfileFormType::class, $profile);
         $form->submit($data);
 
-//        var_dump(empty($data));
-//
-//        exit();
-
         if ($form->isValid()) {
 
             // services
@@ -367,9 +363,16 @@ class ProfileController extends AbstractController
 
             // új státusz beállítás
             $status = $statusService->set($profile);
-            $profile->setStatus($status);       // todo: status-t kivenni a db-ből!
+            $profile->setStatus($status);
 
             $profile->setLastUpdate($now);
+
+            // lastRenewed mező alapján rendezünk sorba. Ha kiemelt, akkor a feltétel nem teljesül, de ha nem, akkor meg kell egyezni a regstarttal.
+            if (!is_null($profile->getRegStart()) && $profile->getLastRenewed() < $profile->getRegStart()) {
+                $lastRenewed = $profile->getRegStart();
+                date_time_set($lastRenewed, $now->format('H'), $now->format('i'), $now->format('s'));
+                $profile->setLastRenewed($lastRenewed);
+            }
 
             $this->em->persist($profile);
             $this->em->flush();
