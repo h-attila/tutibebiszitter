@@ -241,6 +241,7 @@ const reducer = (state = initialState, action) => {
                 user: {
                     ...state.user,
                     [action.target]: action.value,
+                    error: ''
                 }
             }
         }
@@ -256,7 +257,7 @@ const reducer = (state = initialState, action) => {
                     avatar: null,
                     role: null,
                     token: null,
-                    error: ''
+                    error: action.err.response.data.message
                 }
             }
         }
