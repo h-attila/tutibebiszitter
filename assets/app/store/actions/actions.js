@@ -28,7 +28,7 @@ export const searchFormSubmit = (event) => {
 
         dispatch({type: 'SEARCH_FORM_SEARCHING'});
         axios
-            .post('/api/search/search-members', data)
+            .post('/api/search/search-profiles', data)
             .then(
                 result => dispatch({type: 'SEARCH_FORM_SUBMIT', result})
             )

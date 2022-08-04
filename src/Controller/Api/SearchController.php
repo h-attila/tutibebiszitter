@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Profile;
 use App\Repository\ProfileRepository;
 use App\Service\GroupService;
 use App\Service\HandicapService;
@@ -9,6 +10,8 @@ use App\Service\LanguageService;
 use App\Service\PlaceService;
 use App\Service\ServiceService;
 use Lcobucci\JWT\Exception;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -28,6 +31,8 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class SearchController extends AbstractController
 {
+    const MAX_RESULTS_PER_PAGE = 3;
+
     /**
      * @param SerializerInterface $serializer
      * @param ProfileRepository $profileRepository
@@ -97,25 +102,57 @@ class SearchController extends AbstractController
     }
 
     /**
-     * @Route("/search-members", methods={"POST"}, name="searchMembers")
+     * @Route("/search-profiles", methods={"POST"}, name="searchProfiles")
      *
      * @param Request $request
      * @return Response
      */
-    public function searchMembers(Request $request): Response
+    public function searchProfiles(Request $request): Response
     {
         $content = json_decode($request->getContent(), true);
         $currentPage = $content['pagination'] ?? 0;
         $currentPage++;
 
-        $results = $this->profileRepository->search(
+        // last_renewed szerint rendezve, de nincs kettészedve kiemelt és nem kiemelt szerint
+        $profiles = $this->profileRepository->search(
             $content['searchParams']['service']['id'] ?? null,
             $content['searchParams']['place']['id'] ?? null,
             $content['searchParams']['group']['id'] ?? null,
             $content['searchParams']['handicap']['id'] ?? null,
             $content['searchParams']['language']['id'] ?? null,
-            $currentPage,
         );
+
+        $now = new \DateTime();
+        $highlighted = [];
+        $normal = [];
+
+        /* @var Profile $profile */
+        foreach ($profiles as $profile) {
+            if (!is_null($profile->getHighlighted()) && $profile->getHighlighted() > $now) {
+                $highlighted[] = $profile;
+                continue;
+            }
+            $normal[] = $profile;
+        }
+
+        $orderedProfiles = array_merge($highlighted, $normal);
+
+        $adapter = new ArrayAdapter($orderedProfiles);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta
+            ->setMaxPerPage(self::MAX_RESULTS_PER_PAGE)
+            ->setCurrentPage($currentPage);
+
+        $results = [
+            'result' => $adapter->getSlice(($currentPage - 1) * self::MAX_RESULTS_PER_PAGE, self::MAX_RESULTS_PER_PAGE),
+            'pagination' => [
+                'nbResults' => $pagerfanta->getNbResults(),
+                'nbPages' => $pagerfanta->getNbPages(),
+                'haveToPaginate' => $pagerfanta->haveToPaginate(),
+                'hasPreviousPage' => $pagerfanta->hasPreviousPage(),
+                'hasNextPage' => $pagerfanta->hasNextPage()
+            ]
+        ];
 
         $json = $this->serializer->serialize($results, 'json', ['groups' => 'admin_profile']);
 
