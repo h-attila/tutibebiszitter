@@ -25,13 +25,28 @@ class PlaceRepository extends ServiceEntityRepository
     public function getPlaces(): array
     {
         return $this->createQueryBuilder('p')
-          ->andWhere('p.enabled = :enabled')
+          ->where('p.enabled = :enabled')
           ->setParameter('enabled', '1')
           ->orderBy('p.id', 'ASC')
-//          ->orderBy('p.stateLabel', 'ASC')
-//          ->orderBy('p.cityLabel', 'ASC')
+//          ->orderBy('p.stateCode', 'ASC')
+//          ->orderBy('p.cityCode', 'ASC')
           ->getQuery()
-          ->enableResultCache(3600)     // 3600sec = 1 óra      // todo: doctrine cache
           ->getResult();
+    }
+
+    /**
+     * @return array
+     */
+    public function getBudapestDistricts(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ->andWhere(
+                $this->createQueryBuilder('p')->expr()->like('p.cityCode', ':budapest')
+            )
+            ->setParameter('budapest', 'budapest%')
+            ->getQuery()
+            ->getResult();
     }
 }

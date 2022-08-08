@@ -46,10 +46,8 @@ import Switch from "@material-ui/core/Switch";
 import Button from "@material-ui/core/Button";
 import DropzoneArea from "../../../../../app/components/DropzoneArea/DropzoneArea";
 import ProfileDetails from "./ProfileDetails";
-import AdapterMoment from '@mui/lab/AdapterMoment';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment'
+import {LocalizationProvider, DatePicker, DateTimePicker} from '@mui/x-date-pickers';
 import moment from 'moment';
 import SelectItem from "../../../../../app/components/SearchForm/SelectItem/SelectItem";
 import history from "../../../../../app/store/history/history";
@@ -99,13 +97,14 @@ class Account extends Component {
             return
         }
 
-        console.log('»» uuid:', this.props.match.params);
-
         if (this.props.match.params.uuid) {
             this.getProfile(this.props.match.params.uuid);
         } else {
-            // TODO: hiba kiírás, hogy nincsen uuid
-            console.log('»» hiba: nincsen uuid');
+            Swal.fire(
+                'Hiba történt!',
+                'Hiányzó felhasználói azonosító. Kérlek, jelentkezz be újra.',
+                'warning'
+            )
         }
     }
 
@@ -121,8 +120,13 @@ class Account extends Component {
         this.setState({loading: true});
 
         // kilép, ha lejárt
-        console.log('»» token', AuthService.isTokenExpired(), AuthService.getAuthHeader());
         if (AuthService.isTokenExpired()) {
+            Swal.fire(
+                'Lejárt a munkamenet',
+                'Kérlek, jelentkez be újra',
+                'warning'
+            )
+
             history.push('/bejelentkezes');
             window.location.reload();
         }
@@ -153,14 +157,14 @@ class Account extends Component {
 
                 response.data.places = places;
                 this.setState({profile: response.data, uuid: uuid, loading: false, init: true});
-
-                console.log('»»» profile res: ', response.data, this.state.profile.created);
-
             })
             .catch((e) => {
-                console.log('»» error', e)      // todo: error!
-            })
-        ;
+                Swal.fire(
+                    'Hiba történt',
+                    'A profil adatok betöltése nem sikerült. Kérjük, próbáld meg ismét.',
+                    'warning'
+                )
+            });
 
         // szolgáltatások lekérése
         axios
@@ -291,11 +295,6 @@ class Account extends Component {
     setServicesSwitchValue(event, key, id) {
 
         if (event.target.checked) {
-            // hozzáad
-
-            console.log('»» stééét', this.state, key);
-            console.log('»» stééét2', this.state[key]);
-
             const newValue = this.state[key].filter((item) => item.id === id);
             this.setState({
                 profile: {
@@ -344,7 +343,8 @@ class Account extends Component {
     }
 
     addPackage() {
-        console.log('»» hozzáad', this.state.profile)
+        const MySwal = withReactContent(Swal)
+
         // nincsen kezdeti dátum
         if (!this.state.profile.regStart) {
 
@@ -360,7 +360,7 @@ class Account extends Component {
                 })
 
                 Swal.fire(
-                    'Hozzáadás sikeres!',
+                    'Hozzáadás sikeres',
                     'Az új lejárati dátum: <strong>' + regEnd.format('YYYY.MM.DD') + '</strong>',
                     'success'
                 )
@@ -390,7 +390,7 @@ class Account extends Component {
                     })
 
                     Swal.fire(
-                        'Hozzáadás sikeres!',
+                        'Hozzáadás sikeres',
                         'Az új lejárati dátum: <strong>' + regEnd.format('YYYY.MM.DD') + '</strong>',
                         'success'
                     )
@@ -410,7 +410,7 @@ class Account extends Component {
                     });
 
                     Swal.fire(
-                        'Hozzáadás sikeres!',
+                        'Hozzáadás sikeres',
                         'Az új lejárati dátum: <strong>' + regEnd.format('YYYY.MM.DD') + '</strong>',
                         'success'
                     )
@@ -422,6 +422,16 @@ class Account extends Component {
 
     profileRenew() {
         const MySwal = withReactContent(Swal)
+
+        if (AuthService.isTokenExpired()) {
+            Swal.fire(
+                'Lejárt a munkamenet',
+                'Előre helyezés nem indítható, kérlek, jelentkezz be újra.',
+                'warning'
+            )
+
+            return;
+        }
 
         if (!this.state.profile.renewAvailable || !parseInt(this.state.profile.renewAvailable, 10) > 0) {
             MySwal.fire({
@@ -455,7 +465,7 @@ class Account extends Component {
 
                 // profil adatok lekérése
                 axios
-                    .put('/admin/api/profile/renew-now/' + this.state.uuid, {headers: AuthService.getAuthHeader()})
+                    .put('/admin/api/profile/renew-now/' + this.state.uuid, null, {headers: AuthService.getAuthHeader()})
                     .then(response => {
 
                         if (response.data.success) {
@@ -494,7 +504,15 @@ class Account extends Component {
     onAdminProfileFormSubmit() {
         const MySwal = withReactContent(Swal);
 
-        console.log('»» before save', this.state.profile);
+        if (AuthService.isTokenExpired()) {
+            Swal.fire(
+                'Lejárt a munkamenet',
+                'Adatok mentése nem indítható, kérlek, jelentkezz be újra.',
+                'warning'
+            )
+
+            return;
+        }
 
         this.setState({formErrors: []});
 
@@ -519,7 +537,6 @@ class Account extends Component {
                         return response;
                     })
                     .catch(err => {
-                        console.log('»» err', err.response.data.errors);
                         if (err.response.data) {
                             return err.response.data.errors;
                         } else {
@@ -554,14 +571,11 @@ class Account extends Component {
                     }
 
                     result.value.data.places = places;
-
-                    console.log('»» saved profile', result.value.data);
-
                     this.setState({profile: result.value.data});
 
                     MySwal.fire({
                         title: 'Sikeres mentés',
-                        text: 'A módosításokat siekresen elmentettük.',
+                        text: 'A módosításokat sikeresen elmentettük.',
                         icon: 'success'
                     });
 
@@ -598,8 +612,6 @@ class Account extends Component {
         const classes = this.props;
         let profile = null;
         let icon;
-
-        console.log('»» render', this.state);
 
         if (this.state.loading) {
             profile = (<Box mt={3}><Spinner/></Box>);
@@ -643,8 +655,6 @@ class Account extends Component {
                 services = (<Box mt={3}><Spinner/></Box>);
 
             } else {
-
-                console.log('»» profserv', this.state.profile);
 
                 services = this.state.services.map(service => {
                     let checked = false;
@@ -772,14 +782,16 @@ class Account extends Component {
                 places = (
                     <Paper elevation={3} bgcolor="#f7f7f7">
                         <Box p={3} mb={3} height={500}>
-                            <p>Kezd el géplni a keresett város nevét, majd kattints a nevére, hogy a listába kerüljön. Törölni a listából a piros "x" jelre
+                            <p>Kezd el géplni a keresett város nevét, majd kattints a nevére, hogy a listába kerüljön.
+                                Törölni a listából a piros "x" jelre
                                 kattintva
                                 lehet. Több helyszínt is kiválaszthatsz.</p>
 
                             <Grid container spacing={5}>
                                 <Grid item xs={12}>
 
-                                    <SelectItem placeholder='Helyszínek' options={this.state.places} isMulti={true} selected={this.state.profile.places}
+                                    <SelectItem placeholder='Helyszínek' options={this.state.places} isMulti={true}
+                                                selected={this.state.profile.places}
                                                 change={(event) => this.onPlacesSelectChanged(event)} font="Roboto"/>
 
                                 </Grid>
@@ -872,15 +884,22 @@ class Account extends Component {
             const title = this.state.formErrors['title'] ? this.state.formErrors['title'] : 'Böngésző címsorban megjelenő szöveg.';
             const meta = this.state.formErrors['meta'] ? this.state.formErrors['meta'] : 'Adatlapon megjelenő meta leírás.';
             const newMemberSign = this.state.formErrors['newMemberSign'] ? this.state.formErrors['newMemberSign'] : 'Eddig a dátumig az adatlapod kiemelten, "ÚJ" megjelöléssel jelenik meg.';
-            const languageErrors = this.state.formErrors['languages'] ? (<Alert severity="error">{this.state.formErrors['languages']}</Alert>) : '';
+            const languageErrors = this.state.formErrors['languages'] ? (
+                <Alert severity="error">{this.state.formErrors['languages']}</Alert>) : '';
             const additionalServiceErrors = this.state.formErrors['additionalServices'] ? (
                 <Alert severity="error">{this.state.formErrors['additionalServices']}</Alert>) : '';
-            const groupsErrors = this.state.formErrors['groups'] ? (<Alert severity="error">{this.state.formErrors['groups']}</Alert>) : '';
-            const placesErrors = this.state.formErrors['place'] ? (<Alert severity="error">{this.state.formErrors['place']}</Alert>) : '';
-            const packageErrors = this.state.formErrors['package'] ? (<Alert severity="error">{this.state.formErrors['package']}</Alert>) : '';
-            const payModeErrors = this.state.formErrors['payMode'] ? (<Alert severity="error">{this.state.formErrors['payMode']}</Alert>) : '';
-            const imageErrors = this.state.formErrors['image'] ? (<Alert severity="error">{this.state.formErrors['image']}</Alert>) : '';
-            const serviceErrors = this.state.formErrors['service'] ? (<Alert severity="error">{this.state.formErrors['service']}</Alert>) : '';
+            const groupsErrors = this.state.formErrors['groups'] ? (
+                <Alert severity="error">{this.state.formErrors['groups']}</Alert>) : '';
+            const placesErrors = this.state.formErrors['place'] ? (
+                <Alert severity="error">{this.state.formErrors['place']}</Alert>) : '';
+            const packageErrors = this.state.formErrors['package'] ? (
+                <Alert severity="error">{this.state.formErrors['package']}</Alert>) : '';
+            const payModeErrors = this.state.formErrors['payMode'] ? (
+                <Alert severity="error">{this.state.formErrors['payMode']}</Alert>) : '';
+            const imageErrors = this.state.formErrors['image'] ? (
+                <Alert severity="error">{this.state.formErrors['image']}</Alert>) : '';
+            const serviceErrors = this.state.formErrors['service'] ? (
+                <Alert severity="error">{this.state.formErrors['service']}</Alert>) : '';
 
 
             profile = (
@@ -911,18 +930,27 @@ class Account extends Component {
                                             scrollButtons="auto"
                                             aria-label="scrollable auto tabs example"
                                         >
-                                            <Tab label="Áttekintés" icon={<PersonPinIcon/>} {...this.a11yProps(0)} onClick={() => this.onTabClick('0')}/>
-                                            <Tab label="Személyes adatok" icon={<PersonIcon/>} {...this.a11yProps(1)} onClick={() => this.onTabClick('1')}/>
-                                            <Tab label="Bemutatkozás" icon={<ChatIcon/>} {...this.a11yProps(2)} onClick={() => this.onTabClick('2')}/>
+                                            <Tab label="Áttekintés" icon={<PersonPinIcon/>} {...this.a11yProps(0)}
+                                                 onClick={() => this.onTabClick('0')}/>
+                                            <Tab label="Személyes adatok" icon={<PersonIcon/>} {...this.a11yProps(1)}
+                                                 onClick={() => this.onTabClick('1')}/>
+                                            <Tab label="Bemutatkozás" icon={<ChatIcon/>} {...this.a11yProps(2)}
+                                                 onClick={() => this.onTabClick('2')}/>
                                             <Tab label="Közösségi média" icon={<FacebookIcon/>} {...this.a11yProps(3)}
                                                  onClick={() => this.onTabClick('3')}/>
                                             <Tab label="Szolgáltatások" icon={<ChildCareIcon/>} {...this.a11yProps(4)}
                                                  onClick={() => this.onTabClick('4')}/>
-                                            <Tab label="Nyelvek, csoportok" icon={<LanguageIcon/>} {...this.a11yProps(5)} onClick={() => this.onTabClick('5')}/>
-                                            <Tab label="Helyszínek" icon={<PlaceIcon/>} {...this.a11yProps(6)} onClick={() => this.onTabClick('6')}/>
-                                            <Tab label="Kiemelések" icon={<LoyaltyIcon/>} {...this.a11yProps(7)} onClick={() => this.onTabClick('7')}/>
-                                            <Tab label="SEO" icon={<PersonSearchIcon/>} {...this.a11yProps(8)} onClick={() => this.onTabClick('8')}/>
-                                            <Tab label="Galéria" icon={<PhotoCameraIcon/>} {...this.a11yProps(9)} onClick={() => this.onTabClick('9')}/>
+                                            <Tab label="Nyelvek, csoportok"
+                                                 icon={<LanguageIcon/>} {...this.a11yProps(5)}
+                                                 onClick={() => this.onTabClick('5')}/>
+                                            <Tab label="Helyszínek" icon={<PlaceIcon/>} {...this.a11yProps(6)}
+                                                 onClick={() => this.onTabClick('6')}/>
+                                            <Tab label="Kiemelések" icon={<LoyaltyIcon/>} {...this.a11yProps(7)}
+                                                 onClick={() => this.onTabClick('7')}/>
+                                            <Tab label="SEO" icon={<PersonSearchIcon/>} {...this.a11yProps(8)}
+                                                 onClick={() => this.onTabClick('8')}/>
+                                            <Tab label="Galéria" icon={<PhotoCameraIcon/>} {...this.a11yProps(9)}
+                                                 onClick={() => this.onTabClick('9')}/>
                                             {/*<Tab label="Előzmények" icon={<RestoreIcon/>} {...this.a11yProps(10)} onClick={() => this.onTabClick('10')}/>*/}
                                         </Tabs>
                                     </AppBar>
@@ -950,7 +978,8 @@ class Account extends Component {
                                                     xs={12}
                                                 >
                                                     <Paper elevation={3} bgcolor="#f7f7f7">
-                                                        <Profile profileName={this.state.profile.name} status={this.state.profile.status} icon={icon}
+                                                        <Profile profileName={this.state.profile.name}
+                                                                 status={this.state.profile.status} icon={icon}
                                                                  profileImage='/static/images/avatars/avatar_6.png'/>
                                                     </Paper>
                                                     {/*<Grid container spacing={3}>*/}
@@ -988,8 +1017,9 @@ class Account extends Component {
                                                                             onChange={(newValue) => {
                                                                                 this.setDateValue('regStart', newValue);
                                                                             }}
-                                                                            renderInput={(params) => <TextField {...params}
-                                                                                                                helperText="Megjelenés kezdeti dátuma."/>}
+                                                                            renderInput={(params) =>
+                                                                                <TextField {...params}
+                                                                                           helperText="Megjelenés kezdeti dátuma."/>}
                                                                         />
                                                                     </LocalizationProvider>
                                                                 </Grid>
@@ -1005,12 +1035,13 @@ class Account extends Component {
                                                                             inputFormat="yyyy.MM.DD"
                                                                             placeholder="éééé.hh.nn"
                                                                             mask="____.__.__"
-                                                                            value={this.state.profile.regEnd || null}
+                                                                            value={regEnd || null}
                                                                             onChange={(newValue) => {
                                                                                 this.setDateValue('regEnd', newValue);
                                                                             }}
-                                                                            renderInput={(params) => <TextField {...params}
-                                                                                                                helperText="Eddig jelenik meg az adatlap nyilvánosan."/>}
+                                                                            renderInput={(params) =>
+                                                                                <TextField {...params}
+                                                                                           helperText="Eddig jelenik meg az adatlap nyilvánosan."/>}
                                                                         />
                                                                     </LocalizationProvider>
                                                                 </Grid>
@@ -1030,14 +1061,16 @@ class Account extends Component {
                                                                             value={this.state.profile.created}
                                                                             onChange={() => {
                                                                             }}
-                                                                            renderInput={(params) => <TextField {...params}
-                                                                                                                helperText="Regisztráció dátuma."/>}
+                                                                            renderInput={(params) =>
+                                                                                <TextField {...params}
+                                                                                           helperText="Regisztráció dátuma."/>}
                                                                         />
                                                                     </LocalizationProvider>
                                                                 </Grid>
 
                                                                 <Grid item xs={6}>
-                                                                    <LocalizationProvider dateAdapter={AdapterMoment} locale="huLocale">
+                                                                    <LocalizationProvider dateAdapter={AdapterMoment}
+                                                                                          adapterLocale="huLocale">
                                                                         <DateTimePicker
                                                                             readOnly
                                                                             variant="outlined"
@@ -1049,8 +1082,9 @@ class Account extends Component {
                                                                             value={this.state.profile.lastUpdate}
                                                                             onChange={() => {
                                                                             }}
-                                                                            renderInput={(params) => <TextField {...params}
-                                                                                                                helperText="Utolsó adatmódosítás ideje."/>}
+                                                                            renderInput={(params) =>
+                                                                                <TextField {...params}
+                                                                                           helperText="Utolsó adatmódosítás ideje."/>}
                                                                         />
                                                                     </LocalizationProvider>
                                                                 </Grid>
@@ -1084,7 +1118,8 @@ class Account extends Component {
                                                                     </Select>
                                                                 </Grid>
                                                                 <Grid item xs={2}>
-                                                                    <Button fullWidth variant="contained" color="primary" onClick={() => {
+                                                                    <Button fullWidth variant="contained"
+                                                                            color="primary" onClick={() => {
                                                                         this.addPackage();
                                                                     }}>
                                                                         <Box mr={1}>
@@ -1141,7 +1176,8 @@ class Account extends Component {
                                                             <h5>Tagság aktiválása / inaktiválása</h5>
                                                             <p>Engedélyezés, tiltás, szüneteltetés.</p>
                                                             <Grid item xs={12}>
-                                                                <Box display="flex" justifyContent="flex-start" mb={0} p={1}>
+                                                                <Box display="flex" justifyContent="flex-start" mb={0}
+                                                                     p={1}>
                                                                     <Box pr={2}>
                                                                         <Switch
                                                                             checked={this.state.profile.enabled}
@@ -1154,7 +1190,8 @@ class Account extends Component {
                                                                         />
                                                                     </Box>
                                                                     <Box>
-                                                                        Tagság jóváhagyása. Bekapcsolat állapotban az adatlap nyilvánosan megjelenik (az 'Aktív
+                                                                        Tagság jóváhagyása. Bekapcsolat állapotban az
+                                                                        adatlap nyilvánosan megjelenik (az 'Aktív
                                                                         tagság' dátumok beállításától függően).
 
                                                                     </Box>
@@ -1162,7 +1199,8 @@ class Account extends Component {
                                                             </Grid>
 
                                                             <Grid item xs={12}>
-                                                                <Box display="flex" justifyContent="flex-start" mb={0} p={1}>
+                                                                <Box display="flex" justifyContent="flex-start" mb={0}
+                                                                     p={1}>
                                                                     <Box pr={2}>
                                                                         <Switch
                                                                             checked={this.state.profile.active}
@@ -1175,10 +1213,13 @@ class Account extends Component {
                                                                         />
                                                                     </Box>
                                                                     <Box>
-                                                                        Megjelenés engedélyezése vagy szüneteltetése. Kikapcsolt állapotban az adatlap nem
+                                                                        Megjelenés engedélyezése vagy szüneteltetése.
+                                                                        Kikapcsolt állapotban az adatlap nem
                                                                         jelenik meg nyílvánosan.
-                                                                        Hasznos, ha átmenetileg szüneteltetni kell a profilt pl. elfoglaltság miatt. Fontos,
-                                                                        hogy a szüneteltetés idejével nem hosszabodik meg a tagsági idő.
+                                                                        Hasznos, ha átmenetileg szüneteltetni kell a
+                                                                        profilt pl. elfoglaltság miatt. Fontos,
+                                                                        hogy a szüneteltetés idejével nem hosszabodik
+                                                                        meg a tagsági idő.
                                                                     </Box>
                                                                 </Box>
                                                             </Grid>
@@ -1273,7 +1314,8 @@ class Account extends Component {
                                         <Paper elevation={3} bgcolor="#f7f7f7">
                                             <Box p={3} mb={3}>
                                                 <h5>Bejelentkezési adatok</h5>
-                                                <p>Weboldalon történő bejelentkezéshez. A megadott jelszavaknak -az ellenőrzés végett- egyezniük kell.</p>
+                                                <p>Weboldalon történő bejelentkezéshez. A megadott jelszavaknak -az
+                                                    ellenőrzés végett- egyezniük kell.</p>
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={6}>
                                                         <TextField
@@ -1413,8 +1455,10 @@ class Account extends Component {
                                                             />
                                                         </Box>
                                                         <Box pt={0}>
-                                                            Hozzájárulok, hogy a tutibebiszitter.hu megkeressen egyedi marketing ajánlatokkal, akciókkal,
-                                                            promóciókkal. az adatokat nem adjuk ki harmadik félnek, és bizalmasan kezeljük.
+                                                            Hozzájárulok, hogy a tutibebiszitter.hu megkeressen egyedi
+                                                            marketing ajánlatokkal, akciókkal,
+                                                            promóciókkal. az adatokat nem adjuk ki harmadik félnek, és
+                                                            bizalmasan kezeljük.
                                                         </Box>
                                                     </Box>
                                                 </Grid>
@@ -1454,7 +1498,8 @@ class Account extends Component {
 
                                         <Paper elevation={3} bgcolor="#f7f7f7">
                                             <Box p={3} mb={3}>
-                                                <p>Profilodat a továbbiakban az email cimed és jelszavad megadásával bármikor módosíthatod.</p>
+                                                <p>Profilodat a továbbiakban az email cimed és jelszavad megadásával
+                                                    bármikor módosíthatod.</p>
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={12}>
                                                         <TextField
@@ -1526,7 +1571,8 @@ class Account extends Component {
 
                                         <Paper elevation={3} bgcolor="#f7f7f7">
                                             <Box p={3} mb={3}>
-                                                <p>Amennyiben szeretnéd megosztani a profilodat, itt tudod megadni az elérésüket. Kitöltésük nem
+                                                <p>Amennyiben szeretnéd megosztani a profilodat, itt tudod megadni az
+                                                    elérésüket. Kitöltésük nem
                                                     kötelező.</p>
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={6}>
@@ -1595,7 +1641,8 @@ class Account extends Component {
 
                                                 <h3>Szolgáltatások</h3>
 
-                                                <p>A profil ezekre a szolgáltatásokra fog megjelenni a találati listákban.</p>
+                                                <p>A profil ezekre a szolgáltatásokra fog megjelenni a találati
+                                                    listákban.</p>
 
                                                 {serviceErrors}
 
@@ -1611,7 +1658,8 @@ class Account extends Component {
 
                                                 <h3>Kiegészítő szolgáltatások</h3>
 
-                                                <p>Extra szolgáltatások, melyek kiegészítik a gyermek felügyeletet, és előnyt jelentenek a megkereséseknél.</p>
+                                                <p>Extra szolgáltatások, melyek kiegészítik a gyermek felügyeletet, és
+                                                    előnyt jelentenek a megkereséseknél.</p>
 
                                                 {additionalServiceErrors}
 
@@ -1666,7 +1714,8 @@ class Account extends Component {
                                         <Paper elevation={3} bgcolor="#f7f7f7">
                                             <Box p={3} mb={3}>
 
-                                                <p>Azok a területek, amikre a profil megjelenik a találati listákban. Érdemes minden olyan várost / kerületet
+                                                <p>Azok a területek, amikre a profil megjelenik a találati listákban.
+                                                    Érdemes minden olyan várost / kerületet
                                                     megadni,
                                                     ahol elérhető.</p>
 
@@ -1691,10 +1740,12 @@ class Account extends Component {
 
                                                 <h5>Kiemelések</h5>
 
-                                                <p>Kiemelések segítségével a profil a találati listában megkülönböztett módon jelenik meg, ami előnyt és több
+                                                <p>Kiemelések segítségével a profil a találati listában megkülönböztett
+                                                    módon jelenik meg, ami előnyt és több
                                                     megkeresést biztosít a nem
                                                     kiemelt
-                                                    tagokkal szemben. Az új tagok egy ideig automatikusan kiemeltként ("Új tag") jelennek meg, a későbbiekben
+                                                    tagokkal szemben. Az új tagok egy ideig automatikusan kiemeltként
+                                                    ("Új tag") jelennek meg, a későbbiekben
                                                     lehetséges további kiemelést
                                                     igénybe venni.</p>
 
@@ -1753,10 +1804,12 @@ class Account extends Component {
 
                                                 <h5>Előre helyezés</h5>
 
-                                                <p>Az előre helyezés lehetőségt biztosít, hogy a profil ismételten a találati listák elejére kerül, mintha
+                                                <p>Az előre helyezés lehetőségt biztosít, hogy a profil ismételten a
+                                                    találati listák elejére kerül, mintha
                                                     frissen
                                                     regisztrált
-                                                    volna. A listák elején lévő profilok több megkeresésre számthatnak.</p>
+                                                    volna. A listák elején lévő profilok több megkeresésre
+                                                    számthatnak.</p>
 
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={6}>
@@ -1798,7 +1851,8 @@ class Account extends Component {
                                                     </Grid>
 
                                                     <Grid item xs={3}>
-                                                        <Button variant="contained" color="primary" disabled={this.state.renewBtnDisabled} onClick={() => {
+                                                        <Button variant="contained" color="primary"
+                                                                disabled={this.state.renewBtnDisabled} onClick={() => {
                                                             this.profileRenew()
                                                         }}>
                                                             <Box mr={1}>
@@ -1878,7 +1932,8 @@ class Account extends Component {
 
                                                 <h5>Adatlapon megjelenő meta leírás</h5>
 
-                                                <p>Az adatlapon megjelenő meta leírás nem jelenik meg az adatlapon, de a keresőmotorok számára fontos információt tartalmaz.</p>
+                                                <p>Az adatlapon megjelenő meta leírás nem jelenik meg az adatlapon, de a
+                                                    keresőmotorok számára fontos információt tartalmaz.</p>
 
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={12}>
@@ -1913,18 +1968,21 @@ class Account extends Component {
 
                                             <Box p={3} mb={3}>
 
-                                                <p>Profil képek kezelése. Csak húzd be a képeket a keretbe, és a feltöltésük automatikusan megtörténik. Az
+                                                <p>Profil képek kezelése. Csak húzd be a képeket a keretbe, és a
+                                                    feltöltésük automatikusan megtörténik. Az
                                                     előnyös
                                                     képpel rendelkező
                                                     "bizalomgerjesztő" profilok több megkeresésre számíthatnak.</p>
 
                                                 <Grid container spacing={5}>
                                                     <Grid item xs={12}>
-                                                        <DropzoneArea name="images" onChange={(event) => this.onRegistrationFormItemChanged(event)}/>
+                                                        <DropzoneArea name="images"
+                                                                      onChange={(event) => this.onRegistrationFormItemChanged(event)}/>
                                                     </Grid>
                                                 </Grid>
 
-                                                <p>A feltöltött profilképek kezelése. Itt választható ki a kezdő kép is.</p>
+                                                <p>A feltöltött profilképek kezelése. Itt választható ki a kezdő kép
+                                                    is.</p>
                                                 <small>Cardok a már feltöltött képekről...</small>
 
                                             </Box>

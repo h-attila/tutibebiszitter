@@ -28,7 +28,7 @@ export const searchFormSubmit = (event) => {
 
         dispatch({type: 'SEARCH_FORM_SEARCHING'});
         axios
-            .post('/api/search/search-members', data)
+            .post('/api/search/search-profiles', data)
             .then(
                 result => dispatch({type: 'SEARCH_FORM_SUBMIT', result})
             )
@@ -110,16 +110,6 @@ export const buttonClick = (ref) => {
 // *************
 // USER
 // *************
-// export const register = (data) => {
-//     return {
-//         type: actionTypes.REGISTRATION_FORM_SUBMITTING,
-//         data: data
-//     }
-// }
-
-/**
- * PROFIL belépés
- */
 // login
 export const profileLoginFormSubmit = () => {
     return (dispatch, getState) => {
@@ -134,6 +124,7 @@ export const profileLoginFormSubmit = () => {
                 {headers: headers})
             .then(
                 result => dispatch({type: 'PROFILE_LOGIN_SUCCESS', result})
+                // result => console.log('»» login res', result)
             )
             .then(
                 (result) => {
@@ -162,35 +153,35 @@ export const profileLoginFormChange = (event, target) => {
  * ADMIN belépés
  */
 // admin login
-// export const adminLoginFormSubmit = () => {
-//     return (dispatch, getState) => {
-//         console.log('»» admin login data', getState(), {email: getState().user.email, password: getState().user.password});
-//         dispatch({type: 'ADMIN_LOGIN'})
-//         const headers = {
-//             'Content-Type': 'application/json',
-//         }
-//         axios
-//             .post('/api/security/admin-login',
-//                 {username: getState().user.email, password: getState().user.password},
-//                 {headers: headers})
-//             .then(result => dispatch({type: 'ADMIN_LOGIN_SUCCESS', result}))
-//             .then(() => history.push('/admin/dashboard'))
-//             .catch(err => {
-//                 dispatch({type: 'ADMIN_LOGIN_FAILED', err});       // todo: tesztelni!
-//             });
-//     }
-// }
+export const adminLoginFormSubmit = () => {
+    return (dispatch, getState) => {
+        console.log('»» admin login data', getState(), {email: getState().user.email, password: getState().user.password});
+        dispatch({type: 'ADMIN_LOGIN'})
+        const headers = {
+            'Content-Type': 'application/json',
+        }
+        axios
+            .post('/api/login_admin',
+                {username: getState().user.email, password: getState().user.password},
+                {headers: headers})
+            .then(result => dispatch({type: 'ADMIN_LOGIN_SUCCESS', result}))
+            .then(() => history.push('/admin/dashboard'))
+            .catch(err => {
+                dispatch({type: 'ADMIN_LOGIN_FAILED', err});       // todo: tesztelni!
+            });
+    }
+}
 
 // login - adatbevitel
-// export const adminLoginFormChange = (event, target) => {
-//     console.log('»» admin loginFormChange', event, target);
-//     event.preventDefault();
-//     return {
-//         type: actionTypes.ADMIN_LOGIN_CHANGED,
-//         value: event.target.value,
-//         target: target
-//     }
-// }
+export const adminLoginFormChange = (event, target) => {
+    console.log('»» admin loginFormChange', event, target);
+    event.preventDefault();
+    return {
+        type: actionTypes.ADMIN_LOGIN_CHANGED,
+        value: event.target.value,
+        target: target
+    }
+}
 
 // üzenet küldés
 export const message = (message) => {

@@ -2,21 +2,14 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Group;
-use App\Entity\Handicap;
-use App\Entity\Language;
-use App\Entity\Place;
-use App\Entity\Service;
+use App\Entity\Profile;
 use App\Repository\ProfileRepository;
 use App\Service\GroupService;
 use App\Service\HandicapService;
 use App\Service\LanguageService;
 use App\Service\PlaceService;
 use App\Service\ServiceService;
-use Doctrine\ORM\Configuration;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Adapter\NullAdapter;
+use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,15 +26,27 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class SearchController extends AbstractController
 {
+    const MAX_RESULTS_PER_PAGE = 3;
+
     /**
      * @param SerializerInterface $serializer
      * @param ProfileRepository $profileRepository
      * @param LoggerInterface $logger
+     * @param ServiceService $serviceService
+     * @param GroupService $groupService
+     * @param PlaceService $placeService
+     * @param LanguageService $languageService
+     * @param HandicapService $handicapService
      */
     public function __construct(
         protected SerializerInterface $serializer,
         protected ProfileRepository   $profileRepository,
-        protected LoggerInterface     $logger
+        protected LoggerInterface     $logger,
+        protected ServiceService      $serviceService,
+        protected GroupService        $groupService,
+        protected PlaceService        $placeService,
+        protected LanguageService     $languageService,
+        protected HandicapService     $handicapService,
     )
     {
     }
@@ -49,23 +54,42 @@ class SearchController extends AbstractController
     /**
      * @Route("/search-init", methods={"GET"}, name="init")
      *
-     * @return JsonResponse
+     * @return Response
+     * @throws \ErrorException
      */
-    public function init(
-        ServiceService  $serviceService,
-        GroupService    $groupService,
-        PlaceService    $placeService,
-        LanguageService $languageService,
-        HandicapService $handicapService
-    ): Response
+    public function init(): Response
     {
-        $res = [
-            'service' => $serviceService->getList('active'),
-            'group' => $groupService->getList('active'),
-            'place' => $placeService->getPlaceOptions(),
-            'language' => $languageService->getList('active'),
-            'handicap' => $handicapService->getList('active'),
-        ];
+        // todo: alap cache helyett memcached
+        // update: memcached telepítés nem sikerült, "Memcached > 3.1.5 is required." a hibaüzenet. Pont 3.1.5-ös verzió van a mam alá betéve... Várni kicsit, hátha frissül
+        // itt van jó leírás a telepítéshez: https://crunchify.com/install-setup-memcached-mac-os-x/
+//        try {
+//            $client = MemcachedAdapter::createConnection(
+//                'memcached://localhost:11211',
+//                []
+//            );
+//
+//            $res = $client->get('tutibebiszitter.search.init', function (ItemInterface $item) {
+//                $item->expiresAfter(3600);
+//
+//                return [
+//                    'service' => $this->serviceService->getList('active'),
+//                    'group' => $this->groupService->getList('active'),
+//                    'place' => $this->placeService->getPlaceOptions(),
+//                    'language' => $this->languageService->getList('active'),
+//                    'handicap' => $this->handicapService->getList('active'),
+//                    'cache'=> 'ok'
+//                ];
+//            });
+//        } catch (Exception $e) {
+            $res = [
+                'service' => $this->serviceService->getList('active'),
+                'group' => $this->groupService->getList('active'),
+                'place' => $this->placeService->getPlaceOptions(),
+                'language' => $this->languageService->getList('active'),
+                'handicap' => $this->handicapService->getList('active'),
+            ];
+//        }
+
 
         $json = $this->serializer->serialize($res, 'json', ['groups' => ['public']]);
 
@@ -73,25 +97,60 @@ class SearchController extends AbstractController
     }
 
     /**
-     * @Route("/search-members", methods={"POST"}, name="searchMembers")
+     * @Route("/search-profiles", methods={"POST"}, name="searchProfiles")
      *
      * @param Request $request
      * @return Response
      */
-    public function searchMembers(Request $request): Response
+    public function searchProfiles(Request $request): Response
     {
         $content = json_decode($request->getContent(), true);
         $currentPage = $content['pagination'] ?? 0;
         $currentPage++;
 
-        $results = $this->profileRepository->search(
+        $profiles = $this->profileRepository->search(
             $content['searchParams']['service']['id'] ?? null,
             $content['searchParams']['place']['id'] ?? null,
             $content['searchParams']['group']['id'] ?? null,
             $content['searchParams']['handicap']['id'] ?? null,
             $content['searchParams']['language']['id'] ?? null,
-            $currentPage,
         );
+
+        $now = new \DateTime();
+        $highlighted = [];
+        $normal = [];
+
+        /* @var Profile $profile */
+        foreach ($profiles as $profile) {
+            if (!is_null($profile->getHighlighted()) && $profile->getHighlighted() > $now) {
+                $highlighted[] = $profile;
+            } else {
+                // ha lejárt a kiemelés, töröljük, így könnyebb a fronton, ha van érték, akkor kiemelt
+                if (!is_null($profile->getHighlighted())) {
+                    $profile->setHighlighted(null);
+                }
+                $normal[] = $profile;
+            }
+        }
+
+        $orderedProfiles = array_merge($highlighted, $normal);
+
+        $adapter = new ArrayAdapter($orderedProfiles);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta
+            ->setMaxPerPage(self::MAX_RESULTS_PER_PAGE)
+            ->setCurrentPage($currentPage);
+
+        $results = [
+            'result' => $adapter->getSlice(($currentPage - 1) * self::MAX_RESULTS_PER_PAGE, self::MAX_RESULTS_PER_PAGE),
+            'pagination' => [
+                'nbResults' => $pagerfanta->getNbResults(),
+                'nbPages' => $pagerfanta->getNbPages(),
+                'haveToPaginate' => $pagerfanta->haveToPaginate(),
+                'hasPreviousPage' => $pagerfanta->hasPreviousPage(),
+                'hasNextPage' => $pagerfanta->hasNextPage()
+            ]
+        ];
 
         $json = $this->serializer->serialize($results, 'json', ['groups' => 'admin_profile']);
 
@@ -103,7 +162,9 @@ class SearchController extends AbstractController
      */
     public function getNewMembers(): Response
     {
-        $newMembers = [
+        // todo: alap cache helyett memcached
+
+        $res = [
             [
                 'id' => 1,
                 'name' => 'Ben Johnson 1',
@@ -130,6 +191,6 @@ class SearchController extends AbstractController
             ]
         ];
 
-        return new JsonResponse($newMembers, Response::HTTP_OK);
+        return new JsonResponse($res, Response::HTTP_OK);
     }
 }

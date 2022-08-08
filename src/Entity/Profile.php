@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=ProfileRepository::class)
  *
- * @Table(indexes={@Index(name="search_idx", columns={"uuid", "regStart", "regEnd", "enabled", "active", "newMember", "highlighted", "modified", "slug", "lastRenewed", "username"})})
+ * @Table(indexes={@Index(name="search_idx", columns={"uuid", "reg_start", "reg_end", "enabled", "active", "new_member", "highlighted", "modified", "slug", "last_renewed", "username"})})
  *
  * @UniqueEntity(fields="name", message="Ez a név már foglalt, kérjük, módosítsd.")
  * @UniqueEntity(fields="username", message="Ez a felhasználónév már foglalt, kérjük, módosítsd.")

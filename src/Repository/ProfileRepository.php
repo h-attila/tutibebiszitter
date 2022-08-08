@@ -16,12 +16,11 @@ use Pagerfanta\Pagerfanta;
  */
 class ProfileRepository extends ServiceEntityRepository
 {
-    const NB_RESULTS = 3;
-
     /**
      * @param ManagerRegistry $registry
+     * @param PlaceRepository $placeRepository
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, protected PlaceRepository $placeRepository)
     {
         parent::__construct($registry, Profile::class);
     }
@@ -34,10 +33,9 @@ class ProfileRepository extends ServiceEntityRepository
      * @param int|null $group
      * @param int|null $handicap
      * @param int|null $language
-     * @param int|null $currentPage
      * @return array
      */
-    public function search(?int $service, ?int $place, ?int $group, ?int $handicap, ?int $language, ?int $currentPage): array
+    public function search(?int $service, ?int $place, ?int $group, ?int $handicap, ?int $language): array
     {
         $now = new \DateTime();
 
@@ -47,6 +45,10 @@ class ProfileRepository extends ServiceEntityRepository
             ->andWhere('profile.active = :active')
             ->setParameter('enabled', true)
             ->setParameter('active', true);
+        $qb
+            ->andWhere('profile.regStart <= :now')
+            ->andWhere('profile.regEnd >= :now')
+            ->setParameter('now', $now->format('Y-m-d'));
         if ($service) {
             $qb
                 ->leftJoin('profile.services', 's')
@@ -55,13 +57,13 @@ class ProfileRepository extends ServiceEntityRepository
         }
         if ($place) {
             // budapest összes kerülete esetén budapestre szűrünk
-            if ($place === 1) {
+            if ($place == 1) {
                 $qb
                     ->leftJoin('profile.places', 'p')
-                    ->andWhere('p.id >= :min')
-                    ->andWhere('p.id <= :max')
-                    ->setParameter('min', '2')
-                    ->setParameter('max', '24');
+                    ->andWhere(
+                        $qb->expr()->like('p.cityCode', ':budapest')
+                    )
+                    ->setParameter(':budapest', '%budapest%');
             } else {
                 $qb
                     ->leftJoin('profile.places', 'p')
@@ -88,22 +90,10 @@ class ProfileRepository extends ServiceEntityRepository
                 ->setParameter('language', $language);
         }
 
-        $adapter = new QueryAdapter($qb);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta
-            ->setMaxPerPage(self::NB_RESULTS)
-            ->setCurrentPage($currentPage);
-
-        return [
-            'result' => $adapter->getSlice(($currentPage - 1) * self::NB_RESULTS, self::NB_RESULTS),
-            'pagination' => [
-                'nbResults' => $pagerfanta->getNbResults(),
-                'nbPages' => $pagerfanta->getNbPages(),
-                'haveToPaginate' => $pagerfanta->haveToPaginate(),
-                'hasPreviousPage' => $pagerfanta->hasPreviousPage(),
-                'hasNextPage' => $pagerfanta->hasNextPage()
-            ]
-        ];
+        return $qb
+            ->orderBy('profile.lastRenewed', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -113,13 +103,12 @@ class ProfileRepository extends ServiceEntityRepository
      * @param int $limit
      * @return array
      */
-    // todo: nem lesz jó az id szerinti sorbarendezés, adott logika szerint kell (pl. valamely dátum)
     public function getAllProfiles(int $from = 0, int $limit = 50): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.roles LIKE :role')
             ->setParameter('role', '%ROLE_USER%')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.lastRenewed', 'ASC')
             ->setFirstResult($from)
             ->setMaxResults($limit)
             ->getQuery()
@@ -161,7 +150,7 @@ class ProfileRepository extends ServiceEntityRepository
             ->andWhere('p.roles LIKE :role')
             ->setParameter('act', '1')
             ->setParameter('role', '%ROLE_USER%')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.lastRenewed', 'ASC')
             ->setFirstResult($from)
             ->setMaxResults($limit)
             ->getQuery()
@@ -183,7 +172,7 @@ class ProfileRepository extends ServiceEntityRepository
             ->andWhere('p.roles LIKE :role')
             ->setParameter('act', '0')
             ->setParameter('role', '%ROLE_USER%')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.lastRenewed', 'ASC')
             ->setFirstResult($from)
             ->setMaxResults($limit)
             ->getQuery()
@@ -207,7 +196,7 @@ class ProfileRepository extends ServiceEntityRepository
             ->setParameter('act', '1')
             ->setParameter('hig', $now->format('Y.m.d'))
             ->setParameter('role', '%ROLE_USER%')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.lastRenewed', 'ASC')
             ->setFirstResult($from)
             ->setMaxResults($limit)
             ->getQuery()
@@ -233,7 +222,7 @@ class ProfileRepository extends ServiceEntityRepository
             ->setParameter('ena', '1')
             ->setParameter('reg', $dt->format('Y.m.d'))
             ->setParameter('role', '%ROLE_USER%')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.regEnd', 'ASC')
             ->setFirstResult($from)
             ->setMaxResults($limit)
             ->getQuery()
@@ -254,7 +243,7 @@ class ProfileRepository extends ServiceEntityRepository
             ->andWhere('p.roles LIKE :role')
             ->setParameter('mod', '1')
             ->setParameter('role', '%ROLE_USER%')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.lastRenewed', 'ASC')
             ->setFirstResult($from)
             ->setMaxResults($limit)
             ->getQuery()

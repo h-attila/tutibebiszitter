@@ -97,7 +97,7 @@ class AdminProfileFormType extends AbstractType
             'data_class' => Profile::class,
             'allow_extra_fields' => true,
             'csrf_protection' => false,
-//          'validation_groups' => ['Default', 'admin_admin']
+//          'validation_groups' => ['Default', 'admin_admin']       // todo: csrf!
         ]);
     }
 }

@@ -22,6 +22,31 @@
     }
 }
 
+.Badge {
+    color: $white-color;
+    margin: 0.1rem;
+    padding: 0.2rem;
+    font-size: .8rem;
+    font-weight: 300;
+    border-radius: 3px;
+}
+
+.Normal {
+    background-color: $purple-color-light75;
+}
+
+.Orange {
+    background-color: $orange;
+}
+
+.CardHighlighted {
+    border-right: 5px solid $purple-color-light75;
+}
+
+.White {
+    color: $white-color!important;
+}
+
 @media (min-width: 768px) {
     .Item {
         flex-direction: row;
