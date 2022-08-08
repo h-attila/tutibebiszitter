@@ -37,12 +37,18 @@ class ProfileRepository extends ServiceEntityRepository
      */
     public function search(?int $service, ?int $place, ?int $group, ?int $handicap, ?int $language): array
     {
+        $now = new \DateTime();
+
         $qb = $this->createQueryBuilder('profile');
         $qb
             ->where('profile.enabled = :enabled')
             ->andWhere('profile.active = :active')
             ->setParameter('enabled', true)
             ->setParameter('active', true);
+        $qb
+            ->andWhere('profile.regStart <= :now')
+            ->andWhere('profile.regEnd >= :now')
+            ->setParameter('now', $now->format('Y-m-d'));
         if ($service) {
             $qb
                 ->leftJoin('profile.services', 's')

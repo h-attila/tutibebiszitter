@@ -9,20 +9,15 @@ use App\Service\HandicapService;
 use App\Service\LanguageService;
 use App\Service\PlaceService;
 use App\Service\ServiceService;
-use Lcobucci\JWT\Exception;
 use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Class SearchController
@@ -130,9 +125,13 @@ class SearchController extends AbstractController
         foreach ($profiles as $profile) {
             if (!is_null($profile->getHighlighted()) && $profile->getHighlighted() > $now) {
                 $highlighted[] = $profile;
-                continue;
+            } else {
+                // ha lejárt a kiemelés, töröljük, így könnyebb a fronton, ha van érték, akkor kiemelt
+                if (!is_null($profile->getHighlighted())) {
+                    $profile->setHighlighted(null);
+                }
+                $normal[] = $profile;
             }
-            $normal[] = $profile;
         }
 
         $orderedProfiles = array_merge($highlighted, $normal);

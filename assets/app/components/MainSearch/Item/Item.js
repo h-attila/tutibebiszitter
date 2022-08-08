@@ -7,6 +7,10 @@ import Badge from './Badge/Badge';
 const item = (props) => {
     let badges = [];
 
+    if (props.highlighted) {
+        badges.push(<Badge color="secondary">Kiemelt</Badge>);
+    }
+
     for (let i = 0; i < props.services.length; i++) {
         badges.push(<Badge key={i}>{props.services[i].label}</Badge>);
     }
@@ -33,15 +37,13 @@ const item = (props) => {
                     </div>
                 </div>
                 <div className={"mt-auto"}>
-                    <div>
-                        <small className="d-flex text-muted">
+                    <div className="d-flex text-muted">
                         <span className="search-item__card-address mb-0 pb-0 mr-4">
                             <i className="fa fa-home mr-1" aria-hidden="true"/>{props.pubAddress}
                         </span>
                         <span className="search-item__card-phone ml-auto mb-0 pb-0">
                             <i className="fa fa-phone-square mr-1" aria-hidden="true"/>{props.phone}
                         </span>
-                        </small>
                     </div>
                 </div>
             </div>
