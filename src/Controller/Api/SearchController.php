@@ -108,7 +108,6 @@ class SearchController extends AbstractController
         $currentPage = $content['pagination'] ?? 0;
         $currentPage++;
 
-        // last_renewed szerint rendezve, de nincs kettészedve kiemelt és nem kiemelt szerint
         $profiles = $this->profileRepository->search(
             $content['searchParams']['service']['id'] ?? null,
             $content['searchParams']['place']['id'] ?? null,
