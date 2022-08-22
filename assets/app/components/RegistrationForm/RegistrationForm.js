@@ -297,11 +297,11 @@ class RegistrationForm extends Component {
                                             className={classes.Font}
                                             label="Címsor"
                                             name="label"
-                                            id="hourlyRate"
+                                            id="label"
                                             value={this.state.formData.label || ''}
                                             variant="outlined"
                                             size="small"
-                                            helperText="pl. Gyermekszerető bébiszitter több éves gyakorlattal"
+                                            helperText="pl. Gyermekszerető bébiszitter több éves gyakorlattal. (*)"
                                             onChange={(event) => this.onRegistrationFormItemChanged(event)}
                                         />
                                     </Grid>
@@ -352,6 +352,114 @@ class RegistrationForm extends Component {
                                         />
                                     </Grid>
                                 </Grid>
+                            </Box>
+                        </Paper>
+
+                        <Paper elevation={3} bgcolor="#f7f7f7">
+
+                            <Box p={3} mb={3}>
+                                <h5>Tapasztalat</h5>
+                                <hr/>
+                                <p>Itt adhatod meg, milyen tapasztalattal rendelkezel.</p>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            error={'experience' in this.props.formErrors}
+                                            fullWidth
+                                            className={classes.Font}
+                                            label="Tapasztalat"
+                                            name="experience"
+                                            id="experience"
+                                            value={this.state.formData.experience || ''}
+                                            variant="outlined"
+                                            size="small"
+                                            helperText="milyen (pl. hány év) tapasztalattal rendelkezel (*)"
+                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                            </Box>
+                        </Paper>
+
+                        <Paper elevation={3} bgcolor="#f7f7f7">
+
+                            <Box p={3} mb={3}>
+                                <h5>Akiket keresek</h5>
+                                <hr/>
+                                <p>Add meg, elsősorban milyen gyermekeket szeretnél vállalni</p>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            error={'lookingFor' in this.props.formErrors}
+                                            fullWidth
+                                            className={classes.Font}
+                                            label="Akiket keresek"
+                                            name="lookingFor"
+                                            id="lookingFor"
+                                            value={this.state.formData.lookingFor || ''}
+                                            variant="outlined"
+                                            size="small"
+                                            helperText="pl. Leginkább óvódás korúakkal találom meg a hangot, de szívesen foglalkozom nagyobb gyermekekkel is. (*)"
+                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                            </Box>
+                        </Paper>
+
+                        <Paper elevation={3} bgcolor="#f7f7f7">
+
+                            <Box p={3} mb={3}>
+                                <h5>Ekkor érek rá</h5>
+                                <hr/>
+                                <p>Add meg, elsősorban milyen időbeosztás szerint vállalsz gyermekfelügyeletet.</p>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            error={'preferredTime' in this.props.formErrors}
+                                            fullWidth
+                                            className={classes.Font}
+                                            label="Ekkor érek rá"
+                                            name="preferredTime"
+                                            id="preferredTime"
+                                            value={this.state.formData.preferredTime || ''}
+                                            variant="outlined"
+                                            size="small"
+                                            helperText="pl. Hétköznap napközben, de alkalmanként hétvégén is (előzetes egyeztetés alapján). (*)"
+                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                            </Box>
+                        </Paper>
+
+                        <Paper elevation={3} bgcolor="#f7f7f7">
+
+                            <Box p={3} mb={3}>
+                                <h5>Óradíj</h5>
+                                <hr/>
+                                <p>Itt állíthatod adhatod a díjazásoddal kapcsolatos részleteket.</p>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            error={'hourlyRate' in this.props.formErrors}
+                                            fullWidth
+                                            className={classes.Font}
+                                            label="Óradíjam"
+                                            name="hourlyRate"
+                                            id="hourlyRate"
+                                            value={this.state.formData.hourlyRate || ''}
+                                            variant="outlined"
+                                            size="small"
+                                            helperText="Elsősorban óradíj, de lehet, alkalmi vagy napidíj. Akár pontos összeg, tartomány, ill. vagy csak nagyságrend, stb. (*)"
+                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
+                                        />
+                                    </Grid>
+                                </Grid>
+
                             </Box>
                         </Paper>
 
@@ -412,114 +520,6 @@ class RegistrationForm extends Component {
                                         />
                                     </Grid>
                                 </Grid>
-                            </Box>
-                        </Paper>
-
-                        <Paper elevation={3} bgcolor="#f7f7f7">
-
-                            <Box p={3} mb={3}>
-                                <h5>Tapasztalat</h5>
-                                <hr/>
-                                <p>Itt adhatod meg, milyen tapasztalattal rendelkezel.</p>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            error={'experience' in this.props.formErrors}
-                                            fullWidth
-                                            className={classes.Font}
-                                            label="Tapasztalat"
-                                            name="experience"
-                                            id="experience"
-                                            value={this.state.formData.experience || ''}
-                                            variant="outlined"
-                                            size="small"
-                                            helperText="milyen (pl. hány év) tapasztalattal rendelkezel"
-                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
-                                        />
-                                    </Grid>
-                                </Grid>
-
-                            </Box>
-                        </Paper>
-
-                        <Paper elevation={3} bgcolor="#f7f7f7">
-
-                            <Box p={3} mb={3}>
-                                <h5>Akiket keresek</h5>
-                                <hr/>
-                                <p>Add meg, elsősorban milyen gyermekeket szeretnél vállalni</p>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            error={'lookingFor' in this.props.formErrors}
-                                            fullWidth
-                                            className={classes.Font}
-                                            label="Akiket keresek"
-                                            name="lookingFor"
-                                            id="lookingFor"
-                                            value={this.state.formData.lookingFor || ''}
-                                            variant="outlined"
-                                            size="small"
-                                            helperText="pl. Leginkább óvódás korúakkal találom meg a hangot, de szívesen foglalkozom nagyobb gyermekekkel is."
-                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
-                                        />
-                                    </Grid>
-                                </Grid>
-
-                            </Box>
-                        </Paper>
-
-                        <Paper elevation={3} bgcolor="#f7f7f7">
-
-                            <Box p={3} mb={3}>
-                                <h5>Ekkor érek rá</h5>
-                                <hr/>
-                                <p>Add meg, elsősorban milyen időbeosztás szerint vállalsz gyermekfelügyeletet.</p>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            error={'preferredTime' in this.props.formErrors}
-                                            fullWidth
-                                            className={classes.Font}
-                                            label="Ekkor érek rá"
-                                            name="preferredTime"
-                                            id="preferredTime"
-                                            value={this.state.formData.preferredTime || ''}
-                                            variant="outlined"
-                                            size="small"
-                                            helperText="pl. Hétköznap napközben, de alkalmanként hétvégén is (előzetes egyeztetés alapján)."
-                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
-                                        />
-                                    </Grid>
-                                </Grid>
-
-                            </Box>
-                        </Paper>
-
-                        <Paper elevation={3} bgcolor="#f7f7f7">
-
-                            <Box p={3} mb={3}>
-                                <h5>Óradíj</h5>
-                                <hr/>
-                                <p>Itt állíthatod adhatod a díjazásoddal kapcsolatos részleteket.</p>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            error={'hourlyRate' in this.props.formErrors}
-                                            fullWidth
-                                            className={classes.Font}
-                                            label="Óradíjam"
-                                            name="hourlyRate"
-                                            id="hourlyRate"
-                                            value={this.state.formData.hourlyRate || ''}
-                                            variant="outlined"
-                                            size="small"
-                                            helperText="Elsősorban óradíj, de lehet, alkalmi vagy napidíj. Akár pontos összeg, tartomány, ill. vagy csak nagyságrend, stb."
-                                            onChange={(event) => this.onRegistrationFormItemChanged(event)}
-                                        />
-                                    </Grid>
-                                </Grid>
-
                             </Box>
                         </Paper>
 

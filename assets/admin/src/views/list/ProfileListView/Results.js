@@ -147,10 +147,10 @@ const Results = ({className, list, ...rest}) => {
                                 >
                                     <TableCell align="center">
                                         <ButtonGroup variant="outlined" size="small" color="primary" aria-label="small outlined primary button group">
-                                            <Button href={'./profil/' + customer.uuid}>
+                                            <Button href={'./admin/profil/' + customer.uuid}>
                                                 <EditIcon fontSize="small" color="primary"/>
                                             </Button>
-                                            <Button onClick={() => window.open("./profil-elonezet/" + customer.uuid, "_blank")}>
+                                            <Button onClick={() => window.open("./admin/profil-elonezet/" + customer.uuid, "_blank")}>
                                                 <AssignmentIndIcon fontSize="small" color="primary"/>
                                             </Button>
                                             <Button onClick={() => deleteProfile(customer.uuid)}>

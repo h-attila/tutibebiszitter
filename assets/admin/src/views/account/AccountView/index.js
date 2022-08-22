@@ -1498,8 +1498,37 @@ class Account extends Component {
 
                                         <Paper elevation={3} bgcolor="#f7f7f7">
                                             <Box p={3} mb={3}>
-                                                <p>Profilodat a továbbiakban az email cimed és jelszavad megadásával
-                                                    bármikor módosíthatod.</p>
+                                                <h5>Címsor</h5>
+                                                <hr/>
+                                                <p>Figyelemfelkeltő címsor. Megjelenik a találati listában a neved mellett, és az adatlapodon egyaránt.</p>
+                                                <Grid container spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <TextField
+                                                            error={'label' in this.state.formErrors}
+                                                            fullWidth
+                                                            label="Címsor"
+                                                            name="label"
+                                                            id="label"
+                                                            value={this.state.profile.label || ''}
+                                                            variant="outlined"
+                                                            size="small"
+                                                            multiline={false}
+                                                            helperText="pl. Gyermekszerető bébiszitter több éves gyakorlattal. (*)"
+                                                            onChange={(event) => {
+                                                                this.setTextValue('hourlyRate', event);
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
+                                        </Paper>
+
+                                        <Paper elevation={3} bgcolor="#f7f7f7">
+                                            <Box p={3} mb={3}>
+                                                <h5>Bemutatkozás</h5>
+                                                <hr/>
+                                                <p>Rövid bemutatkozó szöveg a találati listában jelenik meg. Törekedj tömör, de figyelemfelkeltő szöveg megadására. A részletes
+                                                    bemutatkozást az adatlapod tartalmazza, ez hosszabb, részletesebb leírás.</p>
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={12}>
                                                         <TextField
@@ -1531,7 +1560,6 @@ class Account extends Component {
                                                             variant="outlined"
                                                             size="small"
                                                             multiline={true}
-                                                            rows={5}
                                                             helperText={introduction}
                                                             onChange={(event) => {
                                                                 this.setTextValue('introduction', event);
@@ -1539,7 +1567,68 @@ class Account extends Component {
                                                         />
                                                     </Grid>
                                                 </Grid>
+                                            </Box>
+                                        </Paper>
 
+                                        <Paper elevation={3} bgcolor="#f7f7f7">
+                                            <Box p={3} mb={3}>
+                                                <h5>Tapasztalat</h5>
+                                                <hr/>
+                                                <p>Itt adhatod meg, milyen tapasztalattal rendelkezel.</p>
+                                                <Grid container spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <TextField
+                                                            error={'experience' in this.state.formErrors}
+                                                            fullWidth
+                                                            label="Tapasztalat"
+                                                            name="experience"
+                                                            id="experience"
+                                                            value={this.state.profile.experience || ''}
+                                                            variant="outlined"
+                                                            size="small"
+                                                            multiline={false}
+                                                            helperText="pl. Gyermekszerető bébiszitter több éves gyakorlattal. (*)"
+                                                            onChange={(event) => {
+                                                                this.setTextValue('hourlyRate', event);
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
+                                        </Paper>
+
+                                        <Paper elevation={3} bgcolor="#f7f7f7">
+                                            <Box p={3} mb={3}>
+                                                <h5>Akiket keresek</h5>
+                                                <hr/>
+                                                <p>Add meg, elsősorban milyen gyermekeket szeretnél vállalni</p>
+                                                <Grid container spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <TextField
+                                                            error={'lookingFor' in this.state.formErrors}
+                                                            fullWidth
+                                                            label="Tapasztalat"
+                                                            name="lookingFor"
+                                                            id="lookingFor"
+                                                            value={this.state.profile.lookingFor || ''}
+                                                            variant="outlined"
+                                                            size="small"
+                                                            multiline={false}
+                                                            helperText="pl. Leginkább óvódás korúakkal találom meg a hangot, de szívesen foglalkozom nagyobb gyermekekkel is. (*)"
+                                                            onChange={(event) => {
+                                                                this.setTextValue('lookingFor', event);
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
+                                        </Paper>
+
+                                        <Paper elevation={3} bgcolor="#f7f7f7">
+                                            <Box p={3} mb={3}>
+                                                <h5>Óradíjam</h5>
+                                                <hr/>
+                                                <p>Itt állíthatod adhatod a díjazásoddal kapcsolatos részleteket.</p>
                                                 <Grid container spacing={3}>
                                                     <Grid item xs={12}>
                                                         <TextField
@@ -1551,8 +1640,7 @@ class Account extends Component {
                                                             value={this.state.profile.hourlyRate || ''}
                                                             variant="outlined"
                                                             size="small"
-                                                            multiline={true}
-                                                            rows={5}
+                                                            multiline={false}
                                                             helperText={hourlyRate}
                                                             // helperText={introduction}
                                                             onChange={(event) => {
@@ -1563,6 +1651,34 @@ class Account extends Component {
                                                 </Grid>
                                             </Box>
                                         </Paper>
+
+                                        <Paper elevation={3} bgcolor="#f7f7f7">
+                                            <Box p={3} mb={3}>
+                                                <h5>Ekkor érek rá</h5>
+                                                <hr/>
+                                                <p>Add meg, elsősorban milyen időbeosztás szerint vállalsz gyermekfelügyeletet.</p>
+                                                <Grid container spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <TextField
+                                                            error={'preferredTime' in this.state.formErrors}
+                                                            fullWidth
+                                                            label="Ekkor érek rá"
+                                                            name="preferredTime"
+                                                            id="preferredTime"
+                                                            value={this.state.profile.preferredTime || ''}
+                                                            variant="outlined"
+                                                            size="small"
+                                                            multiline={false}
+                                                            helperText="pl. Hétköznap napközben, de alkalmanként hétvégén is (előzetes egyeztetés alapján). (*)"
+                                                            onChange={(event) => {
+                                                                this.setTextValue('hourlyRate', event);
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
+                                        </Paper>
+
                                     </ProfileDetails>
 
                                     <ProfileDetails
