@@ -274,6 +274,10 @@ class ProfileController extends AbstractController
                 return new JsonResponse(['success' => false, 'errors' => $errors, 'data' => $data], Response::HTTP_BAD_REQUEST);
             }
 
+            // slug kisbetűsre
+            $slug = strtolower($profile->getSlug());
+            $profile->setSlug($slug);
+
             // új státusz beállítás
             $status = $statusService->set($profile);
             $profile->setStatus($status);

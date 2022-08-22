@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Link as RouterLink} from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { createBrowserHistory } from "history";
+import {createBrowserHistory} from "history";
 
 import {
     AppBar,
@@ -26,7 +26,6 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const history = createBrowserHistory();
 
 const TopBar = ({
                     className,

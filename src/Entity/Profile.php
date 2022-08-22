@@ -496,6 +496,34 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $username;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     */
+    private $label;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     */
+    private $experience;
+
+    /**
+     * @ORM\Column(type="string", length=150, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     */
+    private $lookingFor;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     */
+    private $preferredTime;
+
     #[Pure] public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -1357,6 +1385,82 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMeta(string $meta): self
     {
         $this->meta = $meta;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string|null $label
+     * @return $this
+     */
+    public function setLabel(?string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExperience(): ?string
+    {
+        return $this->experience;
+    }
+
+    /**
+     * @param string|null $experience
+     * @return $this
+     */
+    public function setExperience(?string $experience): self
+    {
+        $this->experience = $experience;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLookingFor(): ?string
+    {
+        return $this->lookingFor;
+    }
+
+    /**
+     * @param string|null $looking_for
+     * @return $this
+     */
+    public function setLookingFor(?string $looking_for): self
+    {
+        $this->lookingFor = $looking_for;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPreferredTime(): ?string
+    {
+        return $this->preferredTime;
+    }
+
+    /**
+     * @param ?string $preferredTime
+     * @return $this
+     */
+    public function setPreferredTime(?string $preferredTime): self
+    {
+        $this->preferredTime = $preferredTime;
 
         return $this;
     }

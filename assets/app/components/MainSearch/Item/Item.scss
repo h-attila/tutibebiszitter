@@ -4,8 +4,23 @@
     max-width: 950px;
     width: 100%;
     min-height: 250px;
-    background-color: $bg-color;
+    background-color: $purple-color-light5;
     flex-direction: column;
+    color: $font-color !important;
+    text-decoration: none;
+    box-shadow: $purple-color-light25 0 3px 8px; // rgb(0 0 0 / 24%
+
+    &:hover {
+        border-right: 5px solid $orange;
+    }
+
+    .Link {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 
     .Thumbnail {
         flex: 0 0 260px;
@@ -13,22 +28,35 @@
 
         .Img {
             width: 250px;
-            height: 250px;
+            height: fit-content;
         }
     }
 
     .InfoBox {
         flex: 1;
     }
+
+    .Title {
+        color: $purple-color;
+        font-weight: 400!important;
+        margin-bottom: 0;
+    }
+
+    .SubInfo {
+        color: $purple-color;
+        font-weight: 300!important;
+        font-size: .85rem;
+        margin: .5rem 0;
+    }
 }
 
 .Badge {
     color: $white-color;
     margin: 0.1rem;
-    padding: 0.2rem;
+    padding: 0.2rem 0.3rem;
     font-size: .8rem;
     font-weight: 300;
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 .Normal {
@@ -44,7 +72,7 @@
 }
 
 .White {
-    color: $white-color!important;
+    color: $white-color !important;
 }
 
 @media (min-width: 768px) {

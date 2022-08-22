@@ -69,7 +69,7 @@ class MainSearch extends Component {
 
                 <div className="row">
                     <div className="col">
-                        <div className="search-results__container d-flex align-items-center flex-column mt-3">
+                        <div className="d-flex align-items-center flex-column mt-3 mb-2">
 
                             {result}
 

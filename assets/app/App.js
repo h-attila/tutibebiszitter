@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom';
-// import { Route, Switch } from 'react-router';
+import {Route, Switch, Router, useParams} from 'react-router-dom';
 import axios from 'axios';
 
 import Toolbar from './components/Navigation/ToolBar';
@@ -16,6 +15,11 @@ import Registration from './containers/app/Registration/Registration';
 import ThankYou from './containers/app/ThankYou/ThankYou';
 import LoginViewProfile from './../admin/src/views/auth/LoginViewProfile';
 import LoginViewAdmin from "../admin/src/views/auth/LoginViewAdmin";
+import Profile from "./containers/app/Profile/Profile";
+
+import {createBrowserHistory} from "history";
+
+
 // import LoginViewAdmin from './../admin/src/views/auth/LoginViewAdmin';
 
 class App extends Component {
@@ -50,35 +54,50 @@ class App extends Component {
             <Aux>
                 <Toolbar/>
                 <main>
+
                     <Switch>
                         <Route path="/" exact>
                             <Home newMembers={this.state.newMembers} testimonials={this.state.testimonials}/>
                         </Route>
+
+                        <Route path="/bebiszitter/:id">
+                            <Contact/>
+                        </Route>
+
                         <Route path="/bebiszittert-keresek" exact>
                             <Search/>
                         </Route>
+
                         <Route path="/bebiszitter-vagyok" exact>
                             <BabysitterInfo testimonials={this.state.testimonials}/>
                         </Route>
+
                         <Route path="/hasznos-infok" exact>
                             <UsefulInfo testimonials={this.state.testimonials}/>
                         </Route>
+
                         <Route path="/kapcsolat" exact>
                             <Contact/>
                         </Route>
+
                         <Route path="/jelentkezem-bebiszitternek" exact>
                             <Registration/>
                         </Route>
+
                         <Route path="/sikeres-jelentkezes" exact>
                             <ThankYou/>
                         </Route>
+
                         <Route path="/bejelentkezes" exact>
                             <LoginViewProfile/>
                         </Route>
+
                         <Route path="/admin-bejelentkezes" exact>
                             <LoginViewAdmin/>
                         </Route>
+
                     </Switch>
+
                 </main>
                 <Footer newMembers={this.state.newMembers}/>
             </Aux>

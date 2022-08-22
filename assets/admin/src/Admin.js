@@ -1,7 +1,7 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {Route, Switch, withRouter} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {ThemeProvider} from '@material-ui/core';
 import GlobalStyles from './components/GlobalStyles';
 import './mixins/chartjs';
