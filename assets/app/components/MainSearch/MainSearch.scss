@@ -6,7 +6,7 @@
     margin: 0 auto;
     padding: 5px;
     background-color: rgba(96, 19, 94, 0.5);
-    color: $font-color-light;
+    color: $fontLight;
     border-radius: 5px;
 }
 
@@ -16,12 +16,12 @@
 
         a {
             padding: 5px 10px;
-            color: $purple-color-light75;
+            color: $colorTwo;
         }
     }
 
     .Selected {
-        border-bottom: 1px solid $purple-color-light75;
+        border-bottom: 1px solid $colorTwo;
 
         a {
             font-weight: 400!important;

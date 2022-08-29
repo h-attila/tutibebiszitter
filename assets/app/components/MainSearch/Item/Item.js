@@ -2,16 +2,12 @@ import React from 'react';
 import Badge from '@mui/material/Badge';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
-import CallIcon from '@mui/icons-material/Call';
-import PlaceIcon from '@mui/icons-material/Place';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import MapIcon from '@mui/icons-material/Map';
 import SavingsIcon from '@mui/icons-material/Savings';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 
 
 import classes from './Item.scss';
@@ -79,7 +75,7 @@ const item = (props) => {
                         mt: 1,
                         mb: 0
                     }}>
-                        <Button variant="outlined" size="small">Megnézem<KeyboardDoubleArrowRightIcon
+                        <Button className={classes.Button} href={`../bebiszitter/${props.slug}`} variant="outlined" size="small">Megnézem<KeyboardDoubleArrowRightIcon
                             fontSize="small"/></Button>
                     </Box>
                 </div>

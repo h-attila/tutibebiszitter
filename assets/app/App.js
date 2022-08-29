@@ -61,7 +61,7 @@ class App extends Component {
                         </Route>
 
                         <Route path="/bebiszitter/:id">
-                            <Contact/>
+                            <Profile/>
                         </Route>
 
                         <Route path="/bebiszittert-keresek" exact>

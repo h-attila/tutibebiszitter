@@ -2,26 +2,26 @@
 
 .Footer {
   .LightBox {
-    background-color: $purple-color-light50;
+    background-color: $colorTwo;
     height: 80px;
-    border-bottom: 1px solid $white-color;
+    border-bottom: 1px solid $white;
   }
 
   .LinkBox {
-    background-color: $purple-color;
-    color: $white-color;
+    background-color: $primaryColor;
+    color: $white;
   }
 
   .Copyright {
     background-color: $black;
-    border-top: 1px solid $white-color;
-    color: $white-color;
+    border-top: 1px solid $white;
+    color: $white;
     line-height: 20px;
     font-size: 12px;
   }
 
   a {
-    color: $white-color;
+    color: $white;
     font-size: 12px;
   }
 
@@ -30,7 +30,7 @@
   }
 
   hr {
-    background-color: $white-color-light;
+    background-color: $whiteLight;
   }
 
   ul {

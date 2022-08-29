@@ -1,7 +1,7 @@
 @import "../../../../styles/colors";
 
 .NavLink {
-  color: $white-color;
+  color: $white;
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 300;
@@ -10,5 +10,5 @@
 }
 
 .NavLink:hover {
-  color: $purple-color-light25!important;
+  color: $colorFour!important;
 }
