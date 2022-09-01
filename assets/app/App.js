@@ -1,23 +1,22 @@
+import axios from 'axios';
+import {createBrowserHistory} from "history";
 import React, {Component} from 'react';
 import {Route, Switch, Router, useParams} from 'react-router-dom';
-import axios from 'axios';
 
-import Toolbar from './components/Navigation/ToolBar';
+import LoginViewAdmin from "../admin/src/views/auth/LoginViewAdmin";
+import LoginViewProfile from './../admin/src/views/auth/LoginViewProfile';
 import Footer from './components/Footer/Footer';
+import Toolbar from './components/Navigation/ToolBar';
+import BabysitterInfo from './containers/app/BabysitterInfo/BabysitterInfo';
+import Contact from './containers/app/Contact/Contact';
+import Home from './containers/app/Home/Home';
+import Profile from "./containers/app/Profile/Profile";
+import Registration from './containers/app/Registration/Registration';
+import Search from './containers/app/Search/Search';
+import ThankYou from './containers/app/ThankYou/ThankYou';
+import UsefulInfo from './containers/app/UsefulInfo/UsefulInfo';
 import Aux from './hoc/Aux';
 
-import Home from './containers/app/Home/Home';
-import Search from './containers/app/Search/Search';
-import BabysitterInfo from './containers/app/BabysitterInfo/BabysitterInfo';
-import UsefulInfo from './containers/app/UsefulInfo/UsefulInfo';
-import Contact from './containers/app/Contact/Contact';
-import Registration from './containers/app/Registration/Registration';
-import ThankYou from './containers/app/ThankYou/ThankYou';
-import LoginViewProfile from './../admin/src/views/auth/LoginViewProfile';
-import LoginViewAdmin from "../admin/src/views/auth/LoginViewAdmin";
-import Profile from "./containers/app/Profile/Profile";
-
-import {createBrowserHistory} from "history";
 
 
 // import LoginViewAdmin from './../admin/src/views/auth/LoginViewAdmin';
@@ -60,7 +59,7 @@ class App extends Component {
                             <Home newMembers={this.state.newMembers} testimonials={this.state.testimonials}/>
                         </Route>
 
-                        <Route path="/bebiszitter/:id">
+                        <Route path="/bebiszitter/:uuid" exact>
                             <Profile/>
                         </Route>
 

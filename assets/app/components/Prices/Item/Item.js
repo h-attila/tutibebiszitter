@@ -1,8 +1,8 @@
+import StarIcon from '@material-ui/icons/Star';
 import React from 'react';
+import NumberFormat from 'react-number-format';
 
 import classes from './Item.scss';
-import StarIcon from '@material-ui/icons/Star';
-import NumberFormat from 'react-number-format';
 
 const Item = (props) => {
     let stars = [];

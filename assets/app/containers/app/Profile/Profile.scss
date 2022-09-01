@@ -117,24 +117,24 @@
         font-weight: 300;
     }
 
-    //.Sign {
-    //    color: $white;
-    //    margin: 0.1rem;
-    //    padding: 0.2rem 0.3rem;
-    //    font-size: .8rem;
-    //    font-weight: 300;
-    //    border-radius: 2px;
-    //}
-    //
-    //.Base {
-    //    background-color: $primaryColor;
-    //}
-    //
-    //.AddServices {
-    //    background-color: $colorThree;
-    //}
-    //
-    //.Orange {
-    //    background-color: $orange;
-    //}
+    .Sign {
+        color: $white;
+        margin: 0.1rem;
+        padding: 0.2rem 0.3rem;
+        font-size: .8rem;
+        font-weight: 300;
+        border-radius: 2px;
+    }
+
+    .Base {
+        background-color: $primaryColor;
+    }
+
+    .AddServices {
+        background-color: $colorThree;
+    }
+
+    .Orange {
+        background-color: $orange;
+    }
 }

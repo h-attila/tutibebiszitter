@@ -1,29 +1,28 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
-import axios from "axios";
 
-import TextField from '@material-ui/core/TextField';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Stepper from '@material-ui/core/Stepper';
 import Switch from '@material-ui/core/Switch';
-import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
+import axios from "axios";
+import React, {Component} from 'react';
+import {connect} from "react-redux";
 
-import Spinner from '../UI/Spinner/Spinner';
 import Aux from '../../hoc/Aux';
-import SelectItem from '../SearchForm/SelectItem/SelectItem';
-import DropzoneArea from "../DropzoneArea/DropzoneArea";
 import * as actionCreators from "../../store/actions/actions";
 import history from "../../store/history/history";
-
+import DropzoneArea from "../DropzoneArea/DropzoneArea";
+import SelectItem from '../SearchForm/SelectItem/SelectItem';
+import Spinner from '../UI/Spinner/Spinner';
 import classes from './RegistrationForm.scss';
 
 class RegistrationForm extends Component {

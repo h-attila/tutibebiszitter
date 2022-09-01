@@ -1,33 +1,38 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LanguageIcon from '@mui/icons-material/Language';
+import MapIcon from '@mui/icons-material/Map';
+import SavingsIcon from '@mui/icons-material/Savings';
+import SchoolIcon from '@mui/icons-material/School';
+import Badge from "@mui/material/Badge";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import Button from '@mui/material/Button';
-import Badge from "@mui/material/Badge";
 import TextField from '@mui/material/TextField';
-
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import MapIcon from '@mui/icons-material/Map';
-import SavingsIcon from '@mui/icons-material/Savings';
-import SchoolIcon from '@mui/icons-material/School';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LanguageIcon from '@mui/icons-material/Language';
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import React, {Component} from 'react';
+import {connect} from "react-redux";
 
 import classes from './Profile.scss';
 
 class Profile extends Component {
 
+    state = {
+        loading: true,
+        profile: null,
+        sending_message: false
+    }
+
     componentDidMount() {
-        console.log('>> Profile before');
-        console.log('>> Profile', this.state);
+        console.log('»» State', this.state);
+        console.log('»» Props', this.props);
     }
 
     render() {
@@ -108,7 +113,7 @@ class Profile extends Component {
                                                 <p className="mb-1"><AccountBoxIcon className="mr-1" fontSize="small"/>Név:</p>
                                             </TableCell>
                                             <TableCell align="left" className="p-2" sx={{fontWeight: 600}}>
-                                                {/*<p className="mb-1">Teszt Elek <Badge key="3" className={[classes.Sign, 'ml-1'].join(' ')}>Kiemelt</Badge><Badge key="34" className={[classes.Sign, classes.Orange, 'ml-1'].join(' ')}>Új tag</Badge></p>*/}
+                                                <p className="mb-1">Teszt Elek <Badge key="3" className={[classes.Sign, classes.Orange, 'ml-1'].join(' ')}>Kiemelt</Badge><Badge key="34" className={[classes.Sign, classes.Orange, 'ml-1'].join(' ')}>Új tag</Badge></p>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key="place" sx={{'td': {border: 0}}}>
@@ -143,9 +148,9 @@ class Profile extends Component {
                         <Box className={[classes.TableInfoBox, 'p-2'].join(' ')}>
                             <h4 className="p-1 h-0">Elsősorban az alábbi gyermekeket keresem</h4>
                             <hr className="p-1 m-0"/>
-                            {/*<Badge key="12" className={[classes.Sign, classes.Base].join(' ')}>Bölcsöde</Badge>*/}
-                            {/*<Badge key="22" className={[classes.Sign, classes.Base].join(' ')}>Óvoda</Badge>*/}
-                            {/*<Badge key="32" className={[classes.Sign, classes.Base].join(' ')}>Ált. Iskola</Badge>*/}
+                            <Badge key="12" className={[classes.Sign, classes.Base].join(' ')}>Bölcsöde</Badge>
+                            <Badge key="22" className={[classes.Sign, classes.Base].join(' ')}>Óvoda</Badge>
+                            <Badge key="32" className={[classes.Sign, classes.Base].join(' ')}>Ált. Iskola</Badge>
                             <p className="mt-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                                 ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                                 ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
@@ -168,11 +173,10 @@ class Profile extends Component {
                             <h4 className="p-1 h-0">Bemutatkozásom</h4>
                             <hr className="p-1 m-0"/>
                             <Box>
-                                {/*<Badge key="13" className={[classes.Sign, classes.AddServices].join(' ')}>*/}
-                                {/*    Vállalok hátrányos helyzetű gyermeket</Badge>*/}
-                                <Badge key="23">Szakképzett bébiszitter vagyok</Badge>
-                                {/*<Badge key="33" className={[classes.Sign, classes.AddServices].join(' ')}>Tudok takarítani</Badge>*/}
-                                <Badge key="43">Van autóm</Badge>
+                                <Badge key="13" className={[classes.Sign, classes.AddServices].join(' ')}>Vállalok hátrányos helyzetű gyermeket</Badge>
+                                <Badge key="23" className={[classes.Sign, classes.AddServices].join(' ')}>Szakképzett bébiszitter vagyok</Badge>
+                                <Badge key="33" className={[classes.Sign, classes.AddServices].join(' ')}>Tudok takarítani</Badge>
+                                <Badge key="43" className={[classes.Sign, classes.AddServices].join(' ')}>Van autóm</Badge>
                             </Box>
                             <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising
                                 pain was born and I will give you a complete account of the system, and expound the

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
+import { Search } from 'react-bootstrap-icons';
 import {connect} from 'react-redux';
 
-import SelectItem from './SelectItem/SelectItem';
 import * as actionCreators from '../../store/actions/actions';
 import Spinner from '../UI/Spinner/Spinner';
-import { Search } from 'react-bootstrap-icons';
-
 import classes from './SearchForm.scss';
+import SelectItem from './SelectItem/SelectItem';
 
 class SearchForm extends Component {
     state = {

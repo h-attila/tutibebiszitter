@@ -1,6 +1,3 @@
-import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
@@ -11,12 +8,13 @@ import {
   colors,
   makeStyles
 } from '@material-ui/core';
-
-import {NavLink} from 'react-router-dom';
-
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {NavLink} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {

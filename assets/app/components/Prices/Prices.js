@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
 import axios from 'axios';
+import React, {Component} from 'react';
 
+import Spinner from "../UI/Spinner/Spinner";
+import Item from './Item/Item';
 import classes from './Prices.scss';
 
-import Item from './Item/Item';
-import Spinner from "../UI/Spinner/Spinner";
 
 class Prices extends Component {
     state = {

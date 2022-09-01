@@ -1,19 +1,22 @@
-import React, {useEffect, useState} from 'react';
 import {
     Container,
     Grid,
     makeStyles
 } from '@material-ui/core';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+
+import history from "../../../../../app/store/history/history";
+import AuthService from "../../../AuthService";
 import Page from '../../../components/Page';
-import NewMembers from './NewMembers';
-import StatisticsByHistory from './StatisticsByHistory';
-import NearExpire from './NearExpire';
 import ActiveMembers from './ActiveMembers';
 import Modified from './Modified';
+import NearExpire from './NearExpire';
+import NewMembers from './NewMembers';
+import StatisticsByHistory from './StatisticsByHistory';
 import StatisticsByUserStatus from './StatisticsByUserStatus';
-import axios from 'axios';
-import AuthService from "../../../AuthService";
-import history from "../../../../../app/store/history/history";
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {

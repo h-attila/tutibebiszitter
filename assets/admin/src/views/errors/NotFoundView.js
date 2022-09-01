@@ -1,10 +1,11 @@
-import React from 'react';
 import {
   Box,
   Container,
   Typography,
   makeStyles
 } from '@material-ui/core';
+import React from 'react';
+
 import Page from '../../components/Page';
 
 const useStyles = makeStyles((theme) => ({

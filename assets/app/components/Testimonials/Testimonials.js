@@ -1,9 +1,9 @@
-import React, {Component} from "react";
 import axios from 'axios';
-
-import classes from './Testimonials.scss';
+import React, {Component} from "react";
 
 import Testimonial from './Testimonial/Testimonial';
+import classes from './Testimonials.scss';
+
 
 class Testimonials extends Component {
     render() {

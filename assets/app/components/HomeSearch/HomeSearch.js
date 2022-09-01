@@ -1,6 +1,6 @@
 import React from 'react';
-import SearchForm from '../SearchForm/SearchForm';
 
+import SearchForm from '../SearchForm/SearchForm';
 import classes from './HomeSearch.scss';
 
 const homeSearch = props => (

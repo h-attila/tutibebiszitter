@@ -1,18 +1,19 @@
-import React, {useEffect} from 'react';
-import {Link as RouterLink, useLocation} from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {Avatar, Box, Divider, Drawer, Hidden, List, makeStyles, Typography} from '@material-ui/core';
-import {Users as UsersIcon} from 'react-feather';
-import NavItem from './NavItem';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ExtensionIcon from '@material-ui/icons/Extension';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ExtensionIcon from '@material-ui/icons/Extension';
 import FlagIcon from '@material-ui/icons/Flag';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import GroupsIcon from '@material-ui/icons/Group';
 import PlaceIcon from '@material-ui/icons/Place';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import PropTypes from 'prop-types';
+import React, {useEffect} from 'react';
+import {Users as UsersIcon} from 'react-feather';
+import {Link as RouterLink, useLocation} from 'react-router-dom';
+
+import NavItem from './NavItem';
 
 const user = {
     avatar: '/static/images/avatars/avatar_6.png',

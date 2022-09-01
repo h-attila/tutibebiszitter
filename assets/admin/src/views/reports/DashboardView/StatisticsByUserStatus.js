@@ -1,8 +1,3 @@
-import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { Doughnut } from 'react-chartjs-2';
-import PhoneIcon from '@material-ui/icons/Phone';
 import {
   Box,
   Card,
@@ -14,6 +9,11 @@ import {
   makeStyles,
   useTheme
 } from '@material-ui/core';
+import PhoneIcon from '@material-ui/icons/Phone';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
 
 const useStyles = makeStyles(() => ({
   root: {

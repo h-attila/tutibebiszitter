@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import Testimonials from "../../../components/Testimonials/Testimonials";
 import Article from '../../../components/Article/Article';
+import Testimonials from "../../../components/Testimonials/Testimonials";
 
 class UsefulInfo extends Component {
     render() {

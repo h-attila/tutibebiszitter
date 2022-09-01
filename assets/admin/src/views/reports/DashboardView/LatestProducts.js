@@ -1,8 +1,3 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
-import moment from 'moment';
 import {
   Box,
   Button,
@@ -16,8 +11,13 @@ import {
   ListItemText,
   makeStyles
 } from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import clsx from 'clsx';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 const data = [
   {

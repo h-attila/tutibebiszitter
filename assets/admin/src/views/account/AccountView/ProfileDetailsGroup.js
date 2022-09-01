@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 // import Stepper from '@material-ui/core/Stepper';
 // import Step from '@material-ui/core/Step';

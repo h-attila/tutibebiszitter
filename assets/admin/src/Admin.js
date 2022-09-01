@@ -1,27 +1,28 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {Route, Switch} from 'react-router-dom';
 import {ThemeProvider} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {Route, Switch} from 'react-router-dom';
+
+import App from "../../app/App";
+import history from "../../app/store/history/history";
+import LoginViewProfile from './../../admin/src/views/auth/LoginViewProfile';
+import AuthService from "./AuthService";
 import GlobalStyles from './components/GlobalStyles';
 import './mixins/chartjs';
-import theme from './theme';
-import TopBar from "./layouts/DashboardLayout/TopBar";
 import NavBar from "./layouts/DashboardLayout/NavBar";
-import DashboardView from "./views/reports/DashboardView";
+import TopBar from "./layouts/DashboardLayout/TopBar";
+import theme from './theme';
+import Account from "./views/account/AccountView";
+import ListView from "./views/list/ListView/ListView";
+import ListViewGroups from "./views/list/ListView/ListViewGroups";
+import ListViewPackages from "./views/list/ListView/ListViewPackages";
+import ListViewPayMode from "./views/list/ListView/ListViewPayMode";
+import ListViewTestimonials from "./views/list/ListView/ListViewTestimonials";
+import PlaceListView from "./views/list/PlaceListView";
 import ProfileListView from "./views/list/ProfileListView"; // todo: ezek nagyon hasonlóak, átírni class-ra, és egybe venni őket, csak paraméterben térnek el.
 import TestimonialsListView from "./views/list/TestimonialsListView";
-import PlaceListView from "./views/list/PlaceListView";
-import ListView from "./views/list/ListView/ListView";
-import ListViewPayMode from "./views/list/ListView/ListViewPayMode";
-import ListViewPackages from "./views/list/ListView/ListViewPackages";
-import ListViewGroups from "./views/list/ListView/ListViewGroups";
-import ListViewTestimonials from "./views/list/ListView/ListViewTestimonials";
-import Account from "./views/account/AccountView";
-import AuthService from "./AuthService";
-import history from "../../app/store/history/history";
-import App from "../../app/App";
-import LoginViewProfile from './../../admin/src/views/auth/LoginViewProfile';
+import DashboardView from "./views/reports/DashboardView";
 
 
 

@@ -1,9 +1,9 @@
 
-import { element, getjQuery, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
+import { element, getjQuery, onDOMContentLoaded } from '../mdb/util/index';
 import 'detect-autofill';
 
 /**

@@ -21,7 +21,7 @@ class Search extends Component {
                                     néhány adatot a
                                     gyermeke(i)dre vonatkozóan és máris hozzájutsz a bébiszitter adatlapjához.
                                     Ha bárkit felhívsz, kérjük, jelezd az illető bébiszitternek, hogy a <a href="http://www.tutibebiszitter.hu"
-                                                                                                           target="_blank">www.tutibebiszitter.hu</a>
+                                                                                                           target="_blank" rel="noreferrer">www.tutibebiszitter.hu</a>
                                     oldalon találtad a hirdetését.</p>
                             </div>
                         </div>

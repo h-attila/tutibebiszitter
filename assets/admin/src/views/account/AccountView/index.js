@@ -1,57 +1,58 @@
 // noinspection JSAnnotator
 
-import React, {Component} from 'react';
 import {Box, Container, Grid, MenuItem, Select} from '@material-ui/core';
-import Page from '../../../components/Page';
-// import ProfileDetailsGroup from './ProfileDetailsGroup';
-import {withStyles} from "@material-ui/core/styles";
-import {withRouter} from "react-router";
-import AuthService from '../../../AuthService';
-
-import Spinner from '../../../../../app/components/UI/Spinner/Spinner';
-import axios from "axios";
-import Aux from "../../../../../app/hoc/Aux";
-
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import AvTimerIcon from '@material-ui/icons/AvTimer';
-import EditIcon from '@material-ui/icons/Edit';
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import {withStyles} from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 import Tab from "@material-ui/core/Tab";
-import PersonPinIcon from "@material-ui/icons/PersonPin";
-import PersonIcon from "@material-ui/icons/Person";
-import ChatIcon from "@material-ui/icons/Chat";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import ChildCareIcon from "@material-ui/icons/ChildCare";
-import PlaceIcon from "@material-ui/icons/Place";
-import LoyaltyIcon from "@material-ui/icons/Loyalty";
-import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
-import ControlPointIcon from '@material-ui/icons/ControlPoint';
-import LanguageIcon from '@material-ui/icons/Language';
-import SaveIcon from '@material-ui/icons/Save';
+import Tabs from "@material-ui/core/Tabs";
+import TextField from "@material-ui/core/TextField";
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import PersonSearchIcon from '@material-ui/icons/Autorenew';
+import AvTimerIcon from '@material-ui/icons/AvTimer';
+import ChatIcon from "@material-ui/icons/Chat";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ChildCareIcon from "@material-ui/icons/ChildCare";
+import ControlPointIcon from '@material-ui/icons/ControlPoint';
+import EditIcon from '@material-ui/icons/Edit';
+import FacebookIcon from "@material-ui/icons/Facebook";
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
+import LanguageIcon from '@material-ui/icons/Language';
+import LoyaltyIcon from "@material-ui/icons/Loyalty";
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+import PersonIcon from "@material-ui/icons/Person";
+import PersonPinIcon from "@material-ui/icons/PersonPin";
+import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
+import PlaceIcon from "@material-ui/icons/Place";
+import SaveIcon from '@material-ui/icons/Save';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import Alert from "@material-ui/lab/Alert";
+import {LocalizationProvider, DatePicker, DateTimePicker} from '@mui/x-date-pickers';
+import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment'
+import axios from "axios";
+import moment from 'moment';
+import React, {Component} from 'react';
 
+
+// import ProfileDetailsGroup from './ProfileDetailsGroup';
+import {withRouter} from "react-router";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import Profile from "./Profile";
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import Switch from "@material-ui/core/Switch";
-import Button from "@material-ui/core/Button";
+
 import DropzoneArea from "../../../../../app/components/DropzoneArea/DropzoneArea";
-import ProfileDetails from "./ProfileDetails";
-import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment'
-import {LocalizationProvider, DatePicker, DateTimePicker} from '@mui/x-date-pickers';
-import moment from 'moment';
 import SelectItem from "../../../../../app/components/SearchForm/SelectItem/SelectItem";
+import Spinner from '../../../../../app/components/UI/Spinner/Spinner';
+import Aux from "../../../../../app/hoc/Aux";
 import history from "../../../../../app/store/history/history";
-import Alert from "@material-ui/lab/Alert";
+import AuthService from '../../../AuthService';
+import Page from '../../../components/Page';
+import Profile from "./Profile";
+import ProfileDetails from "./ProfileDetails";
+
 
 const MySwal = withReactContent(Swal)
 
