@@ -18,34 +18,137 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import React, {Component} from 'react';
-import {connect} from "react-redux";
+import Spinner from '../../../../app/components/UI/Spinner/Spinner';
 
 import classes from './Profile.scss';
+import {withRouter} from "react-router";
+import axios from "axios";
 
 class Profile extends Component {
 
     state = {
+        init: false,
         loading: true,
         profile: null,
+        badges: [],
         sending_message: false
     }
 
     componentDidMount() {
-        console.log('»» State', this.state);
-        console.log('»» Props', this.props);
+        if (this.state.init) {
+            return;
+        }
+
+        if (this.props.match.params.slug) {
+            this.getProfile(this.props.match.params.slug);
+        } else {
+            // TODO: hiba kiírás, hogy nincsen slug
+            console.log('»» hiba: nincsen uuid');
+        }
+    }
+
+    getProfile(slug) {
+        if (this.state.profile) {
+            return
+        }
+
+        this.setState({loading: true});
+
+        axios
+            .get('/api/search/get-profile/' + slug)
+            .then(
+                response => {
+                    console.log('»» profile', response);
+                    if (response.status === 200) {
+                        this.setState({
+                            profile: response.data.profile,
+                            badges: response.data.badges,
+                            loading: false,
+                            init: true
+                        });
+                    } else {
+                        console.log('»» error');
+                    }
+                }
+            )
+            .catch(err => {
+                console.log('»» show 404!')
+            });
     }
 
     render() {
 
+        if (!this.state.profile) {
+            return (
+                <Grid container spacing={1}>
+                    <Grid item xs={12} className="m-5 p-5">
+                        <Spinner/>
+                        <p className="text-center">profil betöltése folyamatban...</p>
+                    </Grid>
+                </Grid>
+            )
+        }
+
+        let facebookIconClass = '';
+        if (!this.state.profile.facebook) {
+            facebookIconClass = 'disabled';
+        }
+
+        let instagramIconClass = '';
+        if (!this.state.profile.instagram) {
+            instagramIconClass = 'disabled';
+        }
+
+        let webIconClass = '';
+        if (!this.state.profile.web) {
+            webIconClass = 'disabled';
+        }
+
+        let nameBadges = this.state.badges.map((badge, i) => {
+            return (<Badge key={i} className={[classes.Sign, classes.Orange, "ml-1"].join(" ")}>{badge}</Badge>);
+        });
+
+        let facebookIcon;
+        if (this.state.profile.facebook) {
+            facebookIcon = (
+                <a href={this.state.profile.facebook} target="_blank" key="facebook"><FacebookIcon key="facebook"
+                                                                                                   className={[classes.TableInfoBox, facebookIconClass, 'ml-4'].join(' ')}/></a>);
+        } else {
+            facebookIcon = (<FacebookIcon key="facebook"
+                                          className={[classes.TableInfoBox, classes.Disabled, facebookIconClass, 'ml-4'].join(' ')}/>);
+        }
+
+        let instagramIcon;
+        if (this.state.profile.instagram) {
+            instagramIcon = (
+                <a href={this.state.profile.instagram} target="_blank" key="instagram"><InstagramIcon key="instagram"
+                                                                                                      className={[classes.TableInfoBox, instagramIconClass, 'ml-4'].join(' ')}/></a>);
+        } else {
+            instagramIcon = (<InstagramIcon key="instagram"
+                                            className={[classes.TableInfoBox, classes.Disabled, instagramIconClass, 'ml-4'].join(' ')}/>);
+        }
+
+        let webIcon;
+        if (this.state.profile.web) {
+            webIcon = (<a href={this.state.profile.web} target="_blank" key="web"><LanguageIcon key="web"
+                                                                                                className={[classes.TableInfoBox, webIconClass, 'ml-4'].join(' ')}/></a>);
+        } else {
+            webIcon = (<LanguageIcon key="web"
+                                     className={[classes.TableInfoBox, classes.Disabled, webIconClass, 'ml-4'].join(' ')}/>);
+        }
+
+        let socialBoxes = [facebookIcon, instagramIcon, webIcon];
+
+        let servicesBadges = this.state.profile.services.map((service) => {
+            return (<Badge key={service.id} className={[classes.Sign, classes.Base].join(' ')}>{service.label}</Badge>);
+        });
+
+        let additionalServicesBadges = this.state.profile.additionalServices.map((service) => {
+            return (<Badge key={service.id} className={[classes.Sign, classes.AddServices].join(' ')}>{service.label}</Badge>);
+        });
+
         return (
             <Container className={[classes.Profile, ""].join(' ')}>
-
-                {/*<Grid container spacing={1}>*/}
-                {/*    <Grid item xs={12}>*/}
-                {/*        */}
-                {/*    </Grid>*/}
-                {/*</Grid>*/}
-
                 <Grid container spacing={1}>
                     <Grid item xs={12} sm={4} md={3}>
                         <Box
@@ -57,19 +160,17 @@ class Profile extends Component {
                         />
 
                         <Box
-                            className={classes.SocialBoxes}
+                            className={[classes.SocialBoxes, 'p-1'].join(' ')}
                             width="100%"
                         >
-                            <a href="#"><FacebookIcon className={classes.SocialIcon}/></a>
-                            <a href="#"><InstagramIcon className={classes.SocialIcon}/></a>
-                            <a href="#"><LanguageIcon className={classes.SocialIcon}/></a>
+                            {socialBoxes}
                         </Box>
 
                         <Box className={[classes.TableInfoBox, 'p-2'].join(' ')}>
                             <h4 className="p-1 h-0">Kapcsolat</h4>
                             <hr className="p-1 m-0"/>
                             <p className="mb-3">Csörgess meg:</p>
-                            <h5 className="text-center">06 20 123 4567</h5>
+                            <h5 className="text-center">{this.state.profile.phone}</h5>
                             <p className="mb-2">Vagy küldj üzenetet:</p>
                             <TextField
                                 className="w-100 m-1 p-1"
@@ -103,41 +204,46 @@ class Profile extends Component {
                             <h4 className="p-1 h-0">Személyes adataim</h4>
                             <hr className="p-1 m-0"/>
                             <Box textAlign="center">
-                                <h3 className="m-1"><FormatQuoteIcon/>Több éves tapasztalattal gyermekfelügyeletet vállalok</h3>
+                                <h3 className="m-1"><FormatQuoteIcon/>{this.state.profile.label}</h3>
                             </Box>
                             <TableContainer className="p-2">
                                 <Table>
                                     <TableBody>
                                         <TableRow key="name" sx={{'td': {border: 0}}}>
                                             <TableCell align="left" style={{width: 150}} className="p-2">
-                                                <p className="mb-1"><AccountBoxIcon className="mr-1" fontSize="small"/>Név:</p>
+                                                <p className="mb-1"><AccountBoxIcon className="mr-1" fontSize="small"/>Név:
+                                                </p>
                                             </TableCell>
                                             <TableCell align="left" className="p-2" sx={{fontWeight: 600}}>
-                                                <p className="mb-1">Teszt Elek <Badge key="3" className={[classes.Sign, classes.Orange, 'ml-1'].join(' ')}>Kiemelt</Badge><Badge key="34" className={[classes.Sign, classes.Orange, 'ml-1'].join(' ')}>Új tag</Badge></p>
+                                                <p className="mb-1">
+                                                    <strong>{this.state.profile.name}</strong>{nameBadges}</p>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key="place" sx={{'td': {border: 0}}}>
                                             <TableCell align="left" className="p-2">
-                                                <p className="mb-1"><MapIcon className="mr-1" fontSize="small"/>Helyszín(ek):</p>
+                                                <p className="mb-1"><MapIcon className="mr-1" fontSize="small"/>Helyszín(ek):
+                                                </p>
                                             </TableCell>
                                             <TableCell align="left" className="p-2" sx={{fontWeight: 600}}>
-                                                <p className="mb-1">Aprajafalva, Törp u.</p>
+                                                <p className="mb-1">{this.state.profile.pubAddress}</p>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key="phone" sx={{'td': {border: 0}}}>
                                             <TableCell align="left" className="p-2">
-                                                <p className="mb-1"><SchoolIcon className="mr-1" fontSize="small"/>Gyakorlat:</p>
+                                                <p className="mb-1"><SchoolIcon className="mr-1" fontSize="small"/>Gyakorlat:
+                                                </p>
                                             </TableCell>
                                             <TableCell align="left" className="p-2" sx={{fontWeight: 600}}>
-                                                <p className="mb-1">10 év, ebből 2 év külföld</p>
+                                                <p className="mb-1">{this.state.profile.experience}</p>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key="price" sx={{'td': {border: 0}}}>
                                             <TableCell align="left" className="p-2">
-                                                <p className="mb-1"><SavingsIcon className="mr-1" fontSize="small"/>Óradíj:</p>
+                                                <p className="mb-1"><SavingsIcon className="mr-1" fontSize="small"/>Óradíj:
+                                                </p>
                                             </TableCell>
                                             <TableCell align="left" className="p-2" sx={{fontWeight: 600}}>
-                                                <p className="mb-1">5000Ft / óra</p>
+                                                <p className="mb-1">{this.state.profile.hourlyRate}</p>
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
@@ -148,48 +254,23 @@ class Profile extends Component {
                         <Box className={[classes.TableInfoBox, 'p-2'].join(' ')}>
                             <h4 className="p-1 h-0">Elsősorban az alábbi gyermekeket keresem</h4>
                             <hr className="p-1 m-0"/>
-                            <Badge key="12" className={[classes.Sign, classes.Base].join(' ')}>Bölcsöde</Badge>
-                            <Badge key="22" className={[classes.Sign, classes.Base].join(' ')}>Óvoda</Badge>
-                            <Badge key="32" className={[classes.Sign, classes.Base].join(' ')}>Ált. Iskola</Badge>
-                            <p className="mt-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-                                sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                                est laborum.</p>
+                            {servicesBadges}
+                            <p className="mt-1">{this.state.profile.lookingFor}</p>
                         </Box>
 
                         <Box className={[classes.TableInfoBox, 'p-2'].join(' ')}>
                             <h4 className="p-1 h-0">Előnyben részesített időpontjaim</h4>
                             <hr className="p-1 m-0"/>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-                                architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas
-                                sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                                voluptatem sequi nesciunt.</p>
+                            <p>{this.state.profile.preferredTime}</p>
                         </Box>
 
                         <Box className={[classes.TableInfoBox, 'p-2'].join(' ')}>
                             <h4 className="p-1 h-0">Bemutatkozásom</h4>
                             <hr className="p-1 m-0"/>
                             <Box>
-                                <Badge key="13" className={[classes.Sign, classes.AddServices].join(' ')}>Vállalok hátrányos helyzetű gyermeket</Badge>
-                                <Badge key="23" className={[classes.Sign, classes.AddServices].join(' ')}>Szakképzett bébiszitter vagyok</Badge>
-                                <Badge key="33" className={[classes.Sign, classes.AddServices].join(' ')}>Tudok takarítani</Badge>
-                                <Badge key="43" className={[classes.Sign, classes.AddServices].join(' ')}>Van autóm</Badge>
+                                {additionalServicesBadges}
                             </Box>
-                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising
-                                pain was born and I will give you a complete account of the system, and expound the
-                                actual teachings of the great explorer of the truth, the master-builder of human
-                                happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure,
-                                but because those who do not know how to pursue pleasure rationally encounter
-                                consequences that are extremely painful. Nor again is there anyone who loves or pursues
-                                or desires to obtain pain of itself, because it is pain, but because occasionally
-                                circumstances occur in which toil and pain can procure him some great pleasure. To take
-                                a trivial example, which of us ever undertakes laborious physical exercise, except to
-                                obtain some advantage from it? But who has any right to find fault with a man who
-                                chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain
-                                that produces no resultant pleasure?</p>
+                            <p>{this.state.profile.introduction}</p>
                         </Box>
                     </Grid>
 
@@ -265,29 +346,8 @@ class Profile extends Component {
                     </Grid>
                 </Grid>
             </Container>
-
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        // services: state.search.options.service,
-        // places: state.search.options.place,
-        // languages: state.search.options.language,
-        // packages: state.packages,
-        // submitDisabled: state.registration.submitDisabled,
-        // formErrors: state.registration.formErrors,
-        // successRegistration: state.registration.successRegistration
-    };
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        // packagesInit: () => dispatch(actionCreators.packagesInit()),
-        // servicesInit: () => dispatch(actionCreators.searchFormInit()),
-        // registrationFormSubmit: (formData) => dispatch(actionCreators.registrationFormSubmit(formData))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default withRouter(Profile);

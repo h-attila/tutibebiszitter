@@ -1312,7 +1312,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        packagesInit: () => dispatch(actionCreators.packagesInit()),        // todo: ezek kellenek?
+        packagesInit: () => dispatch(actionCreators.packagesInit()),
         servicesInit: () => dispatch(actionCreators.searchFormInit()),
         registrationFormSubmit: (formData) => dispatch(actionCreators.registrationFormSubmit(formData))
     }

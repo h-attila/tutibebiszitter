@@ -59,7 +59,7 @@ class App extends Component {
                             <Home newMembers={this.state.newMembers} testimonials={this.state.testimonials}/>
                         </Route>
 
-                        <Route path="/bebiszitter/:uuid" exact>
+                        <Route path="/bebiszitter/:slug" exact>
                             <Profile/>
                         </Route>
 

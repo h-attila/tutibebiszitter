@@ -37,7 +37,6 @@ import axios from "axios";
 import moment from 'moment';
 import React, {Component} from 'react';
 
-
 // import ProfileDetailsGroup from './ProfileDetailsGroup';
 import {withRouter} from "react-router";
 import Swal from 'sweetalert2'
@@ -2148,7 +2147,6 @@ class Account extends Component {
 }
 
 export default withRouter(withStyles
-
 (
     useStyles
 )(

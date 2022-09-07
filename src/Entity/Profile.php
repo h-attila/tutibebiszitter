@@ -33,7 +33,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $id;
 
@@ -95,7 +95,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\NotBlank (message="Név megadása kötelező.")
      * @Assert\Length (min=5, minMessage="A névnek legalább {{ limit }} karakter hosszúnak kell lennie.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $name;
 
@@ -118,7 +118,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\Uuid(message="Érvénytelen felhasználó azonosító.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $uuid;
 
@@ -151,7 +151,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     groups={"admin_admin"}
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $pubAddress;
 
@@ -169,7 +169,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Telefonszám hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $phone;
 
@@ -181,7 +181,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Web cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $web;
 
@@ -193,7 +193,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Facebook cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $facebook;
 
@@ -205,7 +205,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Instagram cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $instagram;
 
@@ -220,7 +220,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Rövid bemutatkozás hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search"})
      */
     private $shortIntroduction;
 
@@ -229,7 +229,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\NotBlank (message="Néhány mondatos bemutatkozó szöveg szükséges.")
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $introduction;
 
@@ -241,7 +241,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Számlázási név hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $invoiceName;
 
@@ -253,7 +253,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Számlázási cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $invoiceAddress;
 
@@ -290,7 +290,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $newMember;
 
@@ -299,7 +299,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\Type("DateTime", message="Kiemelés vége dátum '{{value}}' érvénytelen.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $highlighted;
 
@@ -313,35 +313,35 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Service::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $services;
 
     /**
      * @ORM\ManyToMany(targetEntity=Place::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $places;
 
     /**
      * @ORM\ManyToMany(targetEntity=Language::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $languages;
 
     /**
      * @ORM\ManyToMany(targetEntity=Handicap::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $handicaps;
 
     /**
      * @ORM\ManyToMany(targetEntity=Group::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $groups;
 
@@ -350,14 +350,14 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\Type("DateTime", message="Újként nyilvántartva dátum '{{value}}' érvénytelen.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $newMemberSign;
 
     /**
      * @ORM\ManyToMany(targetEntity=AdditionalService::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $additionalServices;
 
@@ -394,7 +394,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Regex("/^[\w-]+$/",
      *     message="A keresőbarát név ('web adatlap url', vagy SEO név) csak ékezet nélküli betűt, számot, és '-' karaktert tartalmazhat.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $slug;
 
@@ -406,7 +406,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="A 'title' hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $title;
 
@@ -418,7 +418,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="A meta leírás hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $meta;
 
@@ -456,7 +456,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Óradíj hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $hourlyRate;
 
@@ -499,28 +499,28 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      *
-     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
      */
     private $label;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      *
-     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
      */
     private $experience;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
      *
-     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
      */
     private $lookingFor;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @Groups({"admin_admin", "admin_profile", "user_profile"})
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
      */
     private $preferredTime;
 

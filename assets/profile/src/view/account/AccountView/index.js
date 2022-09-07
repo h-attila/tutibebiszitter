@@ -1915,10 +1915,4 @@ class Account extends Component {
     }
 }
 
-export default withRouter(withStyles
-
-(
-    useStyles
-)(
-    Account
-))
+export default withRouter(withStyles(useStyles)(Account))

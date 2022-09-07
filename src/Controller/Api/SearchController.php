@@ -9,6 +9,7 @@ use App\Service\HandicapService;
 use App\Service\LanguageService;
 use App\Service\PlaceService;
 use App\Service\ServiceService;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Psr\Log\LoggerInterface;
@@ -39,14 +40,15 @@ class SearchController extends AbstractController
      * @param HandicapService $handicapService
      */
     public function __construct(
-        protected SerializerInterface $serializer,
-        protected ProfileRepository   $profileRepository,
-        protected LoggerInterface     $logger,
-        protected ServiceService      $serviceService,
-        protected GroupService        $groupService,
-        protected PlaceService        $placeService,
-        protected LanguageService     $languageService,
-        protected HandicapService     $handicapService,
+        protected SerializerInterface    $serializer,
+        protected ProfileRepository      $profileRepository,
+        protected LoggerInterface        $logger,
+        protected ServiceService         $serviceService,
+        protected GroupService           $groupService,
+        protected PlaceService           $placeService,
+        protected LanguageService        $languageService,
+        protected HandicapService        $handicapService,
+        protected EntityManagerInterface $em
     )
     {
     }
@@ -81,13 +83,13 @@ class SearchController extends AbstractController
 //                ];
 //            });
 //        } catch (Exception $e) {
-            $res = [
-                'service' => $this->serviceService->getList('active'),
-                'group' => $this->groupService->getList('active'),
-                'place' => $this->placeService->getPlaceOptions(),
-                'language' => $this->languageService->getList('active'),
-                'handicap' => $this->handicapService->getList('active'),
-            ];
+        $res = [
+            'service' => $this->serviceService->getList('active'),
+            'group' => $this->groupService->getList('active'),
+            'place' => $this->placeService->getPlaceOptions(),
+            'language' => $this->languageService->getList('active'),
+            'handicap' => $this->handicapService->getList('active'),
+        ];
 //        }
 
 
@@ -155,6 +157,47 @@ class SearchController extends AbstractController
         $json = $this->serializer->serialize($results, 'json', ['groups' => 'admin_profile']);
 
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
+    }
+
+    /**
+     * Admin profil lekérdezés.
+     *
+     * @param string $uuid
+     * @return Response
+     *
+     * @Route("/get-profile/{slug}", methods={"GET"}, name="get_profile")
+     */
+    public function getProfile(string $slug): Response
+    {
+        $p = $this->em->getRepository(Profile::class);
+
+        /* @var $profile Profile */
+        $profile = $p->findOneBy([
+            'slug' => $slug
+        ]);
+
+        $now = new \DateTime();
+        if (!$profile || !$profile->getActive() || !$profile->getEnabled() || $profile->getRegStart()?->format('Y-m-d') > $now->format('Y-m-d') || $profile->getRegEnd()?->format('Y-m-d') < $now->format('Y-m-d')) {
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        }
+
+        // kiemelések
+        $badges = [];
+        if ($profile->getNewMemberSign()?->format('Y-m-d') >= (new \DateTime())->format('Y-m-d')) {
+            $badges[] = "Új tag";
+        }
+        if ($profile->getHighlighted()?->format('Y-m-d') >= (new \DateTime())->format('Y-m-d')) {
+            $badges[] = "Kiemelt";
+        }
+
+        $data = [
+            'profile'=>$profile,
+            'badges'=>$badges
+        ];
+
+        $json = $this->serializer->serialize($data, 'json', ['groups' => ['public_profile']]);
+
+        return JsonResponse::fromJsonString($json);
     }
 
     /**
