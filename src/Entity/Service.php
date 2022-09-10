@@ -99,9 +99,15 @@ class Service
      */
     private $weight;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SearchHistory::class, mappedBy="service")
+     */
+    private $searchHistories;
+
     #[Pure] public function __construct()
     {
         $this->profiles = new ArrayCollection();
+        $this->searchHistories = new ArrayCollection();
     }
 
     /**
@@ -190,6 +196,36 @@ class Service
     public function setWeight(int $weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SearchHistory>
+     */
+    public function getSearchHistories(): Collection
+    {
+        return $this->searchHistories;
+    }
+
+    public function addSearchHistory(SearchHistory $searchHistory): self
+    {
+        if (!$this->searchHistories->contains($searchHistory)) {
+            $this->searchHistories[] = $searchHistory;
+            $searchHistory->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSearchHistory(SearchHistory $searchHistory): self
+    {
+        if ($this->searchHistories->removeElement($searchHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($searchHistory->getService() === $this) {
+                $searchHistory->setService(null);
+            }
+        }
 
         return $this;
     }

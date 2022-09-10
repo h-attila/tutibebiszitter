@@ -524,6 +524,11 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $preferredTime;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Hit::class, mappedBy="profile", orphanRemoval=true)
+     */
+    private $hits;
+
     #[Pure] public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -532,6 +537,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
         $this->handicaps = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->additionalServices = new ArrayCollection();
+        $this->hits = new ArrayCollection();
     }
 
 //    /**
@@ -1461,6 +1467,36 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPreferredTime(?string $preferredTime): self
     {
         $this->preferredTime = $preferredTime;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Hit>
+     */
+    public function getHits(): Collection
+    {
+        return $this->hits;
+    }
+
+    public function addHit(Hit $hit): self
+    {
+        if (!$this->hits->contains($hit)) {
+            $this->hits[] = $hit;
+            $hit->setProfile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHit(Hit $hit): self
+    {
+        if ($this->hits->removeElement($hit)) {
+            // set the owning side to null (unless already changed)
+            if ($hit->getProfile() === $this) {
+                $hit->setProfile(null);
+            }
+        }
 
         return $this;
     }

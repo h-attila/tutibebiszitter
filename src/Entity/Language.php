@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\LanguaneRepository;
+use App\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=LanguaneRepository::class)
+ * @ORM\Entity(repositoryClass=LanguageRepository::class)
  *
  * @Table(indexes={@Index(name="search_idx", columns={"enabled"})})
  */
@@ -23,7 +23,7 @@ class Language
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"admin_self", "admin_profile", "user_profile", "public"})
+     * @Groups({"admin_self", "admin_profile", "user_profile", "public_profile", "public"})
      */
     private $id;
 
@@ -42,7 +42,7 @@ class Language
      *     groups={"admin_admin"}
      *     )
      *
-     * @Groups({"admin_self", "admin_profile", "user_profile", "public"})
+     * @Groups({"admin_self", "admin_profile", "user_profile", "public_profile", "public"})
      */
     private $label;
 
@@ -96,9 +96,15 @@ class Language
      */
     private $weight;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SearchHistory::class, mappedBy="language")
+     */
+    private $searchHistories;
+
     public function __construct()
     {
         $this->profiles = new ArrayCollection();
+        $this->searchHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,6 +183,36 @@ class Language
     public function setWeight(int $weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SearchHistory>
+     */
+    public function getSearchHistories(): Collection
+    {
+        return $this->searchHistories;
+    }
+
+    public function addSearchHistory(SearchHistory $searchHistory): self
+    {
+        if (!$this->searchHistories->contains($searchHistory)) {
+            $this->searchHistories[] = $searchHistory;
+            $searchHistory->setLanguage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSearchHistory(SearchHistory $searchHistory): self
+    {
+        if ($this->searchHistories->removeElement($searchHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($searchHistory->getLanguage() === $this) {
+                $searchHistory->setLanguage(null);
+            }
+        }
 
         return $this;
     }
