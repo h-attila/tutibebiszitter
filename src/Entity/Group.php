@@ -30,9 +30,7 @@ class Group
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     *
-     * @Groups({"admin_self", "admin_profile", "user_profile", , "public_profile", "public"})
-     */
+     **/
     private $id;
 
     /**

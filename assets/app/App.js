@@ -60,7 +60,7 @@ class App extends Component {
                         </Route>
 
                         <Route path="/bebiszitter/:slug" exact>
-                            <Profile/>
+                            <Profile testimonials={this.state.testimonials}/>
                         </Route>
 
                         <Route path="/bebiszittert-keresek" exact>

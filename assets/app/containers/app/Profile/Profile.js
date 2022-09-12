@@ -31,6 +31,7 @@ class Profile extends Component {
         loading: true,
         profile: null,
         badges: [],
+        testimonials: false,
         sending_message: false
     }
 
@@ -39,12 +40,21 @@ class Profile extends Component {
             return;
         }
 
+        console.log('»» props', this.props);
+
         if (this.props.match.params.slug) {
             this.getProfile(this.props.match.params.slug);
         } else {
             // TODO: hiba kiírás, hogy nincsen slug
             console.log('»» hiba: nincsen uuid');
         }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (!this.state.testimonials && this.props.testimonials) {
+            this.setState({testimonials: this.props.testimonials});
+        }
+        console.log('»» update props', this.props);
     }
 
     getProfile(slug) {
@@ -87,6 +97,23 @@ class Profile extends Component {
                     </Grid>
                 </Grid>
             )
+        }
+
+        let testimonials = '';
+        if (this.props.testimonials) {
+            testimonials = this.props.testimonials.map((testimonial) => {
+                return (
+                    <li key={testimonial.id}>
+                        <span>
+                           <FormatQuoteIcon/>{testimonial.description}
+                            <br/>
+                        -- <b>{testimonial.label}</b>
+                            <br/>
+                            <hr/>
+                        </span>
+                    </li>
+                );
+            });
         }
 
         let facebookIconClass = '';
@@ -144,7 +171,8 @@ class Profile extends Component {
         });
 
         let additionalServicesBadges = this.state.profile.additionalServices.map((service) => {
-            return (<Badge key={service.id} className={[classes.Sign, classes.AddServices].join(' ')}>{service.label}</Badge>);
+            return (<Badge key={service.id}
+                           className={[classes.Sign, classes.AddServices].join(' ')}>{service.label}</Badge>);
         });
 
         return (
@@ -299,48 +327,19 @@ class Profile extends Component {
                         <Box className={[classes.Testimonials, 'p-2 mb-2'].join(' ')}>
                             <h4>Rólunk <small>mondták</small></h4>
                             <ul>
-                                <li>
-                                    <span>
-                                       <FormatQuoteIcon/>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        <br/>
-                                    -- <b>Teszt Emberke</b>
-                                        <br/>
-                                        <hr/>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span>
-                                       <FormatQuoteIcon/>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        <br/>
-                                    -- <b>Teszt Emberke</b>
-                                        <br/>
-                                        <hr/>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span>
-                                       <FormatQuoteIcon/>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        <br/>
-                                    -- <b>Teszt Emberke</b>
-                                        <br/>
-                                        <hr/>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span>
-                                       <FormatQuoteIcon/>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        <br/>
-                                    -- <b>Teszt Emberke</b>
-                                    </span>
-                                </li>
+                                {testimonials}
+                                {/*    <li>*/}
+                                {/*        <span>*/}
+                                {/*           <FormatQuoteIcon/>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor*/}
+                                {/*        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud*/}
+                                {/*        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.*/}
+                                {/*            <br/>*/}
+                                {/*        -- <b>Teszt Emberke</b>*/}
+                                {/*            <br/>*/}
+                                {/*            <hr/>*/}
+                                {/*        </span>*/}
+                                {/*    </li>*/}
+
                             </ul>
                         </Box>
                     </Grid>

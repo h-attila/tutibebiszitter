@@ -45,6 +45,12 @@ class SearchController extends AbstractController
      * @param PlaceService $placeService
      * @param LanguageService $languageService
      * @param HandicapService $handicapService
+     * @param EntityManagerInterface $em
+     * @param ServiceRepository $serviceRepository
+     * @param PlaceRepository $placeRepository
+     * @param GroupRepository $groupRepository
+     * @param HandicapRepository $handicapRepository
+     * @param LanguageRepository $languageRepository
      */
     public function __construct(
         protected SerializerInterface    $serializer,
@@ -200,7 +206,7 @@ class SearchController extends AbstractController
     /**
      * Admin profil lekérdezés.
      *
-     * @param string $uuid
+     * @param string $slug
      * @return Response
      *
      * @Route("/get-profile/{slug}", methods={"GET"}, name="get_profile")

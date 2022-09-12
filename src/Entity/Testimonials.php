@@ -109,6 +109,13 @@ class Testimonials
      */
     private $weight;
 
+    /**
+     * @ORM\Column(type="string", length=100)
+     *
+     * @Groups({"admin_self", "public"})
+     */
+    private $label;
+
     public function getId(): int
     {
         return $this->id;
@@ -183,6 +190,18 @@ class Testimonials
     public function setAvatar(string $avatar): self
     {
         $this->avatar = $avatar;
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+
         return $this;
     }
 }

@@ -16,6 +16,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        dql:
+            numeric_functions:
+                rand: App\Doctrine\Custom\Rand
 
 when@test:
     doctrine:

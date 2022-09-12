@@ -12,7 +12,7 @@ class Testimonials extends Component {
             testimonials = this.props.testimonials.map((testimonial) => {
                 return (
                     <div className="col-lg-4" key={testimonial.id}>
-                        <Testimonial title={testimonial.name} text={testimonial.description} alt={testimonial.name} image={testimonial.avatar} />
+                        <Testimonial title={testimonial.name} text={testimonial.description} alt={testimonial.name} image={testimonial.avatar} label={testimonial.label} />
                     </div>);
             });
         }
