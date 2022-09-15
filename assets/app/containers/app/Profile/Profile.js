@@ -23,6 +23,7 @@ import Spinner from '../../../../app/components/UI/Spinner/Spinner';
 import classes from './Profile.scss';
 import {withRouter} from "react-router";
 import axios from "axios";
+import {message} from "../../../store/actions/actions";
 
 class Profile extends Component {
 
@@ -31,8 +32,14 @@ class Profile extends Component {
         loading: true,
         profile: null,
         badges: [],
-        testimonials: false,
-        sending_message: false
+        message: {
+            uuid: '',
+            name: '',
+            email: '',
+            message: '',
+            sending: false,
+            buttonText: 'Üzenetet küldök'
+        }
     }
 
     componentDidMount() {
@@ -48,13 +55,6 @@ class Profile extends Component {
             // TODO: hiba kiírás, hogy nincsen slug
             console.log('»» hiba: nincsen uuid');
         }
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!this.state.testimonials && this.props.testimonials) {
-            this.setState({testimonials: this.props.testimonials});
-        }
-        console.log('»» update props', this.props);
     }
 
     getProfile(slug) {
@@ -74,6 +74,10 @@ class Profile extends Component {
                             profile: response.data.profile,
                             badges: response.data.badges,
                             loading: false,
+                            message: {
+                                ...this.state.message,
+                                uuid: response.data.profile.uuid
+                            },
                             init: true
                         });
                     } else {
@@ -86,7 +90,54 @@ class Profile extends Component {
             });
     }
 
+    messageFieldChanged(event, field) {
+        this.setState({
+            message: {
+                ...this.state.message,
+                [field]: event.target.value
+            }
+        });
+    }
+
+    sendProfileMessage(event) {
+        console.log('»» sendProfileMessage', event, this.state.message);
+        this.setState({
+            message: {
+                ...this.state.message,
+                sending: true
+            }
+        });
+
+        axios
+            .post('/api/message/send-profile-message', this.state.message)
+            .then(
+                response => {
+                    console.log('»» profile', response);
+                    if (response.status === 200) {
+                        console.log('»» msg res', response);
+                        this.setState({
+                            message: {
+                                ...this.state.message,
+                                name: '',
+                                email: '',
+                                message: '',
+                                sending: false
+                            }
+                        });
+                    } else {
+                        console.log('»» error');
+                    }
+                }
+            )
+            .catch(err => {
+                console.log('»» show error modal!')
+            });
+
+    }
+
     render() {
+
+        console.log('»» render', this.props, this.state);
 
         if (!this.state.profile) {
             return (
@@ -205,12 +256,16 @@ class Profile extends Component {
                                 id="message_name"
                                 label='Neved'
                                 size="small"
+                                value={this.state.message.name}
+                                onChange={(event) => this.messageFieldChanged(event, 'name')}
                             />
                             <TextField
                                 className="w-100 m-1 p-1"
                                 id="message_email"
                                 label='E-mail címed'
                                 size="small"
+                                value={this.state.message.email}
+                                onChange={(event) => this.messageFieldChanged(event, 'email')}
                             />
                             <TextField
                                 className="w-100 m-1 p-1"
@@ -219,11 +274,14 @@ class Profile extends Component {
                                 rows={7}
                                 label='Írd ide az üzeneted'
                                 size="small"
+                                value={this.state.message.message}
+                                onChange={(event) => this.messageFieldChanged(event, 'message')}
                             />
                             <Button
                                 variant="outlined"
                                 className={[classes.Button, 'w-100 m-1'].join(' ')}
-                            >Üzenetet küldök
+                                onClick={(event) => this.sendProfileMessage(event)}>
+                                { this.state.message.buttonText }
                             </Button>
                         </Box>
                     </Grid>
@@ -328,18 +386,6 @@ class Profile extends Component {
                             <h4>Rólunk <small>mondták</small></h4>
                             <ul>
                                 {testimonials}
-                                {/*    <li>*/}
-                                {/*        <span>*/}
-                                {/*           <FormatQuoteIcon/>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor*/}
-                                {/*        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud*/}
-                                {/*        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.*/}
-                                {/*            <br/>*/}
-                                {/*        -- <b>Teszt Emberke</b>*/}
-                                {/*            <br/>*/}
-                                {/*            <hr/>*/}
-                                {/*        </span>*/}
-                                {/*    </li>*/}
-
                             </ul>
                         </Box>
                     </Grid>

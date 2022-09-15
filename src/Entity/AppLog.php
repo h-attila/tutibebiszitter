@@ -47,13 +47,6 @@ class AppLog
         return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $created): self
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
     public function getLevel(): ?string
     {
         return $this->level;
@@ -86,6 +79,18 @@ class AppLog
     public function setContext(?array $context): self
     {
         $this->context = $context;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     *
+     * @return $this
+     */
+    public function onPrePersist(): self
+    {
+        $this->created = new \DateTime();
 
         return $this;
     }

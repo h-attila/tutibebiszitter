@@ -95,7 +95,7 @@
     }
 
     .TableInfoBox {
-        //background-color: $colorFive;
+        background-color: $colorFive;
         margin: 0 0 8px 0;
 
         h4 {
@@ -109,6 +109,10 @@
 
         p {
             font-size: .9rem;
+        }
+
+        input, textarea {
+            background-color: $white;
         }
     }
 

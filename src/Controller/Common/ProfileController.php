@@ -30,13 +30,13 @@ class ProfileController extends AbstractController
 
     /**
      * @param EntityManagerInterface $em
-     * @param LoggerInterface $logger
+//     * @param LoggerInterface $logger
      * @param ProfileRepository $profileRepository
      * @param SerializerInterface $serializer
      */
     public function __construct(
         protected EntityManagerInterface $em,
-        protected LoggerInterface        $logger,
+//        protected LoggerInterface        $logger,
         protected ProfileRepository      $profileRepository,
         protected SerializerInterface    $serializer
     )

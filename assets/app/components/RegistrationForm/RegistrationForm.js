@@ -1147,7 +1147,6 @@ class RegistrationForm extends Component {
             let subData = {
                 ...this.state.formData[subKey],
                 [e.target.name]: e.target.checked
-                // [e.target.name]: 1
             };
             this.setState({
                 formData: {
@@ -1267,6 +1266,9 @@ class RegistrationForm extends Component {
     }
 
     render() {
+
+        console.log('»» rendi', this.props);
+
         const stepErrors = [
             !!(this.props.formErrors['name'] || this.props.formErrors['address'] || this.props.formErrors['phone'] || this.props.formErrors['pubAddress'] || this.props.formErrors['username'] || this.props.formErrors['plainPassword']),
             !!(this.props.formErrors['shortIntroduction'] || this.props.formErrors['introduction']) || (this.props.formErrors['web'] || this.props.formErrors['facebook'] || this.props.formErrors['instagram']),
@@ -1313,7 +1315,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         packagesInit: () => dispatch(actionCreators.packagesInit()),
-        servicesInit: () => dispatch(actionCreators.searchFormInit()),
+        // servicesInit: () => dispatch(actionCreators.searchFormInit()),
         registrationFormSubmit: (formData) => dispatch(actionCreators.registrationFormSubmit(formData))
     }
 }

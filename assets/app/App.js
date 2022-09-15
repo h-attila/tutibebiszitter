@@ -31,7 +31,7 @@ class App extends Component {
         axios
             .get('/api/testimonials/get-testimonials')
             .then(response => {
-                this.setState({testimonials: response.data});       // todo: válasz success? Többinél is!
+                this.setState({testimonials: response.data});
             });
     }
 

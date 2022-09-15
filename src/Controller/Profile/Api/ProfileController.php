@@ -7,7 +7,7 @@ namespace App\Controller\Profile\Api;
 use App\Form\Profile\AdminProfileFormType;
 use App\Repository\ProfileRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+//use Psr\Log\LoggerInterface;
 use App\Controller\Common\ProfileController as CommonProfileController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -25,13 +25,13 @@ class ProfileController extends CommonProfileController
 
     public function __construct(
         EntityManagerInterface $em,
-        LoggerInterface        $logger,
+//        LoggerInterface        $logger,
         ProfileRepository      $profileRepository,
         SerializerInterface    $serializer
     )
     {
         $this->adminProfileFormType = AdminProfileFormType::class;
 
-        parent::__construct($em, $logger, $profileRepository, $serializer);
+        parent::__construct($em, $profileRepository, $serializer);
     }
 }
