@@ -26,7 +26,7 @@ class Message
      * @Assert\Length (
      *     min=5,
      *     max=250,
-     *     minMessage="Az üzenet szövege túl rövid"
+     *     minMessage="Az üzenet szövege túl rövid",
      *     maxMessage="Az üzenet szövege legfeljebb 250 karakter lehet"
      * )
      *

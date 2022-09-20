@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class MessageController
@@ -18,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MessageController extends AbstractController
 {
-    public function __construct(protected MailerService $mailer, protected ProfileRepository $profileRepository)
+    public function __construct(protected MailerService $mailer, protected ProfileRepository $profileRepository, protected ValidatorInterface $validator)
     {}
 
     /**
@@ -43,12 +45,25 @@ class MessageController extends AbstractController
 
                 $this->mailer->sendMessageToProfile($message, $profile);
             } catch (\Throwable $e) {
-                return new JsonResponse(null, 400);
+                $error = [
+                    'errors'=>$e->getMessage()
+                ];
+                return new JsonResponse($error, 400);
             }
 
             return new JsonResponse(null, 200);
         }
 
-        return new JsonResponse(null, 400);
+        $msg = [];
+        $errors = $this->validator->validate($message);
+        /* @var ConstraintViolation $error */
+        foreach ($errors as $error) {
+            $msg[] = $error->getMessage();
+        }
+
+        $error = [
+            'errors'=>$msg
+        ];
+        return new JsonResponse($error, 400);
     }
 }

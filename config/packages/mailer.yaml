@@ -3,7 +3,7 @@ framework:
         dsn: '%env(MAILER_DSN)%'
 #        dsn: 'null://null'
         envelope:
-            sender: 'info@tutibebiszitter.hu'
+            sender: 'tutibebiszitter_teszt@itsweb.hu'
         headers:
-            From: 'Tuti Bébiszitter Közvetítő <info@tutibebiszitter.hu>'
+            From: 'Tuti Bébiszitter Közvetítő <tutibebiszitter_teszt@itsweb.hu>'
 #            Bcc: 'baz@example.com'     // todo: kitalálni, hová menjen a bcc

@@ -28,7 +28,8 @@ class MessageFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Message::class,
-            'csrf_protection' => true,
+            'csrf_protection' => false,
+            'allow_extra_fields' => false
         ]);
     }
 }

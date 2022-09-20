@@ -33,7 +33,7 @@ class MailerService
             ->context([
                 'name' => $profile->getName(),
                 'sender' => $message->getName(),
-                'email' => $message->getEmail(),
+                'email_address' => $message->getEmail(),
                 'message' => $message->getMessage(),
             ]);
 

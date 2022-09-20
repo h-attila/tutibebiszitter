@@ -19,11 +19,11 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import React, {Component} from 'react';
 import Spinner from '../../../../app/components/UI/Spinner/Spinner';
+import ReCaptcha from './../../../components/Recaptcha/Recaptcha';
 
 import classes from './Profile.scss';
 import {withRouter} from "react-router";
 import axios from "axios";
-import {message} from "../../../store/actions/actions";
 
 class Profile extends Component {
 
@@ -46,6 +46,8 @@ class Profile extends Component {
         if (this.state.init) {
             return;
         }
+
+        this._reCaptchaRef = React.createRef();
 
         console.log('»» props', this.props);
 
@@ -99,8 +101,8 @@ class Profile extends Component {
         });
     }
 
-    sendProfileMessage(event) {
-        console.log('»» sendProfileMessage', event, this.state.message);
+    sendProfileMessage(){
+        console.log('»» sendProfileMessage', this.state.message);
         this.setState({
             message: {
                 ...this.state.message,
@@ -108,8 +110,15 @@ class Profile extends Component {
             }
         });
 
+        let message = {
+            name: this.state.message.name,
+            email: this.state.message.email,
+            message: this.state.message.message,
+            uuid: this.state.message.uuid
+        };
+
         axios
-            .post('/api/message/send-profile-message', this.state.message)
+            .post('/api/message/send-profile-message', message)
             .then(
                 response => {
                     console.log('»» profile', response);
@@ -133,6 +142,10 @@ class Profile extends Component {
                 console.log('»» show error modal!')
             });
 
+    }
+
+    onChange(value) {
+        console.log("Captcha value:", value);
     }
 
     render() {
@@ -251,38 +264,50 @@ class Profile extends Component {
                             <p className="mb-3">Csörgess meg:</p>
                             <h5 className="text-center">{this.state.profile.phone}</h5>
                             <p className="mb-2">Vagy küldj üzenetet:</p>
-                            <TextField
-                                className="w-100 m-1 p-1"
-                                id="message_name"
-                                label='Neved'
-                                size="small"
-                                value={this.state.message.name}
-                                onChange={(event) => this.messageFieldChanged(event, 'name')}
-                            />
-                            <TextField
-                                className="w-100 m-1 p-1"
-                                id="message_email"
-                                label='E-mail címed'
-                                size="small"
-                                value={this.state.message.email}
-                                onChange={(event) => this.messageFieldChanged(event, 'email')}
-                            />
-                            <TextField
-                                className="w-100 m-1 p-1"
-                                id="message_message"
-                                multiline
-                                rows={7}
-                                label='Írd ide az üzeneted'
-                                size="small"
-                                value={this.state.message.message}
-                                onChange={(event) => this.messageFieldChanged(event, 'message')}
-                            />
-                            <Button
-                                variant="outlined"
-                                className={[classes.Button, 'w-100 m-1'].join(' ')}
-                                onClick={(event) => this.sendProfileMessage(event)}>
-                                { this.state.message.buttonText }
-                            </Button>
+                            <form>
+                                <TextField
+                                    className="w-100 m-1 p-1"
+                                    id="message_name"
+                                    label='Neved'
+                                    size="small"
+                                    value={this.state.message.name}
+                                    onChange={(event) => this.messageFieldChanged(event, 'name')}
+                                />
+                                <TextField
+                                    className="w-100 m-1 p-1"
+                                    id="message_email"
+                                    label='E-mail címed'
+                                    size="small"
+                                    value={this.state.message.email}
+                                    onChange={(event) => this.messageFieldChanged(event, 'email')}
+                                />
+                                <TextField
+                                    className="w-100 m-1 p-1"
+                                    id="message_message"
+                                    multiline
+                                    rows={7}
+                                    label='Írd ide az üzeneted'
+                                    size="small"
+                                    value={this.state.message.message}
+                                    onChange={(event) => this.messageFieldChanged(event, 'message')}
+                                />
+                                <div>
+                                    <ReCaptcha
+                                        id="recaptcha"
+                                        size="invisible"
+                                        apiKey="6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw"
+                                        onChange={(response) => {
+                                            this.setState({ captchaResponse: response })
+                                        }}
+                                    />
+                                </div>
+                                <Button
+                                    variant="outlined"
+                                    className={[classes.Button, 'w-100 m-1'].join(' ')}
+                                    onClick={(event) => this.sendProfileMessage(event)}>
+                                    {this.state.message.buttonText}
+                                </Button>
+                            </form>
                         </Box>
                     </Grid>
                     <Grid item xs={8} md={6}>
