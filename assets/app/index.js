@@ -6,12 +6,16 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import history from './store/history/history';
+
 import {Provider} from 'react-redux';
-import {applyMiddleware, createStore} from 'redux';
+
 import reducer from './store/reducer/reducer';
-import thunk from 'redux-thunk';
+
 import {Router} from "react-router-dom";
+import {applyMiddleware, createStore} from 'redux';
+import thunk from 'redux-thunk';
 // import { ConnectedRouter } from 'connected-react-router';
 import './styles/app.scss';
 

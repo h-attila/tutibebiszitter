@@ -39,3 +39,7 @@ services:
         class: App\EventListener\AuthenticationExpiredListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }
+
+    App\Service\Captcha\GoogleReCaptchaChecker:
+        arguments:
+            $secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'

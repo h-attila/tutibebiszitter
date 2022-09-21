@@ -32,7 +32,6 @@ class DoctrineHandler extends AbstractProcessingHandler
 
         $appLog = new AppLog();
         $appLog
-            ->setCreated(new \DateTime())
             ->setLevel($record['level'] ?? null)
             ->setMessage($record['level'] ?? null)
             ->setContext($record['context'] ?? null);

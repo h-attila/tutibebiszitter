@@ -1,0 +1,148 @@
+@import "../../../styles/colors";
+
+
+.Profile {
+    margin-top: 100px;
+
+    h3 {
+        font-style: italic;
+        color: $colorTwo;
+    }
+
+    .SocialBoxes {
+        text-align: center;
+
+        .SocialIcon {
+            width: 2rem;
+            height: 2rem;
+            margin: 1rem;
+        }
+
+        .Disabled {
+            color: $colorThree!important;
+        }
+    }
+
+    .FacebookBox {
+        background-color: $primaryColor;
+        border-bottom: 1px solid $white;
+        color: $white;
+
+        hr {
+            border-color: $white;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+        }
+    }
+
+    .TopSearchBox {
+        background-color: $colorTwo;
+        border-bottom: 1px solid $white;
+        color: $white;
+
+        h4 {
+            color: $white;
+            font-size: 1.25rem;
+        }
+
+        ol {
+            padding: 0 1rem 1rem 2rem;
+
+            li {
+                font-size: .85rem;
+
+                a {
+                    color: $white;
+
+                    &:hover {
+                        text-decoration: underline!important;
+                    }
+                }
+            }
+        }
+    }
+
+    .Testimonials {
+        background-color: $colorThree;
+        color: $white;
+
+        h4 {
+            color: $white;
+            font-size: 1.24rem;
+        }
+
+        ul {
+            padding: 0 1rem;
+
+            li {
+                font-size: .85rem;
+                text-align: center;
+                font-style: italic;
+                list-style-type: none;
+                margin-bottom: 1rem;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                hr {
+                    border-color: $white;
+                }
+            }
+        }
+    }
+
+    .TableInfoBox {
+        background-color: $colorFive;
+        margin: 0 0 8px 0;
+
+        h4 {
+            color: $primaryColor;
+            font-size: 1.3rem;
+        }
+
+        h5 {
+            color: $colorTwo;
+        }
+
+        p {
+            font-size: .9rem;
+        }
+
+        input, textarea {
+            background-color: $white;
+        }
+    }
+
+    .Button {
+        color: $primaryColor;
+        border-color: $primaryColor;
+    }
+
+    TableCell {
+        font-weight: 300;
+    }
+
+    .Sign {
+        color: $white;
+        margin: 0.1rem;
+        padding: 0.2rem 0.3rem;
+        font-size: .8rem;
+        font-weight: 300;
+        border-radius: 2px;
+    }
+
+    .Base {
+        background-color: $primaryColor;
+    }
+
+    .AddServices {
+        background-color: $colorThree;
+    }
+
+    .Orange {
+        background-color: $orange;
+    }
+}

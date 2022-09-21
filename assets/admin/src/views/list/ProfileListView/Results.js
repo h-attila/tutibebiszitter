@@ -1,21 +1,22 @@
-import React, {useState} from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import {Avatar, Box, Card, makeStyles, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, Typography} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import {Avatar, Box, Card, makeStyles, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, Typography} from '@material-ui/core';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import EditIcon from '@material-ui/icons/Edit';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import Swal from 'sweetalert2';
-import getInitials from '../../../utils/getInitials';
 import axios from "axios";
+import clsx from 'clsx';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, {useState} from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Swal from 'sweetalert2';
 import withReactContent from "sweetalert2-react-content";
-import AuthService from "../../../AuthService";
+
 import history from "../../../../../app/store/history/history";
+import AuthService from "../../../AuthService";
+import getInitials from '../../../utils/getInitials';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -147,10 +148,10 @@ const Results = ({className, list, ...rest}) => {
                                 >
                                     <TableCell align="center">
                                         <ButtonGroup variant="outlined" size="small" color="primary" aria-label="small outlined primary button group">
-                                            <Button href={'./profil/' + customer.uuid}>
+                                            <Button href={'./admin/profil/' + customer.uuid}>
                                                 <EditIcon fontSize="small" color="primary"/>
                                             </Button>
-                                            <Button onClick={() => window.open("./profil-elonezet/" + customer.uuid, "_blank")}>
+                                            <Button onClick={() => window.open("./admin/profil-elonezet/" + customer.uuid, "_blank")}>
                                                 <AssignmentIndIcon fontSize="small" color="primary"/>
                                             </Button>
                                             <Button onClick={() => deleteProfile(customer.uuid)}>

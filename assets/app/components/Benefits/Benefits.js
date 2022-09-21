@@ -1,7 +1,7 @@
 import React from "react";
 
-import classes from './Benefits.scss';
 import bgArt from "../../images/bg_art.jpg";
+import classes from './Benefits.scss';
 
 const benefits = () => {
     return (

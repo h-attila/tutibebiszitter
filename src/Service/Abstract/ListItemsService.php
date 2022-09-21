@@ -4,7 +4,7 @@ namespace App\Service\Abstract;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-abstract class ListItemsService
+class ListItemsService
 {
     protected string $class;
 
@@ -18,10 +18,9 @@ abstract class ListItemsService
      * Listaelemek lekérdezése
      *
      * @param string $status
-     * @param bool $publicOnly
      * @return array
      */
-    function getList(string $status='active', bool $publicOnly = false): array
+    function getList(string $status='active'): array
     {
         $qb = $this->entityManager->getRepository($this->class)->createQueryBuilder('p');
         $qb

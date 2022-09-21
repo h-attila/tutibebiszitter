@@ -1,7 +1,8 @@
 import React from 'react';
-import classes from './SubToolBar.module.scss';
 
 import NavLink from './NavLink/NavLink';
+import classes from './SubToolBar.module.scss';
+
 
 const subToolBar = () => (
     <nav className={[classes.SubToolBar, "d-none d-sm-inline-flex fixed-top navbar-expand-sm navbar-light w-100 flex-row-reverse"].join(' ')}>

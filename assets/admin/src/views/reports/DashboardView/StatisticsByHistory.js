@@ -1,7 +1,3 @@
-import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import {Bar} from 'react-chartjs-2';
 import {
     Box,
     Button,
@@ -15,8 +11,12 @@ import {
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import {NavLink} from "react-router-dom";
 import AvTimerIcon from "@material-ui/icons/AvTimer";
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {Bar} from 'react-chartjs-2';
+import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
     root: {}

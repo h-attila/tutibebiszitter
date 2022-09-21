@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import axios from 'axios';
-
-import classes from './Testimonials.scss';
 
 import Testimonial from './Testimonial/Testimonial';
+import classes from './Testimonials.scss';
+
 
 class Testimonials extends Component {
     render() {
@@ -12,7 +11,7 @@ class Testimonials extends Component {
             testimonials = this.props.testimonials.map((testimonial) => {
                 return (
                     <div className="col-lg-4" key={testimonial.id}>
-                        <Testimonial title={testimonial.name} text={testimonial.description} alt={testimonial.name} image={testimonial.avatar} />
+                        <Testimonial title={testimonial.name} text={testimonial.description} alt={testimonial.name} image={testimonial.avatar} label={testimonial.label} />
                     </div>);
             });
         }

@@ -1,5 +1,5 @@
-import * as actionTypes from '../actions/actionTypes';
 import AuthService from '../../../admin/src/AuthService';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
         search: {
@@ -44,7 +44,8 @@ const initialState = {
             error: null
         },
         testimonials: null,
-        packages: null
+        packages: null,
+        profile: null
     }
 ;
 
@@ -189,7 +190,7 @@ const reducer = (state = initialState, action) => {
             return state;
         }
         case actionTypes.PROFILE_LOGIN:
-        // case actionTypes.ADMIN_LOGIN:
+            // case actionTypes.ADMIN_LOGIN:
         {
             console.log('»» PROFILE_LOGIN');
 
@@ -233,8 +234,7 @@ const reducer = (state = initialState, action) => {
             return AuthService.getCurrentUser();
         }
         case actionTypes.PROFILE_LOGIN_CHANGED:
-        case actionTypes.ADMIN_LOGIN_CHANGED:
-        {
+        case actionTypes.ADMIN_LOGIN_CHANGED: {
             console.log('»» login action', action);
             return {
                 ...state,
@@ -246,8 +246,7 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.PROFILE_LOGIN_FAILED:
-        case actionTypes.ADMIN_LOGIN_FAILED:
-        {
+        case actionTypes.ADMIN_LOGIN_FAILED: {
             return {
                 ...state,
                 user: {

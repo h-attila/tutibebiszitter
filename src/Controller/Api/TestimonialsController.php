@@ -26,7 +26,5 @@ class TestimonialsController extends AbstractController
         $json = $serializer->serialize($testimonials, 'json', ['groups' => ['public']]);
 
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
-
-//        return new JsonResponse($testimonials, Response::HTTP_OK);
     }
 }

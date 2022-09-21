@@ -14,10 +14,16 @@ class SelectItem extends Component {
     font = this.props.font ?? 'Poppins';
 
     colourStyles = {
-        control: styles => ({...styles, fontWeight: '300', fontFamily: this.font, color: '#0d0f10'}),
-        option: styles => ({...styles, fontWeight: '300', fontFamily: this.font, color: '#0d0f10'}),
-        input: styles => ({...styles, fontWeight: '300', fontFamily: this.font, color: '#0d0f10'}),
-        placeholder: styles => ({...styles, fontWeight: '300', fontFamily: this.font, color: '#0d0f10'})
+        control: styles => ({...styles, fontWeight: '300', fontFamily: this.font, color: '#60135E', borderColor: '#60135E'}),
+        input: styles => ({...styles, fontWeight: '300', fontFamily: this.font, color: '#60135E'}),
+        placeholder: styles => ({...styles, fontWeight: '300', fontFamily: this.font, color: '#60135E'}),
+        option: (styles, { isSelected }) => {
+            return {
+                ...styles,
+                backgroundColor: isSelected ? '#60135E' : '#ffffff',
+                color: isSelected ? '#FFFFFF' : '#60135E',
+            }
+        }
     };
 
     componentDidMount() {

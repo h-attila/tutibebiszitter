@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {Avatar, Box, Card, CardContent, makeStyles, Typography} from '@material-ui/core';
 import Chip from "@material-ui/core/Chip";
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const useStyles = makeStyles(() => ({
     root: {},

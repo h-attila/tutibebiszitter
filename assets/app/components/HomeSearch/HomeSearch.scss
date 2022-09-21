@@ -9,7 +9,7 @@
 
   .Title {
     font-weight: 500;
-    color: $white-color;
+    color: $white;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
     font-size: 24px;
     line-height: 42px;
@@ -20,7 +20,7 @@
     max-width: 700px;
     margin: 0 auto;
     background-color: rgba(96, 19, 94, 0.5);
-    color: $font-color-light;
+    color: $fontLight;
     border-radius: 5px;
   }
 }

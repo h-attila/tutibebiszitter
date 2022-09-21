@@ -2,13 +2,21 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Hit;
 use App\Entity\Profile;
+use App\Entity\SearchHistory;
+use App\Repository\GroupRepository;
+use App\Repository\HandicapRepository;
+use App\Repository\LanguageRepository;
+use App\Repository\PlaceRepository;
 use App\Repository\ProfileRepository;
+use App\Repository\ServiceRepository;
 use App\Service\GroupService;
 use App\Service\HandicapService;
 use App\Service\LanguageService;
 use App\Service\PlaceService;
 use App\Service\ServiceService;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Psr\Log\LoggerInterface;
@@ -37,16 +45,28 @@ class SearchController extends AbstractController
      * @param PlaceService $placeService
      * @param LanguageService $languageService
      * @param HandicapService $handicapService
+     * @param EntityManagerInterface $em
+     * @param ServiceRepository $serviceRepository
+     * @param PlaceRepository $placeRepository
+     * @param GroupRepository $groupRepository
+     * @param HandicapRepository $handicapRepository
+     * @param LanguageRepository $languageRepository
      */
     public function __construct(
-        protected SerializerInterface $serializer,
-        protected ProfileRepository   $profileRepository,
-        protected LoggerInterface     $logger,
-        protected ServiceService      $serviceService,
-        protected GroupService        $groupService,
-        protected PlaceService        $placeService,
-        protected LanguageService     $languageService,
-        protected HandicapService     $handicapService,
+        protected SerializerInterface    $serializer,
+        protected ProfileRepository      $profileRepository,
+        protected LoggerInterface        $logger,
+        protected ServiceService         $serviceService,
+        protected GroupService           $groupService,
+        protected PlaceService           $placeService,
+        protected LanguageService        $languageService,
+        protected HandicapService        $handicapService,
+        protected EntityManagerInterface $em,
+        protected ServiceRepository      $serviceRepository,
+        protected PlaceRepository        $placeRepository,
+        protected GroupRepository        $groupRepository,
+        protected HandicapRepository     $handicapRepository,
+        protected LanguageRepository     $languageRepository
     )
     {
     }
@@ -81,17 +101,17 @@ class SearchController extends AbstractController
 //                ];
 //            });
 //        } catch (Exception $e) {
-            $res = [
-                'service' => $this->serviceService->getList('active'),
-                'group' => $this->groupService->getList('active'),
-                'place' => $this->placeService->getPlaceOptions(),
-                'language' => $this->languageService->getList('active'),
-                'handicap' => $this->handicapService->getList('active'),
-            ];
+        $res = [
+            'service' => $this->serviceService->getList('active'),
+            'group' => $this->groupService->getList('active'),
+            'place' => $this->placeService->getPlaceOptions(),
+            'language' => $this->languageService->getList('active'),
+            'handicap' => $this->handicapService->getList('active'),
+        ];
 //        }
 
 
-        $json = $this->serializer->serialize($res, 'json', ['groups' => ['public']]);
+        $json = $this->serializer->serialize($res, 'json', ['groups' => ['public_profile']]);
 
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
     }
@@ -108,13 +128,39 @@ class SearchController extends AbstractController
         $currentPage = $content['pagination'] ?? 0;
         $currentPage++;
 
+        $serviceId = $content['searchParams']['service']['id'] ?? null;
+        $placeId = $content['searchParams']['place']['id'] ?? null;
+        $groupId = $content['searchParams']['group']['id'] ?? null;
+        $handicapId = $content['searchParams']['handicap']['id'] ?? null;
+        $languageId = $content['searchParams']['language']['id'] ?? null;
+
         $profiles = $this->profileRepository->search(
-            $content['searchParams']['service']['id'] ?? null,
-            $content['searchParams']['place']['id'] ?? null,
-            $content['searchParams']['group']['id'] ?? null,
-            $content['searchParams']['handicap']['id'] ?? null,
-            $content['searchParams']['language']['id'] ?? null,
+            $serviceId,
+            $placeId,
+            $groupId,
+            $handicapId,
+            $languageId,
         );
+
+        $service = is_null($serviceId) ? null : $this->serviceRepository->find($serviceId);
+        $place = is_null($placeId) ? null : $this->placeRepository->find($placeId);
+        $group = is_null($groupId) ? null : $this->groupRepository->find($groupId);
+        $handicap = is_null($handicapId) ? null : $this->handicapRepository->find($handicapId);
+        $language = is_null($languageId) ? null : $this->languageRepository->find($languageId);
+
+        // mentjük a keresést
+        $searchHistory = new SearchHistory();
+        $searchHistory
+            ->setService($service)
+            ->setPlace($place)
+            ->setGroups($group)
+            ->setHandicap($handicap)
+            ->setLanguage($language)
+            ->setFound(count($profiles))
+            ->setCreated(new \DateTime());
+
+        $this->em->persist($searchHistory);
+        $this->em->flush();
 
         $now = new \DateTime();
         $highlighted = [];
@@ -155,6 +201,58 @@ class SearchController extends AbstractController
         $json = $this->serializer->serialize($results, 'json', ['groups' => 'admin_profile']);
 
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
+    }
+
+    /**
+     * Admin profil lekérdezés.
+     *
+     * @param string $slug
+     * @return Response
+     *
+     * @Route("/get-profile/{slug}", methods={"GET"}, name="get_profile")
+     */
+    public function getProfile(string $slug): Response
+    {
+        $p = $this->em->getRepository(Profile::class);
+
+        /* @var $profile Profile */
+        $profile = $p->findOneBy([
+            'slug' => $slug
+        ]);
+
+        $now = new \DateTime();
+        if (!$profile || !$profile->getActive() || !$profile->getEnabled() || $profile->getRegStart()?->format('Y-m-d') > $now->format('Y-m-d') || $profile->getRegEnd()?->format('Y-m-d') < $now->format('Y-m-d')) {
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        }
+
+        // kiemelések
+        $badges = [];
+        if ($profile->getNewMemberSign()?->format('Y-m-d') >= (new \DateTime())->format('Y-m-d')) {
+            $badges[] = "Új tag";
+        }
+        if ($profile->getHighlighted()?->format('Y-m-d') >= (new \DateTime())->format('Y-m-d')) {
+            $badges[] = "Kiemelt";
+        }
+
+        $data = [
+            'profile' => $profile,
+            'badges' => $badges
+        ];
+
+        // mentjük a keresési eseményt
+        $hit = new Hit();
+        $hit
+            ->setCreated(new \DateTime());
+        $profile
+            ->addHit($hit);
+
+        $this->em->persist($hit);
+        $this->em->persist($profile);
+        $this->em->flush();
+
+        $json = $this->serializer->serialize($data, 'json', ['groups' => ['public_profile']]);
+
+        return JsonResponse::fromJsonString($json);
     }
 
     /**

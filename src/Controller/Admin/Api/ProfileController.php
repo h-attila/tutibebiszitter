@@ -29,14 +29,14 @@ class ProfileController extends CommonProfileController
 
     public function __construct(
         EntityManagerInterface $em,
-        LoggerInterface        $logger,
+//        LoggerInterface        $logger,
         ProfileRepository      $profileRepository,
         SerializerInterface    $serializer
     )
     {
         $this->adminProfileFormType = AdminProfileFormType::class;
 
-        parent::__construct($em, $logger, $profileRepository, $serializer);
+        parent::__construct($em, $profileRepository, $serializer);
     }
 
 

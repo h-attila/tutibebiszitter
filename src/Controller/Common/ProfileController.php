@@ -30,13 +30,13 @@ class ProfileController extends AbstractController
 
     /**
      * @param EntityManagerInterface $em
-     * @param LoggerInterface $logger
+//     * @param LoggerInterface $logger
      * @param ProfileRepository $profileRepository
      * @param SerializerInterface $serializer
      */
     public function __construct(
         protected EntityManagerInterface $em,
-        protected LoggerInterface        $logger,
+//        protected LoggerInterface        $logger,
         protected ProfileRepository      $profileRepository,
         protected SerializerInterface    $serializer
     )
@@ -273,6 +273,10 @@ class ProfileController extends AbstractController
             if (!empty($errors)) {
                 return new JsonResponse(['success' => false, 'errors' => $errors, 'data' => $data], Response::HTTP_BAD_REQUEST);
             }
+
+            // slug kisbetűsre
+            $slug = strtolower($profile->getSlug());
+            $profile->setSlug($slug);
 
             // új státusz beállítás
             $status = $statusService->set($profile);

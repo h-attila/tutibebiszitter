@@ -1,12 +1,3 @@
-import React, {useState} from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Switch from '@material-ui/core/Switch';
-
 import {
   Avatar,
   Box,
@@ -21,9 +12,18 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Switch from '@material-ui/core/Switch';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import EditIcon from '@material-ui/icons/Edit';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import clsx from 'clsx';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, {useState} from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 import getInitials from '../../../utils/getInitials';
 
 const useStyles = makeStyles((theme) => ({

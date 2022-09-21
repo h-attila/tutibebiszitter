@@ -1,6 +1,3 @@
-import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
@@ -11,10 +8,13 @@ import {
   makeStyles,
   colors
 } from '@material-ui/core';
-import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
-import {NavLink} from "react-router-dom";
 import AvTimerIcon from '@material-ui/icons/AvTimer';
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
   root: {

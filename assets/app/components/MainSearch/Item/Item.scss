@@ -4,8 +4,23 @@
     max-width: 950px;
     width: 100%;
     min-height: 250px;
-    background-color: $bg-color;
+    background-color: $colorFive;
     flex-direction: column;
+    color: $font !important;
+    text-decoration: none;
+    box-shadow: 0 .5rem 1rem $bgShadow!important;
+
+    &:hover {
+        border-right: 5px solid $orange;
+    }
+
+    .Link {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 
     .Thumbnail {
         flex: 0 0 260px;
@@ -13,26 +28,43 @@
 
         .Img {
             width: 250px;
-            height: 250px;
+            height: fit-content;
         }
     }
 
     .InfoBox {
         flex: 1;
     }
+
+    .Title {
+        color: $primaryColor;
+        font-weight: 400!important;
+        margin-bottom: 0;
+    }
+
+    .SubInfo {
+        color: $primaryColor;
+        font-weight: 300!important;
+        font-size: .85rem;
+        margin: .5rem 0;
+    }
+
+    .Button {
+        color: $primaryColor;
+    }
 }
 
 .Badge {
-    color: $white-color;
+    color: $white;
     margin: 0.1rem;
-    padding: 0.2rem;
+    padding: 0.2rem 0.3rem;
     font-size: .8rem;
     font-weight: 300;
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 .Normal {
-    background-color: $purple-color-light75;
+    background-color: $primaryColor;
 }
 
 .Orange {
@@ -40,11 +72,11 @@
 }
 
 .CardHighlighted {
-    border-right: 5px solid $purple-color-light75;
+    border-right: 5px solid $colorTwo;
 }
 
 .White {
-    color: $white-color!important;
+    color: $white !important;
 }
 
 @media (min-width: 768px) {

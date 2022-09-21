@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {
   Box,
   Button,
@@ -11,14 +8,17 @@ import {
   SvgIcon,
   makeStyles
 } from '@material-ui/core';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import MoodIcon from '@material-ui/icons/Mood';
-import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import AvTimerIcon from '@material-ui/icons/AvTimer';
 import EditIcon from '@material-ui/icons/Edit';
-import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import MoodIcon from '@material-ui/icons/Mood';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {Search as SearchIcon} from 'react-feather';
 
 const useStyles = makeStyles((theme) => ({

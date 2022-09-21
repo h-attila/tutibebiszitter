@@ -1,16 +1,19 @@
-import React, {useState, Component} from 'react';
 import {
     Box,
     Container,
     // makeStyles
 } from '@material-ui/core';
+import axios from "axios";
+import React, {useState, Component} from 'react';
+
+import Spinner from '../../../../../app/components/UI/Spinner/Spinner';
+import history from "../../../../../app/store/history/history";
+import AuthService from "../../../AuthService";
 import Page from '../../../components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
-import Spinner from '../../../../../app/components/UI/Spinner/Spinner';
-import axios from "axios";
-import AuthService from "../../../AuthService";
-import history from "../../../../../app/store/history/history";
+
+
 
 // const useStyles = makeStyles((theme) => ({
 //     root: {
@@ -112,7 +115,7 @@ class ProfileListView extends Component {
                 </Container>
             </Page>
         );
-    };
+    }
 }
 
 export default ProfileListView;

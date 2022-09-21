@@ -1,11 +1,12 @@
 // import { useRouter } from 'next/router';
-import React, {Component} from 'react';
+import Alert from "@material-ui/lab/Alert";
 import {Box, Button, Container, TextField, Typography} from '@mui/material';
-import * as actionCreators from "../../../../app/store/actions/actions";
+import React, {Component} from 'react';
 import {connect} from "react-redux";
 
+import * as actionCreators from "../../../../app/store/actions/actions";
 import classes from './LoginViewCommon.scss';
-import Alert from "@material-ui/lab/Alert";
+
 
 class LoginViewProfile extends Component {
 
@@ -121,7 +122,7 @@ class LoginViewProfile extends Component {
                 </Box>
             </>
         );
-    };
+    }
 }
 
 const mapStateToProps = state => {

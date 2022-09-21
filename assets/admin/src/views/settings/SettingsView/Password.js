@@ -1,6 +1,3 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {
   Box,
   Button,
@@ -11,6 +8,9 @@ import {
   TextField,
   makeStyles
 } from '@material-ui/core';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
 const useStyles = makeStyles(({
   root: {}

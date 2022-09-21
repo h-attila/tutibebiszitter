@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
+import ReactPaginate from 'react-paginate';
 import {connect} from 'react-redux';
 
 import Aux from '../../hoc/Aux';
+import * as actionCreators from "../../store/actions/actions";
+import SearchForm from '../SearchForm/SearchForm';
 import Spinner from '../UI/Spinner/Spinner';
 import Item from './Item/Item';
-import SearchForm from '../SearchForm/SearchForm';
-import ReactPaginate from 'react-paginate';
-
 import classes from './MainSearch.scss';
-import * as actionCreators from "../../store/actions/actions";
 
 class MainSearch extends Component {
 
@@ -69,7 +68,7 @@ class MainSearch extends Component {
 
                 <div className="row">
                     <div className="col">
-                        <div className="search-results__container d-flex align-items-center flex-column mt-3">
+                        <div className="d-flex align-items-center flex-column mt-3 mb-2">
 
                             {result}
 

@@ -1,11 +1,11 @@
-import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
 import history from "../history/history";
+import * as actionTypes from './actionTypes';
 import {SEARCH_FORM_PAGE_CHANGE} from "./actionTypes";
 
 // *************
-// Search Form
+// SEARCH FORM
 // *************
 export const searchFormInit = () => {
     console.log('SEARCH_FORM_INIT');
@@ -100,7 +100,7 @@ export const registrationFormReset = () => {
 }
 
 // *************
-// Button
+// BUTTON
 // *************
 export const buttonClick = (ref) => {
     return () => history.push('/' + ref);
@@ -149,9 +149,9 @@ export const profileLoginFormChange = (event, target) => {
     }
 }
 
-/**
- * ADMIN belépés
- */
+// *************
+// ADMIN LOGIN
+// *************
 // admin login
 export const adminLoginFormSubmit = () => {
     return (dispatch, getState) => {

@@ -1,9 +1,3 @@
-import React, {useState} from 'react';
-import {Link as RouterLink} from 'react-router-dom';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { createBrowserHistory } from "history";
-
 import {
     AppBar,
     Badge,
@@ -13,9 +7,15 @@ import {
     Toolbar,
     makeStyles
 } from '@material-ui/core';
+import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
+import clsx from 'clsx';
+import {createBrowserHistory} from "history";
+import PropTypes from 'prop-types';
+import React, {useState} from 'react';
+import {Link as RouterLink} from 'react-router-dom';
+
 import Logo from '../../components/Logo';
 
 const useStyles = makeStyles(() => ({
@@ -26,7 +26,6 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const history = createBrowserHistory();
 
 const TopBar = ({
                     className,

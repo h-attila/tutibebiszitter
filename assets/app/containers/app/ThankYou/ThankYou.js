@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
 
 import Article from '../../../components/Article/Article';
-import {connect} from "react-redux";
-import history from "../../../store/history/history";
 import * as actionCreators from "../../../store/actions/actions";
+import history from "../../../store/history/history";
 
 class ThankYou extends Component {
 
