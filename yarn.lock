@@ -6254,6 +6254,14 @@ react-feather@^2.0.8:
   dependencies:
     prop-types "^15.7.2"
 
+react-google-invisible-recaptcha@^0.2.12:
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/react-google-invisible-recaptcha/-/react-google-invisible-recaptcha-0.2.12.tgz#9b485ff3587e1206101b39d96e3b861e3962e01c"
+  integrity sha512-K16BPZLNb+ZkdIDv/PPvXdq7D0kZdpC+BGZCWDKwS87mXDFf73YBPFF/rlw97iaK3Vdcmsdm84TwBWd4yIrnEA==
+  dependencies:
+    prop-types "^15.6.2"
+    uuid "^3.3.2"
+
 react-google-recaptcha@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-google-recaptcha/-/react-google-recaptcha-2.1.0.tgz#9f6f4954ce49c1dedabc2c532347321d892d0a16"

@@ -19,13 +19,20 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import React, {Component} from 'react';
 import Spinner from '../../../../app/components/UI/Spinner/Spinner';
-import ReCaptcha from './../../../components/Recaptcha/Recaptcha';
+import Recaptcha from 'react-google-invisible-recaptcha';
 
 import classes from './Profile.scss';
 import {withRouter} from "react-router";
 import axios from "axios";
 
+
 class Profile extends Component {
+
+    constructor( props ) {
+        super( props );
+        this.sendMessage = this.sendMessage.bind( this );
+        this.onResolved = this.onResolved.bind( this );
+    }
 
     state = {
         init: false,
@@ -39,15 +46,14 @@ class Profile extends Component {
             message: '',
             sending: false,
             buttonText: 'Üzenetet küldök'
-        }
+        },
+        captchaResponse: null
     }
 
     componentDidMount() {
         if (this.state.init) {
             return;
         }
-
-        this._reCaptchaRef = React.createRef();
 
         console.log('»» props', this.props);
 
@@ -101,8 +107,14 @@ class Profile extends Component {
         });
     }
 
-    sendProfileMessage(){
-        console.log('»» sendProfileMessage', this.state.message);
+    sendMessage() {
+        console.log(this);
+        this.recaptcha.execute();
+    }
+
+    onResolved() {
+        console.log('»» Human detected.');
+
         this.setState({
             message: {
                 ...this.state.message,
@@ -141,17 +153,9 @@ class Profile extends Component {
             .catch(err => {
                 console.log('»» show error modal!')
             });
-
-    }
-
-    onChange(value) {
-        console.log("Captcha value:", value);
     }
 
     render() {
-
-        console.log('»» render', this.props, this.state);
-
         if (!this.state.profile) {
             return (
                 <Grid container spacing={1}>
@@ -291,22 +295,18 @@ class Profile extends Component {
                                     value={this.state.message.message}
                                     onChange={(event) => this.messageFieldChanged(event, 'message')}
                                 />
-                                <div>
-                                    <ReCaptcha
-                                        id="recaptcha"
-                                        size="invisible"
-                                        apiKey="6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw"
-                                        onChange={(response) => {
-                                            this.setState({ captchaResponse: response })
-                                        }}
-                                    />
-                                </div>
                                 <Button
                                     variant="outlined"
                                     className={[classes.Button, 'w-100 m-1'].join(' ')}
-                                    onClick={(event) => this.sendProfileMessage(event)}>
+                                    onClick={this.sendMessage}>
                                     {this.state.message.buttonText}
                                 </Button>
+                                <div>
+                                    <Recaptcha
+                                        ref={ref => this.recaptcha = ref}
+                                        sitekey="6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw"
+                                        onResolved={this.onResolved}/>
+                                </div>
                             </form>
                         </Box>
                     </Grid>
