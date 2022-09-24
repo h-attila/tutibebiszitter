@@ -51,7 +51,8 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
 
-    console.log('»» action type', action, state);
+    console.log('»» action type', action);
+    console.log('»» state type', state);
 
     switch (action.type) {
         case actionTypes.SEARCH_FORM_INIT: {
@@ -256,18 +257,21 @@ const reducer = (state = initialState, action) => {
                     avatar: null,
                     role: null,
                     token: null,
-                    error: action.err.response.data.message
-                }
+                },
+                error: action.err.response.data.message ?? 'Hiba történt, kérlek, próbáld újra'
             }
         }
         case actionTypes.SHOW_ERROR_MESSAGE: {
             console.log('»» hiba történt, hiba modal nyitás');
             return {
                 ...state,
-                registration: {
-                    ...state.registration,
-                    submitDisabled: false
-                }
+                error: 'Hiba történt'
+            }
+        }
+        case actionTypes.CLEAR_ERROR_MESSAGE: {
+            return {
+                ...state,
+                error: null
             }
         }
     }

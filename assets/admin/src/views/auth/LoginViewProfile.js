@@ -6,9 +6,32 @@ import {connect} from "react-redux";
 
 import * as actionCreators from "../../../../app/store/actions/actions";
 import classes from './LoginViewCommon.scss';
-
+import Recaptcha from 'react-google-invisible-recaptcha';
+import ErrorModal from '../../../../app/components/Modal/Error/ErrorModal';
 
 class LoginViewProfile extends Component {
+
+    constructor(props) {
+        super(props);
+        this.onResolved = this.onResolved.bind(this);
+
+    }
+
+    onLoginFormSubmit(event) {
+        event.preventDefault();
+
+        console.log('»» execure');
+        this.recaptcha.execute();
+    }
+
+    onResolved() {
+        let token = this.recaptcha.getResponse();
+
+        console.log('»» tokki', token);
+
+        this.props.onProfileLoginFormSubmit(token);
+    }
+
 
     render() {
         let alert = null;
@@ -28,7 +51,7 @@ class LoginViewProfile extends Component {
                     }}
                 >
                     <Container maxWidth="sm">
-                        <form>
+                        <form method="POST">
                             <Box sx={{my: 4}}>
                                 <Typography
                                     align="center"
@@ -92,7 +115,7 @@ class LoginViewProfile extends Component {
                                     size="large"
                                     type="submit"
                                     variant="contained"
-                                    onClick={() => this.props.onProfileLoginFormSubmit()}
+                                    onClick={(event) => this.onLoginFormSubmit(event)}
                                 >
                                     Belépés
                                 </Button>
@@ -117,9 +140,16 @@ class LoginViewProfile extends Component {
                                     Elfelejtetted a jelszavad? {' '} <a href="#">Kattints ide</a>
                                 </Typography>
                             </Box>
+                            <div>
+                                <Recaptcha
+                                    ref={ref => this.recaptcha = ref}
+                                    sitekey="6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw"
+                                    onResolved={this.onResolved}/>
+                            </div>
                         </form>
                     </Container>
                 </Box>
+                <ErrorModal />
             </>
         );
     }
@@ -139,7 +169,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onProfileLoginFormChange: (event, target) => dispatch(actionCreators.profileLoginFormChange(event, target)),
-        onProfileLoginFormSubmit: () => dispatch(actionCreators.profileLoginFormSubmit()),
+        onProfileLoginFormSubmit: (token) => dispatch(actionCreators.profileLoginFormSubmit(token)),
     }
 }
 
