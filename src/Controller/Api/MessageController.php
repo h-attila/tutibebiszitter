@@ -6,6 +6,7 @@ use App\Entity\Message;
 use App\Form\MessageFormType;
 use App\Repository\ProfileRepository;
 use App\Service\MailerService;
+use App\Service\MessageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class MessageController extends AbstractController
 {
-    public function __construct(protected MailerService $mailer, protected ProfileRepository $profileRepository, protected ValidatorInterface $validator)
+    public function __construct(protected MailerService $mailer, protected ProfileRepository $profileRepository, protected ValidatorInterface $validator, protected MessageService $messageService)
     {}
 
     /**
@@ -40,13 +41,20 @@ class MessageController extends AbstractController
         $form->submit($data);
 
         if ($form->isValid()) {
+
+            $captchaIsValid = $this->messageService->validateCaptcha($message->getToken());
+
+            if (!$captchaIsValid) {
+                return new JsonResponse(null, 400);
+            }
+
             try {
                 $profile = $this->profileRepository->getByUuid($message->getUuid());
 
                 $this->mailer->sendMessageToProfile($message, $profile);
             } catch (\Throwable $e) {
                 $error = [
-                    'errors'=>$e->getMessage()
+                    'errors'=>$e->getMessage() ?? null
                 ];
                 return new JsonResponse($error, 400);
             }

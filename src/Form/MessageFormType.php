@@ -17,7 +17,8 @@ class MessageFormType extends AbstractType
             ->add('name', TextType::class)
             ->add('email', EmailType::class)
             ->add('message', TextType::class)
-            ->add('uuid', TextType::class);
+            ->add('uuid', TextType::class)
+            ->add('token', TextType::class);
     }
 
     /**

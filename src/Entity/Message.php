@@ -21,6 +21,8 @@ class Message
      */
     private string $email;
 
+    private string $token;
+
     /**
      * @Assert\NotBlank (message="Üzenet szövege nem lehet üres.")
      * @Assert\Length (
@@ -113,4 +115,21 @@ class Message
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     * @return Message
+     */
+    public function setToken(string $token): Message
+    {
+        $this->token = $token;
+        return $this;
+    }
 }
