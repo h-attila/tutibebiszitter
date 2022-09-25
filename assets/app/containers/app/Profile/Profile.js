@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import React, {Component} from 'react';
 import Spinner from '../../../../app/components/UI/Spinner/Spinner';
 import Recaptcha from 'react-google-invisible-recaptcha';
+import { FormControl } from '@mui/material';
 
 import classes from './Profile.scss';
 import {withRouter} from "react-router";
@@ -299,7 +300,7 @@ class Profile extends Component {
                             <p className="mb-3">Csörgess meg:</p>
                             <h5 className="text-center">{this.state.profile.phone}</h5>
                             <p className="mb-2">Vagy küldj üzenetet:</p>
-                            <form>
+                            <FormControl className="w-100">
                                 <TextField
                                     className="w-100 m-1 p-1"
                                     id="message_name"
@@ -338,7 +339,7 @@ class Profile extends Component {
                                         sitekey="6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw"
                                         onResolved={this.onResolved}/>
                                 </div>
-                            </form>
+                            </FormControl>
                         </Box>
                     </Grid>
                     <Grid item xs={8} md={6}>
