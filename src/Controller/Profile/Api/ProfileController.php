@@ -25,7 +25,6 @@ class ProfileController extends CommonProfileController
 
     public function __construct(
         EntityManagerInterface $em,
-//        LoggerInterface        $logger,
         ProfileRepository      $profileRepository,
         SerializerInterface    $serializer
     )

@@ -85,8 +85,6 @@ class ListViewGroups extends ListView {
                     .put('api/list-items/' + this.props.name + '/edit/' + data.value.id, data.value, {headers: AuthService.getAuthHeader()})
                     .then(response => {
 
-                        console.log('resp status: ', response.status);
-
                         if (response.status === 200 && response.data) {
 
                             let data = JSON.parse(response.data);
@@ -222,8 +220,6 @@ class ListViewGroups extends ListView {
     }
 
     render() {
-        console.log('»» render paymode', this.state);
-
         return (
             <Page
                 title={this.state.title}

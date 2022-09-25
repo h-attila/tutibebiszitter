@@ -1,38 +1,25 @@
 import {
     AppBar,
-    Badge,
     Box,
     Hidden,
     IconButton,
-    Toolbar,
-    makeStyles
+    Toolbar
 } from '@material-ui/core';
 import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import clsx from 'clsx';
-import {createBrowserHistory} from "history";
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {Link as RouterLink} from 'react-router-dom';
 
-import Logo from '../../components/Logo';
-
-const useStyles = makeStyles(() => ({
-    root: {},
-    avatar: {
-        width: 60,
-        height: 60
-    }
-}));
-
+import classes from './TopBar.scss';
 
 const TopBar = ({
                     className,
                     onMobileNavOpen,
                     ...rest
                 }) => {
-    const classes = useStyles();
+    // const classes = useStyles();
     const [notifications] = useState([]);
 
     function logoutHandler() {
@@ -43,31 +30,20 @@ const TopBar = ({
 
     return (
         <AppBar
-            className={clsx(classes.root, className)}
+            className={clsx(className)}
             elevation={0}
             {...rest}
         >
             <Toolbar>
-                <RouterLink to="/admin/dashboard">
-                    <Logo/>
+                <RouterLink className={classes.Link} to="/admin/dashboard">
+                    TUTI Bébiszitter Közvetítő
                 </RouterLink>
                 <Box flexGrow={1}/>
                 <Hidden mdDown>
-                    {/*<IconButton color="inherit">*/}
-                    {/*    <Badge*/}
-                    {/*        badgeContent={notifications.length}*/}
-                    {/*        color="primary"*/}
-                    {/*        variant="dot"*/}
-                    {/*    >*/}
-                    {/*        <NotificationsIcon/>*/}
-                    {/*    </Badge>*/}
-                    {/*</IconButton>*/}
-                    {/*<IconButton color="inherit">*/}
-                    <a href="#" onClick={e => logoutHandler(e)}>Logout</a>
+                    <a href="#" className={classes.Link} onClick={e => logoutHandler(e)}>Kijelentkezés</a>
                     <RouterLink to="/admin/logout">
-                        <InputIcon/>
+                        <InputIcon className={['m-1', classes.Icon].join(' ')}/>
                     </RouterLink>
-                    {/*</IconButton>*/}
                 </Hidden>
                 <Hidden lgUp>
                     <IconButton

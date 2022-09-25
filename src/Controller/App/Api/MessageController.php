@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\App\Api;
 
 use App\Entity\Message;
 use App\Form\MessageFormType;

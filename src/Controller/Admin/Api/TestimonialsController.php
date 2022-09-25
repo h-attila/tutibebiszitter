@@ -48,7 +48,7 @@ class TestimonialsController extends ListItemsController
     }
 
     /**
-     * @Route("/testimonials/add", methods={"PUT"}, name="add")
+     * @Route("/add", methods={"PUT"}, name="add")
      */
     public function add(Request $request): Response
     {

@@ -3,35 +3,35 @@ import {connect} from 'react-redux';
 import Swal from 'sweetalert2';
 import withReactContent from "sweetalert2-react-content";
 import * as actionCreators from "../../../store/actions/actions";
-import {compile} from "sass";
+// import {compile} from "sass";
 // import clearError from '../actions/clearError'
 
 class ErrorModal extends React.Component {
 
-    state = {
-        show: false
-    };
+    // state = {
+    //     show: false
+    // };
+    //
+    // onClick = (e) => {
+    //     this.setState({
+    //         show: false
+    //     });
+    // };
 
-
-    onClick = (e) => {
-        this.setState({
-            show: false
-        });
-    };
-
-    componentDidUpdate(prevProps) {
-        console.log('»» prevProps', this.props, prevProps);
-        if (this.props.error && !prevProps.error) {
-            this.setState({
-                show: true
-            });
-        }
-
-    }
+    // componentDidUpdate(prevProps) {
+    //     console.log('»» prevProps', this.props, prevProps);
+    //     if (this.props.error && !prevProps.error) {
+    //         this.setState({
+    //             show: true
+    //         });
+    //     }
+    //
+    // }
 
     render() {
 
-        if(!this.state.show){
+        // if(!this.state.show){
+        if(!this.props.error){
             return null;
         }
 

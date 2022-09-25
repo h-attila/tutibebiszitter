@@ -132,7 +132,7 @@ class Account extends Component {
 
         // profil adatok lekérése
         axios
-            .get('/profilom/api/get-profile/' + uuid, {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/get-profile/' + uuid, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 response.data.regStart = response.data.regStart ? moment(response.data.regStart) : null;
                 response.data.regEnd = response.data.regEnd ? moment(response.data.regEnd) : null;
@@ -167,49 +167,49 @@ class Account extends Component {
 
         // szolgáltatások lekérése
         axios
-            .get('/profilom/api/list-items/additional-service/get-list', {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/list-items/additional-service/get-list', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({additionalServices: response.data});
             });
 
         // kieg. szolgáltatások lekérése
         axios
-            .get('/profilom/api/list-items/service/get-list', {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/list-items/service/get-list', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({services: response.data});
             });
 
         // helyek lekérése
         axios
-            .get('/profilom/api/list-items/place/get-list', {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/list-items/place/get-list', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({places: response.data});
             });
 
         // fizetési módok
         axios
-            .get('/profilom/api/list-items/paymode/get-list', {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/list-items/paymode/get-list', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({payModes: response.data});
             });
 
         // díjcsomagok
         axios
-            .get('/profilom/api/list-items/package/get-list', {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/list-items/package/get-list', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({packages: response.data});
             });
 
         // nyelvek
         axios
-            .get('/profilom/api/list-items/language/get-list', {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/list-items/language/get-list', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({languages: response.data});
             });
 
         // csoportok
         axios
-            .get('/profilom/api/list-items/group/get-list', {headers: AuthService.getAuthHeader()})
+            .get('profilom/api/list-items/group/get-list', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({groups: response.data});
             });
@@ -384,7 +384,7 @@ class Account extends Component {
 
                 // profil adatok lekérése
                 axios
-                    .put('/profilom/api/renew-now/' + this.state.uuid, {headers: AuthService.getAuthHeader()})
+                    .put('profilom/api/renew-now/' + this.state.uuid, {headers: AuthService.getAuthHeader()})
                     .then(response => {
 
                         if (response.data.success) {
@@ -443,7 +443,7 @@ class Account extends Component {
             preConfirm: () => {
 
                 return axios
-                    .put('/profilom/api/save/' + this.state.uuid, profile, {headers: AuthService.getAuthHeader()})
+                    .put('profilom/api/save/' + this.state.uuid, profile, {headers: AuthService.getAuthHeader()})
                     .then(response => {
                         return response;
                     })

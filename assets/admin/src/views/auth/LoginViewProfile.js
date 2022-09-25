@@ -7,20 +7,18 @@ import {connect} from "react-redux";
 import * as actionCreators from "../../../../app/store/actions/actions";
 import classes from './LoginViewCommon.scss';
 import Recaptcha from 'react-google-invisible-recaptcha';
-import ErrorModal from '../../../../app/components/Modal/Error/ErrorModal';
 
 class LoginViewProfile extends Component {
 
     constructor(props) {
         super(props);
         this.onResolved = this.onResolved.bind(this);
-
     }
 
     onLoginFormSubmit(event) {
         event.preventDefault();
 
-        console.log('»» execure');
+        console.log('»» execute');
         this.recaptcha.execute();
     }
 
@@ -34,6 +32,8 @@ class LoginViewProfile extends Component {
 
 
     render() {
+        console.log('»» error', this.props);
+
         let alert = null;
         if (this.props.error) {
             alert = <Alert severity="warning" style={{width: '100%'}}>{this.props.error}</Alert>;
@@ -149,14 +149,13 @@ class LoginViewProfile extends Component {
                         </form>
                     </Container>
                 </Box>
-                <ErrorModal />
             </>
         );
     }
 }
 
 const mapStateToProps = state => {
-
+    console.log('»» error', state);
         return {
             loading: state.user.loading,
             username: state.user.username,

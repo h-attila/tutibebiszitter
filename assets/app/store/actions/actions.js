@@ -3,7 +3,6 @@ import axios from 'axios';
 import history from "../history/history";
 import * as actionTypes from './actionTypes';
 import {SEARCH_FORM_PAGE_CHANGE} from "./actionTypes";
-import Swal from 'sweetalert2';
 
 // *************
 // SEARCH FORM
@@ -132,8 +131,8 @@ export const profileLoginFormSubmit = (token) => {
         console.log('»» login call');
 
         axios
-            .post('/api/login_check',
-                {username: getState().user.username, password: getState().user.password},
+            .post('/api/login',
+                {username: getState().user.username, password: getState().user.password, token: token},
                 {headers: headers})
             .then(
                 result => dispatch({type: 'PROFILE_LOGIN_SUCCESS', result})

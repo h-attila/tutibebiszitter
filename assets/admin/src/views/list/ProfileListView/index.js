@@ -13,17 +13,6 @@ import Page from '../../../components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
 
-
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         backgroundColor: theme.palette.background.dark,
-//         minHeight: '100%',
-//         paddingBottom: theme.spacing(3),
-//         paddingTop: theme.spacing(3)
-//     }
-// }));
-
 class ProfileListView extends Component {
 
     state = {
@@ -72,7 +61,6 @@ class ProfileListView extends Component {
     }
 
     handleToolbarChange(status) {
-        console.log('»» toolbar event', status);
         this.setState({status: status});
         this.getList(status);
     }

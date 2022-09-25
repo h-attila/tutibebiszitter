@@ -5,7 +5,6 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import FlagIcon from '@material-ui/icons/Flag';
 import GroupsIcon from '@material-ui/icons/Group';
-import PlaceIcon from '@material-ui/icons/Place';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import PropTypes from 'prop-types';
@@ -16,7 +15,7 @@ import {Link as RouterLink, useLocation} from 'react-router-dom';
 import NavItem from './NavItem';
 
 const user = {
-    avatar: '/static/images/avatars/avatar_6.png',
+    avatar: '/static/images/avatars/potorke_csilla.jpeg',
     jobTitle: 'Adminisztrátor',
     name: 'Pötörke Csilla'
 };

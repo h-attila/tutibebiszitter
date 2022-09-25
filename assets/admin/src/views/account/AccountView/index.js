@@ -133,7 +133,7 @@ class Account extends Component {
 
         // profil adatok lekérése
         axios
-            .get('/admin/api/profile/get-profile/' + uuid, {headers: AuthService.getAuthHeader()})
+            .get('admin/api/profile/get-profile/' + uuid, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 response.data.regStart = response.data.regStart ? moment(response.data.regStart) : null;
                 response.data.regEnd = response.data.regEnd ? moment(response.data.regEnd) : null;
@@ -168,49 +168,49 @@ class Account extends Component {
 
         // szolgáltatások lekérése
         axios
-            .get('/admin/api/list-items/additional-service/get-list/active', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/additional-service/get-list/active', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({additionalServices: response.data});
             });
 
         // kieg. szolgáltatások lekérése
         axios
-            .get('/admin/api/list-items/service/get-list/active', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/service/get-list/active', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({services: response.data});
             });
 
         // helyek lekérése
         axios
-            .get('/admin/api/list-items/place/get-list/active', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/place/get-list/active', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({places: response.data});
             });
 
         // fizetési módok
         axios
-            .get('/admin/api/list-items/paymode/get-list/active', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/paymode/get-list/active', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({payModes: response.data});
             });
 
         // díjcsomagok
         axios
-            .get('/admin/api/list-items/package/get-list/active', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/package/get-list/active', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({packages: response.data});
             });
 
         // nyelvek
         axios
-            .get('/admin/api/list-items/language/get-list/active', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/language/get-list/active', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({languages: response.data});
             });
 
         // csoportok
         axios
-            .get('/admin/api/list-items/group/get-list/active', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/group/get-list/active', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 this.setState({groups: response.data});
             });
@@ -465,7 +465,7 @@ class Account extends Component {
 
                 // profil adatok lekérése
                 axios
-                    .put('/admin/api/profile/renew-now/' + this.state.uuid, null, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/profile/renew-now/' + this.state.uuid, null, {headers: AuthService.getAuthHeader()})
                     .then(response => {
 
                         if (response.data.success) {
@@ -532,7 +532,7 @@ class Account extends Component {
             preConfirm: () => {
 
                 return axios
-                    .put('/admin/api/profile/save/' + this.state.uuid, profile, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/profile/save/' + this.state.uuid, profile, {headers: AuthService.getAuthHeader()})
                     .then(response => {
                         return response;
                     })
