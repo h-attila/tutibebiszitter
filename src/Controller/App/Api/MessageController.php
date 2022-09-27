@@ -2,8 +2,10 @@
 
 namespace App\Controller\App\Api;
 
-use App\Entity\Message;
-use App\Form\MessageFormType;
+use App\Entity\ContactMessage;
+use App\Entity\ProfileMessage;
+use App\Form\ContactMessageFormType;
+use App\Form\ProfileMessageFormType;
 use App\Repository\ProfileRepository;
 use App\Service\MailerService;
 use App\Service\MessageService;
@@ -22,7 +24,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class MessageController extends AbstractController
 {
     public function __construct(protected MailerService $mailer, protected ProfileRepository $profileRepository, protected ValidatorInterface $validator, protected MessageService $messageService)
-    {}
+    {
+    }
 
     /**
      * Üzenet küldése profil oldalról
@@ -34,9 +37,9 @@ class MessageController extends AbstractController
      */
     public function profile(Request $request): JsonResponse
     {
-        $message = new Message();
+        $message = new ProfileMessage();
 
-        $form = $this->createForm(MessageFormType::class, $message);
+        $form = $this->createForm(ProfileMessageFormType::class, $message);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 
@@ -45,7 +48,7 @@ class MessageController extends AbstractController
             $captchaIsValid = $this->messageService->validateCaptcha($message->getToken());
 
             if (!$captchaIsValid) {
-                return new JsonResponse(null, 400);
+                return new JsonResponse(null, 200);
             }
 
             try {
@@ -54,12 +57,12 @@ class MessageController extends AbstractController
                 $this->mailer->sendMessageToProfile($message, $profile);
             } catch (\Throwable $e) {
                 $error = [
-                    'errors'=>$e->getMessage() ?? null
+                    'error' => $e->getMessage() ?? null
                 ];
-                return new JsonResponse($error, 400);
+                return new JsonResponse($error, 200);
             }
 
-            return new JsonResponse(null, 200);
+            return new JsonResponse(null, 201);
         }
 
         $msg = [];
@@ -70,8 +73,57 @@ class MessageController extends AbstractController
         }
 
         $error = [
-            'errors'=>$msg
+            'error' => $msg
         ];
-        return new JsonResponse($error, 400);
+        return new JsonResponse($error, 200);
+    }
+
+    /**
+     * Üzenet küldése kapcoslat oldalról
+     *
+     * @Route("/send-contact-message", methods={"POST"}, name="send_contact_message")
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function contact(Request $request): JsonResponse
+    {
+        $message = new ContactMessage();
+
+        $form = $this->createForm(ContactMessageFormType::class, $message);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
+
+        if ($form->isValid()) {
+
+            $captchaIsValid = $this->messageService->validateCaptcha($message->getToken());
+
+            if (!$captchaIsValid) {
+                return new JsonResponse(null, 200);
+            }
+
+            try {
+                $this->mailer->sendMessageToBusiness($message);
+            } catch (\Throwable $e) {
+                $error = [
+                    'error' => $e->getMessage() ?? null
+                ];
+                return new JsonResponse($error, 200);
+            }
+
+            return new JsonResponse(null, 201);
+        }
+
+        $msg = [];
+        $errors = $this->validator->validate($message);
+        /* @var ConstraintViolation $error */
+        foreach ($errors as $error) {
+            $msg[] = $error->getMessage();
+        }
+
+        $error = [
+            'error' => $msg
+        ];
+        return new JsonResponse($error, 200);
     }
 }

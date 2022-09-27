@@ -1,5 +1,11 @@
+@import "../../../styles/colors";
+
 .Contact {
     padding-top: 60px;
+
+    .FormWrapper {
+        background-color: $colorFive;
+    }
 
     .Img {
         background-repeat: no-repeat;
@@ -9,6 +15,14 @@
         width: 100%;
         min-height: 200px;
         overflow: hidden;
+    }
+
+    h4 {
+        color: $colorTwo;
+    }
+
+    input, textarea {
+        background-color: $white;
     }
 }
 

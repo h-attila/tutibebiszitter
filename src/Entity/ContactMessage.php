@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Message
+class ContactMessage
 {
     /**
      * @Assert\NotBlank (message="Név mgadása kötelező")
@@ -14,7 +14,12 @@ class Message
     private string $name;
 
     /**
-     * @Assert\NotBlank (message="Név mgadása kötelező.")
+     * @var string
+     */
+    private string $phone;
+
+    /**
+     * @Assert\NotBlank (message="Email cím mgadása kötelező.")
      * @Assert\Email(message="Email cím nem megfelelő")
      *
      * @var string
@@ -37,13 +42,6 @@ class Message
     private string $message;
 
     /**
-     * @Assert\NotBlank (message="Címzett azonosító értéke nem lehet üres")
-     *
-     * @var string
-     */
-    private string $uuid;
-
-    /**
      * @return string
      */
     public function getName(): string
@@ -53,9 +51,9 @@ class Message
 
     /**
      * @param string $name
-     * @return Message
+     * @return $this
      */
-    public function setName(string $name): Message
+    public function setName(string $name): ContactMessage
     {
         $this->name = $name;
         return $this;
@@ -71,9 +69,9 @@ class Message
 
     /**
      * @param string $email
-     * @return Message
+     * @return $this
      */
-    public function setEmail(string $email): Message
+    public function setEmail(string $email): ContactMessage
     {
         $this->email = $email;
         return $this;
@@ -89,29 +87,11 @@ class Message
 
     /**
      * @param string $message
-     * @return Message
+     * @return $this
      */
-    public function setMessage(string $message): Message
+    public function setMessage(string $message): ContactMessage
     {
         $this->message = $message;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @param string $uuid
-     * @return Message
-     */
-    public function setUuid(string $uuid): Message
-    {
-        $this->uuid = $uuid;
         return $this;
     }
 
@@ -125,11 +105,29 @@ class Message
 
     /**
      * @param string $token
-     * @return Message
+     * @return $this
      */
-    public function setToken(string $token): Message
+    public function setToken(string $token): ContactMessage
     {
         $this->token = $token;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     * @return ContactMessage
+     */
+    public function setPhone(string $phone): ContactMessage
+    {
+        $this->phone = $phone;
         return $this;
     }
 }

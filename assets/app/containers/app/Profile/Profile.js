@@ -20,7 +20,7 @@ import TextField from '@mui/material/TextField';
 import React, {Component} from 'react';
 import Spinner from '../../../../app/components/UI/Spinner/Spinner';
 import Recaptcha from 'react-google-invisible-recaptcha';
-import { FormControl } from '@mui/material';
+import {FormControl} from '@mui/material';
 
 import classes from './Profile.scss';
 import {withRouter} from "react-router";
@@ -149,7 +149,7 @@ class Profile extends Component {
             .post('/api/message/send-profile-message', message)
             .then(
                 response => {
-                    if (response.status === 200) {
+                    if (response.status === 201) {
                         this.setState({
                             message: {
                                 ...this.state.message,
@@ -165,26 +165,30 @@ class Profile extends Component {
                             text: 'Üzenet sikeresen elküldve',
                         })
                     } else {
-                        this.setState({
-                            message: {
-                                ...this.state.message,
-                                sending: false,
-                                token: null
-                            }
-                        });
-
                         MySwal.fire({
                             icon: 'error',
-                            text: response.error ?? 'Hiba történt, az üzenet elküldése sikertelen',
+                            text: response.data.error.join(', ') ?? 'Hiba történt, az üzenet elküldése sikertelen',
                         })
                     }
                 }
-            ).catch(err => {
-            MySwal.fire({
-                icon: 'error',
-                text: 'Hiba történt, az üzenet elküldése sikertelen',
+            )
+            .catch(err => {
+                MySwal.fire({
+                    icon: 'error',
+                    text: 'Hiba történt, az üzenet elküldése sikertelen',
+                })
             })
-        });
+            .finally(() => {
+                this.recaptcha.reset();
+                this.setState({
+                    ...this.state,
+                    message: {
+                        ...this.state.message,
+                        sending: false,
+                        token: null
+                    }
+                });
+            });
     }
 
     render() {
@@ -336,7 +340,7 @@ class Profile extends Component {
                                 <div>
                                     <Recaptcha
                                         ref={ref => this.recaptcha = ref}
-                                        sitekey="6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw"
+                                        sitekey='6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw'
                                         onResolved={this.onResolved}/>
                                 </div>
                             </FormControl>

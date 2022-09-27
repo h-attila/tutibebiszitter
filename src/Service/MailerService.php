@@ -2,8 +2,9 @@
 
 namespace App\Service;
 
-use App\Entity\Message;
+use App\Entity\ContactMessage;
 use App\Entity\Profile;
+use App\Entity\ProfileMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -16,17 +17,18 @@ class MailerService
     }
 
     /**
-     * @param Message $message
+     * @param ProfileMessage $message
      * @param Profile $profile
      * @return void
      * @throws TransportExceptionInterface
      */
-    public function sendMessageToProfile(Message $message, Profile $profile): void
+    public function sendMessageToProfile(ProfileMessage $message, Profile $profile): void
     {
         // filter, hogy ne menjen ki csak ha akarjuk
         $to = $this->getTo($profile->getUsername());
 
         $email = (new TemplatedEmail())
+            ->from('TUTI Bébiszitter Közvetítő <info@tutibebiszitter.hu>')
             ->to($to)
             ->subject('üzeneted érkezett')
             ->htmlTemplate('emails/messageToProfile.html.twig')
@@ -34,6 +36,29 @@ class MailerService
                 'name' => $profile->getName(),
                 'sender' => $message->getName(),
                 'email_address' => $message->getEmail(),
+                'message' => $message->getMessage(),
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @param ContactMessage $message
+     * @return void
+     * @throws TransportExceptionInterface
+     */
+    public function sendMessageToBusiness(ContactMessage $message): void
+    {
+        $email = (new TemplatedEmail())
+            ->from($message->getEmail())
+//            ->to('info@tutibebiszitter.hu')
+            ->to('email.atinak@gmail.com')
+            ->subject('Kapcsolat - üzeneted a érkezett')
+            ->htmlTemplate('emails/messageToBusiness.html.twig')
+            ->context([
+                'sender' => $message->getName(),
+                'email_address' => $message->getEmail(),
+                'phone' => $message->getPhone(),
                 'message' => $message->getMessage(),
             ]);
 

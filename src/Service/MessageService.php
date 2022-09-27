@@ -21,7 +21,7 @@ class MessageService
         try {
             $url = self::GOOGLE_CAPTCHA_VERIFY;
             $data = [
-                'secret'   => '['. $secret .']',
+                'secret'   => $secret,
                 'response' => $token,
                 'remoteip' => $_SERVER['REMOTE_ADDR']
             ];
