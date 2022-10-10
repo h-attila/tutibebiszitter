@@ -70,14 +70,9 @@ class MailerService
      */
     protected function getTo(string $to): string
     {
-        if ($_ENV['APP_ENV'] === 'prod') {
-            return $to;
-        }
-
-        if (preg_match('/^.*@tutimagantanar\.hu$/', $to) === 1) {
-            return $to;
-        }
-
-        return 'email.atinak@gmail.com';
+        return match ($_ENV['APP_ENV']) {
+            'prod' => $to,
+            default => $_ENV['CUSTOMER_SERVICE_EMAIL']
+        };
     }
 }
