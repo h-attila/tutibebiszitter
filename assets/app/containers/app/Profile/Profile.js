@@ -20,18 +20,22 @@ import TextField from '@mui/material/TextField';
 import React, {Component} from 'react';
 import Spinner from '../../../../app/components/UI/Spinner/Spinner';
 import Recaptcha from 'react-google-invisible-recaptcha';
+import {FormControl} from '@mui/material';
 
 import classes from './Profile.scss';
 import {withRouter} from "react-router";
 import axios from "axios";
+import withReactContent from "sweetalert2-react-content";
+import Swal from 'sweetalert2';
 
 
 class Profile extends Component {
 
-    constructor( props ) {
-        super( props );
-        this.sendMessage = this.sendMessage.bind( this );
-        this.onResolved = this.onResolved.bind( this );
+    constructor(props) {
+        super(props);
+        this.sendMessage = this.sendMessage.bind(this);
+        this.onResolved = this.onResolved.bind(this);
+
     }
 
     state = {
@@ -44,7 +48,9 @@ class Profile extends Component {
             name: '',
             email: '',
             message: '',
+            token: null,
             sending: false,
+            error: false,
             buttonText: 'Üzenetet küldök'
         },
         captchaResponse: null
@@ -55,13 +61,16 @@ class Profile extends Component {
             return;
         }
 
-        console.log('»» props', this.props);
+        let MySwal = withReactContent(Swal);
 
         if (this.props.match.params.slug) {
             this.getProfile(this.props.match.params.slug);
         } else {
-            // TODO: hiba kiírás, hogy nincsen slug
-            console.log('»» hiba: nincsen uuid');
+            MySwal.fire({
+                icon: 'error',
+                title: 'Felhasználói azonosító nem található',
+                text: label
+            })
         }
     }
 
@@ -70,13 +79,13 @@ class Profile extends Component {
             return
         }
 
+        let MySwal = withReactContent(Swal);
         this.setState({loading: true});
 
         axios
             .get('/api/search/get-profile/' + slug)
             .then(
                 response => {
-                    console.log('»» profile', response);
                     if (response.status === 200) {
                         this.setState({
                             profile: response.data.profile,
@@ -89,12 +98,18 @@ class Profile extends Component {
                             init: true
                         });
                     } else {
-                        console.log('»» error');
+                        MySwal.fire({
+                            icon: 'error',
+                            text: 'Hiba történt a profil lekérdezése közben',
+                        })
                     }
                 }
             )
             .catch(err => {
-                console.log('»» show 404!')
+                MySwal.fire({
+                    icon: 'error',
+                    text: 'Hiba történt a profil lekérdezése közben',
+                })
             });
     }
 
@@ -108,17 +123,15 @@ class Profile extends Component {
     }
 
     sendMessage() {
-        console.log(this);
         this.recaptcha.execute();
     }
 
     onResolved() {
-        console.log('»» Human detected.');
-
         this.setState({
             message: {
                 ...this.state.message,
-                sending: true
+                sending: true,
+                error: false
             }
         });
 
@@ -126,32 +139,55 @@ class Profile extends Component {
             name: this.state.message.name,
             email: this.state.message.email,
             message: this.state.message.message,
+            token: this.recaptcha.getResponse(),
             uuid: this.state.message.uuid
         };
+
+        let MySwal = withReactContent(Swal);
 
         axios
             .post('/api/message/send-profile-message', message)
             .then(
                 response => {
-                    console.log('»» profile', response);
-                    if (response.status === 200) {
-                        console.log('»» msg res', response);
+                    if (response.status === 201) {
                         this.setState({
                             message: {
                                 ...this.state.message,
                                 name: '',
                                 email: '',
                                 message: '',
-                                sending: false
+                                sending: false,
+                                token: null
                             }
                         });
+                        MySwal.fire({
+                            icon: 'success',
+                            text: 'Üzenet sikeresen elküldve',
+                        })
                     } else {
-                        console.log('»» error');
+                        MySwal.fire({
+                            icon: 'error',
+                            text: response.data.error.join(', ') ?? 'Hiba történt, az üzenet elküldése sikertelen',
+                        })
                     }
                 }
             )
             .catch(err => {
-                console.log('»» show error modal!')
+                MySwal.fire({
+                    icon: 'error',
+                    text: 'Hiba történt, az üzenet elküldése sikertelen',
+                })
+            })
+            .finally(() => {
+                this.recaptcha.reset();
+                this.setState({
+                    ...this.state,
+                    message: {
+                        ...this.state.message,
+                        sending: false,
+                        token: null
+                    }
+                });
             });
     }
 
@@ -268,7 +304,7 @@ class Profile extends Component {
                             <p className="mb-3">Csörgess meg:</p>
                             <h5 className="text-center">{this.state.profile.phone}</h5>
                             <p className="mb-2">Vagy küldj üzenetet:</p>
-                            <form>
+                            <FormControl className="w-100">
                                 <TextField
                                     className="w-100 m-1 p-1"
                                     id="message_name"
@@ -304,10 +340,10 @@ class Profile extends Component {
                                 <div>
                                     <Recaptcha
                                         ref={ref => this.recaptcha = ref}
-                                        sitekey="6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw"
+                                        sitekey='6LfJWhEiAAAAALIr3BJ2D440K-c7n5MyGYE-vWkw'
                                         onResolved={this.onResolved}/>
                                 </div>
-                            </form>
+                            </FormControl>
                         </Box>
                     </Grid>
                     <Grid item xs={8} md={6}>

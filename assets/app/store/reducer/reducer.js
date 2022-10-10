@@ -50,9 +50,6 @@ const initialState = {
 ;
 
 const reducer = (state = initialState, action) => {
-
-    console.log('»» action type', action, state);
-
     switch (action.type) {
         case actionTypes.SEARCH_FORM_INIT: {
             console.log('### SEARCH_FORM_INIT', action, state);
@@ -69,7 +66,6 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.SEARCH_ITEM_CHANGED: {
-            console.log('»» action', action);
             let value = null;
             if (action.value) {
                 action.value.value = action.value ? action.value.id : null;
@@ -88,7 +84,6 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.SEARCH_FORM_SEARCHING: {
-            console.log('### SEARCH_FORM_SEARCHING', action, state);
             return {
                 ...state,
                 search: {
@@ -147,8 +142,6 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.REGISTRATION_FORM_SUCCESS: {
-            console.log('»» REGISTRATION_FORM_SUCCESS', action, state);
-
             return {
                 ...state,
                 registration: {
@@ -192,8 +185,6 @@ const reducer = (state = initialState, action) => {
         case actionTypes.PROFILE_LOGIN:
             // case actionTypes.ADMIN_LOGIN:
         {
-            console.log('»» PROFILE_LOGIN');
-
             return {
                 ...state,
                 user: {
@@ -204,7 +195,6 @@ const reducer = (state = initialState, action) => {
         }
         case actionTypes.PROFILE_LOGIN_SUCCESS:
         case actionTypes.ADMIN_LOGIN_SUCCESS: {
-            console.log('»» LOGIN_SUCCESS', action.result.data.token, action.result.data);
             if (!action.result.data.token) {
                 return;     // todo: ide kell tenni a sikertelen ágat
             }
@@ -235,13 +225,11 @@ const reducer = (state = initialState, action) => {
         }
         case actionTypes.PROFILE_LOGIN_CHANGED:
         case actionTypes.ADMIN_LOGIN_CHANGED: {
-            console.log('»» login action', action);
             return {
                 ...state,
                 user: {
                     ...state.user,
                     [action.target]: action.value,
-                    error: ''
                 }
             }
         }
@@ -256,18 +244,20 @@ const reducer = (state = initialState, action) => {
                     avatar: null,
                     role: null,
                     token: null,
-                    error: action.err.response.data.message
+                    error: action.err.response.data.message ?? 'Hiba történt, kérlek, próbáld újra'
                 }
             }
         }
         case actionTypes.SHOW_ERROR_MESSAGE: {
-            console.log('»» hiba történt, hiba modal nyitás');
             return {
                 ...state,
-                registration: {
-                    ...state.registration,
-                    submitDisabled: false
-                }
+                error: 'Hiba történt'
+            }
+        }
+        case actionTypes.CLEAR_ERROR_MESSAGE: {
+            return {
+                ...state,
+                error: null
             }
         }
     }

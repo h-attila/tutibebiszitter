@@ -14,15 +14,15 @@ class BabysitterInfo extends Component {
     render() {
         return (
             <Aux>
-                <section className="babysitter-info-page mt-3">
+                <section className={["babysitter-info-page", classes.BabysitterInfo].join(' ')}>
                     <div className="container">
                         <div className="row">
                             <div className="col">
                                 <article>
 
-                                    <h1 className="text-center mt-5 mb-3">Bébiszitter vagyok</h1>
+                                    <h1 className="text-center mb-3">Bébiszitter vagyok</h1>
 
-                                    <h2 className="text-center mt-3">Miért érdemes regisztrálnod a <a href="http://tutibebiszitter.hu"
+                                    <h2 className="text-center">Miért érdemes regisztrálnod a <a href="http://tutibebiszitter.hu"
                                                                                                       target="_blank" rel="noreferrer">www.tutibebiszitter.hu</a> oldalon ?</h2>
                                     <div className="container mt-4">
                                         <p>Amennyiben megtisztelsz bennünket jelentkezéseddel, a következő előnyöket tudjuk Számodra biztosítani:</p>

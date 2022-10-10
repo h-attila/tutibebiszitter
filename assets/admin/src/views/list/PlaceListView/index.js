@@ -34,7 +34,7 @@ const PlaceListView = () => {
         }
 
         axios
-            .get('/admin/api/list-items/place/get-list/all', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/place/get-list/all', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 console.log('»» init', response.data);
                 setData(response.data);

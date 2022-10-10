@@ -76,7 +76,7 @@ class ListView extends Component {
         }
 
         axios
-            .put('/admin/api/list-items/' + this.props.name + '/set-enabled', postData, {headers: AuthService.getAuthHeader()})
+            .put('admin/api/list-items/' + this.props.name + '/set-enabled', postData, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 if (response.status === 200) {
                     tmpData[index].disabled = false;
@@ -108,7 +108,7 @@ class ListView extends Component {
         }
 
         axios
-            .put('/admin/api/list-items/' + this.props.name + '/set-public', postData, {headers: AuthService.getAuthHeader()})
+            .put('admin/api/list-items/' + this.props.name + '/set-public', postData, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 if (response.status === 200) {
                     tmpData[index].disabled = false;
@@ -142,7 +142,7 @@ class ListView extends Component {
         }
 
         axios
-            .post('/admin/api/list-items/' + this.props.name + '/pre-check-delete', {id: id}, {headers: AuthService.getAuthHeader()})
+            .post('admin/api/list-items/' + this.props.name + '/pre-check-delete', {id: id}, {headers: AuthService.getAuthHeader()})
             .then(response => {
 
                 console.log('»» pre-check-del resp', response);
@@ -183,7 +183,7 @@ class ListView extends Component {
                             });
 
                             axios
-                                .delete('/admin/api/list-items/' + this.props.name + '/delete', {data: {id: id}, headers: AuthService.getAuthHeader()})
+                                .delete('admin/api/list-items/' + this.props.name + '/delete', {data: {id: id}, headers: AuthService.getAuthHeader()})
                                 .then(response => {
                                     if (response.status === 200) {
                                         let data = [...this.state.data];
@@ -274,7 +274,7 @@ class ListView extends Component {
                 }
 
                 axios
-                    .put('api/list-items/' + this.props.name + '/edit/' + data.value.id, data.value, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/list-items/' + this.props.name + '/edit/' + data.value.id, data.value, {headers: AuthService.getAuthHeader()})
                     .then(response => {
 
                         console.log('resp status: ', response.status);
@@ -374,7 +374,7 @@ class ListView extends Component {
                 }
 
                 axios
-                    .put('api/list-items/' + this.props.name + '/add', data.value, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/list-items/' + this.props.name + '/add', data.value, {headers: AuthService.getAuthHeader()})
                     .then(response => {
                         if (response.status === 200) {
 
@@ -419,7 +419,7 @@ class ListView extends Component {
         }
 
         axios
-            .get('/admin/api/list-items/' + this.props.name + '/get-list/' + filter, {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/' + this.props.name + '/get-list/' + filter, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 if (response.status === 200 && response.data.length > 0) {
 

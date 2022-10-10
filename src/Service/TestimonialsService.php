@@ -43,11 +43,20 @@ class TestimonialsService extends ListItemsService
                     ->where('p.enabled LIKE :value')
                     ->setParameter('value', false);
                 break;
+
+            case 'all':
+                break;
+
+            case 'active-front':        // front oldali megjelenítés
+                $qb
+                    ->where('p.enabled LIKE :value')
+                    ->setParameter('value', true)
+                    ->orderBy('RAND()')
+                    ->setMaxResults($limit);
+                break;
         }
 
         return $qb
-//            ->orderBy('RAND()')
-            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

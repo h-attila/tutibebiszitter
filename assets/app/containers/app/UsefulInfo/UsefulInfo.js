@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 
 import Article from '../../../components/Article/Article';
 import Testimonials from "../../../components/Testimonials/Testimonials";
+import classes from "./UsefullInfo.scss";
 
 class UsefulInfo extends Component {
     render() {
         return (
-            <div className="useful-info-page">
+            <div className={["contact-page", classes.UsefulInfo].join(' ')}>
                 <div className="container">
                     <div className="row">
                         <div className="col-sm text-center">

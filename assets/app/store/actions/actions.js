@@ -8,7 +8,6 @@ import {SEARCH_FORM_PAGE_CHANGE} from "./actionTypes";
 // SEARCH FORM
 // *************
 export const searchFormInit = () => {
-    console.log('SEARCH_FORM_INIT');
     return dispatch => axios
         .get('/api/search/search-init')
         .then(
@@ -18,7 +17,6 @@ export const searchFormInit = () => {
 }
 
 export const searchFormSubmit = (event) => {
-    console.log('»» searchFormSubmit');
     const pagination = event ? event.selected : 0;
     return (dispatch, getState) => {
         const data = {
@@ -39,7 +37,7 @@ export const searchFormSubmit = (event) => {
                 () => history.push('/bebiszittert-keresek')
             )
             .catch(err => {
-                dispatch({type: 'SHOW_ERROR_MESSAGE', err});       // todo: tesztelni!
+                dispatch({type: 'SHOW_ERROR_MESSAGE', err});
             });
     }
 }
@@ -100,6 +98,15 @@ export const registrationFormReset = () => {
 }
 
 // *************
+// HIBA
+// *************
+export const onClearError = () => {
+    return (dispatch) => {
+        dispatch({type: 'CLEAR_ERROR_MESSAGE'})
+    }
+}
+
+// *************
 // BUTTON
 // *************
 export const buttonClick = (ref) => {
@@ -111,20 +118,24 @@ export const buttonClick = (ref) => {
 // USER
 // *************
 // login
-export const profileLoginFormSubmit = () => {
+export const profileLoginFormSubmit = (token) => {
+
     return (dispatch, getState) => {
-        console.log('»» login data', getState(), {username: getState().user.username, password: getState().user.password});
+        console.log('»» login data', getState(), {username: getState().user.username, password: getState().user.password, token: token});
+
         dispatch({type: 'PROFILE_LOGIN'})
         const headers = {
             'Content-Type': 'application/json',
         }
+
+        console.log('»» login call');
+
         axios
-            .post('/api/login_check',
-                {username: getState().user.username, password: getState().user.password},
+            .post('/api/login',
+                {username: getState().user.username, password: getState().user.password, token: token},
                 {headers: headers})
             .then(
                 result => dispatch({type: 'PROFILE_LOGIN_SUCCESS', result})
-                // result => console.log('»» login res', result)
             )
             .then(
                 (result) => {
@@ -133,7 +144,7 @@ export const profileLoginFormSubmit = () => {
                 }
             )
             .catch(err => {
-                dispatch({type: 'PROFILE_LOGIN_FAILED', err});       // todo: tesztelni!
+                dispatch({type: 'PROFILE_LOGIN_FAILED', err});
             });
     }
 }

@@ -60,6 +60,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $avatar;
 
+    private ?string $token;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -177,4 +179,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     * @return User
+     */
+    public function setToken(?string $token): User
+    {
+        $this->token = $token;
+        return $this;
+    }
+
+
 }

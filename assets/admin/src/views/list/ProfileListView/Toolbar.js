@@ -40,10 +40,6 @@ class Toolbar extends Component {
         this.props.onToolbarChange(status);
     }
 
-    // const classes = useStyles();
-
-    // console.log("»» toolbar rest", rest);
-
     render() {
         return (
             <div>

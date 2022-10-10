@@ -24,13 +24,13 @@ import ListView from "./ListView";
 
 class ListViewTestimonials extends ListView {
 
-    editItem(id, name, avatar, description, weight) {
+    editItem(id, label, avatar, description, weight) {
 
         const MySwal = withReactContent(Swal);
 
         MySwal.fire({
             title: 'Szerkesztés',
-            html: '<input type="text" id="name" class="swal2-input" value="' + name + '" placeholder="név">' +
+            html: '<input type="text" id="label" class="swal2-input" value="' + label + '" placeholder="név">' +
                 '<input type="text" id="avatar" class="swal2-input" value="' + avatar + '" placeholder="avatar">' +
                 '<textarea id="description" class="swal2-input" placeholder="leírás">' + description + '</textarea>' +
                 '<input type="text" id="weight" class="swal2-input" value="' + weight + '" placeholder="súly" onkeypress="return event.charCode >= 48 && event.charCode <= 57">',
@@ -50,16 +50,16 @@ class ListViewTestimonials extends ListView {
                     return;
                 }
 
-                const name = Swal.getPopup().querySelector('#name').value;
+                const label = Swal.getPopup().querySelector('#label').value;
                 const weight = Swal.getPopup().querySelector('#weight').value;
                 const avatar = Swal.getPopup().querySelector('#avatar').value;
                 const description = Swal.getPopup().querySelector('#description').value;
 
-                if (!name || !weight || !avatar || !description) {
+                if (!label || !weight || !avatar || !description) {
                     Swal.showValidationMessage(`Kérlek, ellenőrizd a megadott adatokat`)
                 }
 
-                data.name = name;
+                data.label = label;
                 data.weight = weight;
                 data.avatar = avatar;
                 data.description = description;
@@ -87,7 +87,7 @@ class ListViewTestimonials extends ListView {
                 }
 
                 axios
-                    .put('api/list-items/' + this.props.name + '/edit/' + data.value.id, data.value, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/list-items/' + this.props.name + '/edit/' + data.value.id, data.value, {headers: AuthService.getAuthHeader()})
                     .then(response => {
 
                         console.log('resp status: ', response.status);
@@ -149,7 +149,7 @@ class ListViewTestimonials extends ListView {
 
         MySwal.fire({
             title: 'Hozzáadás',
-            html: '<input type="text" id="name" class="swal2-input" placeholder="név">' +
+            html: '<input type="text" id="label" class="swal2-input" placeholder="név">' +
                 '<input type="text" id="avatar" class="swal2-input" placeholder="avtar">' +
                 '<textarea id="description" class="swal2-input" placeholder="leírás"></textarea>' +
                 '<input type="text" id="weight" class="swal2-input" placeholder="súly" onkeypress="return event.charCode >= 48 && event.charCode <= 57">',
@@ -157,12 +157,12 @@ class ListViewTestimonials extends ListView {
             confirmButtonText: 'Mentés',
             cancelButtonText: 'Mégsem',
             preConfirm: () => {
-                const name = Swal.getPopup().querySelector('#name').value;
+                const label = Swal.getPopup().querySelector('#label').value;
                 const avatar = Swal.getPopup().querySelector('#avatar').value;
                 const description = Swal.getPopup().querySelector('#description').value;
                 const weight = Swal.getPopup().querySelector('#weight').value;
 
-                if (!name || !weight || !avatar || !description) {
+                if (!label || !weight || !avatar || !description) {
                     Swal.showValidationMessage(`Kérlek, ellenőrizd a megadott adatokat`)
                 }
 
@@ -194,7 +194,7 @@ class ListViewTestimonials extends ListView {
                 }
 
                 axios
-                    .put('api/list-items/' + this.props.name + '/add', data.value, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/list-items/' + this.props.name + '/add', data.value, {headers: AuthService.getAuthHeader()})
                     .then(response => {
                         if (response.status === 200) {
 
@@ -306,16 +306,15 @@ class ListViewTestimonials extends ListView {
                                                     key={item.id}
                                                 >
                                                     <TableCell>
-                                                        {item.name}
+                                                        {item.label}
                                                     </TableCell>
                                                     <TableCell align="center">
-                                                        {/*<Avatar*/}
-                                                        {/*    className={}*/}
-                                                        {/*    component={}*/}
-                                                        {/*    src={}*/}
-                                                        {/*    to="/app/account"*/}
-                                                        {/*/>*/}
-                                                        {item.avatar}
+                                                        <Avatar
+                                                            // className=""
+                                                            // component=""
+                                                            src={"/upload/testimonials/" + item.avatar}
+                                                            to="#"
+                                                        />
                                                     </TableCell>
                                                     <TableCell align="center">
                                                         {item.description.length > 50 ? item.description.substring(0, 50) + '...' : item.description}
@@ -339,7 +338,7 @@ class ListViewTestimonials extends ListView {
                                                                      aria-label="small outlined primary button group">
                                                             <Button>
                                                                 <EditIcon fontSize="small" color="primary"
-                                                                          onClick={(event) => this.editItem(item.id, item.name, item.avatar, item.description, item.weight)}/>
+                                                                          onClick={(event) => this.editItem(item.id, item.label, item.avatar, item.description, item.weight)}/>
                                                             </Button>
                                                             <Button>
                                                                 <HighlightOffIcon fontSize="small" color="error"
@@ -356,8 +355,8 @@ class ListViewTestimonials extends ListView {
                             <TablePagination
                                 component="div"
                                 count={this.state.data.length}
-                                onChangePage={(event) => this.handlePageChange(event)}
-                                onChangeRowsPerPage={(event) => this.handleLimitChange(event)}
+                                onPageChange={(event) => this.handlePageChange(event)}
+                                onRowsPerPageChange={(event) => this.handleLimitChange(event)}
                                 page={this.state.page}
                                 rowsPerPage={this.state.limit}
                                 rowsPerPageOptions={[25, 50, 100, 250]}

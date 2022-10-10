@@ -19,7 +19,7 @@ class TestimonialsFormType extends AbstractType
         $builder
           ->add('enabled', CheckboxType::class)
           ->add('id', IntegerType::class)
-          ->add('name', TextType::class, ['empty_data' => ''])
+          ->add('label', TextType::class, ['empty_data' => ''])
           ->add('avatar', TextType::class, ['empty_data' => ''])
           ->add('description', TextType::class, ['empty_data' => ''])
           ->add('weight', IntegerType::class, ['empty_data' => '0']);
@@ -29,9 +29,9 @@ class TestimonialsFormType extends AbstractType
     {
         $resolver->setDefaults([
           'data_class' => Testimonials::class,
-          'validation_groups' => ['admin_admin'],       // admin szerkesztheti adminból
-          'csrf_protection' => false,        // todo: kivenni!
-          'allow_extra_fields' => false,     // todo: lastModified miatt
+          'validation_groups' => ['admin_admin'],           // admin szerkesztheti adminból
+          'csrf_protection' => false,
+          'allow_extra_fields' => true,                     // lastModified miatt
         ]);
     }
 }
