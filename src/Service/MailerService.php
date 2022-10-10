@@ -51,8 +51,7 @@ class MailerService
     {
         $email = (new TemplatedEmail())
             ->from($message->getEmail())
-//            ->to('info@tutibebiszitter.hu')
-            ->to('email.atinak@gmail.com')
+            ->to($_ENV['CUSTOMER_SERVICE_EMAIL'])
             ->subject('Kapcsolat - üzeneted a érkezett')
             ->htmlTemplate('emails/messageToBusiness.html.twig')
             ->context([
@@ -71,6 +70,14 @@ class MailerService
      */
     protected function getTo(string $to): string
     {
+        if ($_ENV['APP_ENV'] === 'prod') {
+            return $to;
+        }
+
+        if (preg_match('/^.*@tutimagantanar\.hu$/', $to) === 1) {
+            return $to;
+        }
+
         return 'email.atinak@gmail.com';
     }
 }
