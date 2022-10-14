@@ -17,6 +17,10 @@ class DropzoneAreaExample extends Component{
         return (
             <DropzoneArea
                 onChange={this.handleChange.bind(this)}
+                filesLimit={1}
+                acceptedFiles={['image/*']}
+                dropzoneText={"Húzd ide a fájlt, vagy kattints ide a feltöltés ablak megnyitásához"}
+                maxFileSize={5000000}
             />
         )
     }

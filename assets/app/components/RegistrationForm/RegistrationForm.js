@@ -1,6 +1,9 @@
-
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CardMedia from '@mui/material/CardMedia';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
@@ -13,6 +16,8 @@ import Stepper from '@material-ui/core/Stepper';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import axios from "axios";
 import React, {Component} from 'react';
 import {connect} from "react-redux";
@@ -20,12 +25,12 @@ import {connect} from "react-redux";
 import Aux from '../../hoc/Aux';
 import * as actionCreators from "../../store/actions/actions";
 import history from "../../store/history/history";
-import DropzoneArea from "../DropzoneArea/DropzoneArea";
 import SelectItem from '../SearchForm/SelectItem/SelectItem';
 import Spinner from '../UI/Spinner/Spinner';
 import classes from './RegistrationForm.scss';
 
 class RegistrationForm extends Component {
+
     state = {
         steps: {
             active: 0,
@@ -66,7 +71,33 @@ class RegistrationForm extends Component {
         services: null,
         groups: null,
         languages: null,
-        additionalService: null
+        additionalService: null,
+        file: null,
+        path: null
+    }
+
+    // file upload
+    handleFileUpload(e) {
+        console.log('-- event');
+        console.log(e);
+
+        if (!e.target.files[0]) {
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            file: e.target.files[0],
+            path: URL.createObjectURL(e.target.files[0])
+        });
+    }
+
+    removeUploadedFile() {
+        this.setState({
+            ...this.state,
+            file: null,
+            path: null
+        });
     }
 
     // STEPPER
@@ -94,6 +125,10 @@ class RegistrationForm extends Component {
         window.scrollTo(0, 0);
     };
 
+    handleDropChange(e) {
+        console.log('»» file', e);
+    }
+
     getStepContent(stepIndex) {
         // step 1
         const name = this.props.formErrors['name'] ? this.props.formErrors['name'] : 'Profilodon megjelenő neved (*)';
@@ -110,18 +145,25 @@ class RegistrationForm extends Component {
         const facebook = this.props.formErrors['facebook'] ? this.props.formErrors['facebook'] : 'facebook profil elérhetőség, pl. https://www.facebook.com/kovacs.peter';
         const instagram = this.props.formErrors['instagram'] ? this.props.formErrors['instagram'] : 'Instagram elérhetőség, pl. https://www.instagram.com/kovacs.peter';
         // step 3
-        const serviceErrors = this.props.formErrors['service'] ? (<Alert severity="error">{this.props.formErrors['service']}</Alert>) : '';
-        const languageErrors = this.props.formErrors['language'] ? (<Alert severity="error">{this.props.formErrors['language']}</Alert>) : '';
+        const serviceErrors = this.props.formErrors['service'] ? (
+            <Alert severity="error">{this.props.formErrors['service']}</Alert>) : '';
+        const languageErrors = this.props.formErrors['language'] ? (
+            <Alert severity="error">{this.props.formErrors['language']}</Alert>) : '';
         const additionalServiceErrors = this.props.formErrors['additionalService'] ? (
             <Alert severity="error">{this.props.formErrors['additionalService']}</Alert>) : '';
-        const groupsErrors = this.props.formErrors['groups'] ? (<Alert severity="error">{this.props.formErrors['groups']}</Alert>) : '';
+        const groupsErrors = this.props.formErrors['groups'] ? (
+            <Alert severity="error">{this.props.formErrors['groups']}</Alert>) : '';
         // step 4
-        const placeErrors = this.props.formErrors['place'] ? (<Alert severity="error">{this.props.formErrors['place']}</Alert>) : '';
+        const placeErrors = this.props.formErrors['place'] ? (
+            <Alert severity="error">{this.props.formErrors['place']}</Alert>) : '';
         // step 5
-        const packageErrors = this.props.formErrors['package'] ? (<Alert severity="error">{this.props.formErrors['package']}</Alert>) : '';
-        const payModeErrors = this.props.formErrors['payMode'] ? (<Alert severity="error">{this.props.formErrors['payMode']}</Alert>) : '';
+        const packageErrors = this.props.formErrors['package'] ? (
+            <Alert severity="error">{this.props.formErrors['package']}</Alert>) : '';
+        const payModeErrors = this.props.formErrors['payMode'] ? (
+            <Alert severity="error">{this.props.formErrors['payMode']}</Alert>) : '';
         // step 6
-        const imageErrors = this.props.formErrors['image'] ? (<Alert severity="error">{this.props.formErrors['image']}</Alert>) : '';
+        const imageErrors = this.props.formErrors['image'] ? (
+            <Alert severity="error">{this.props.formErrors['image']}</Alert>) : '';
 
         let submitDisabled = this.props.submitDisabled;
         let btnLabel = submitDisabled ? 'Adatok mentése folyamatban...' : 'Jelentkezés mentése';
@@ -209,7 +251,8 @@ class RegistrationForm extends Component {
                             <Box p={3} mb={3}>
                                 <h5>Bejelentkezési adatok</h5>
                                 <hr/>
-                                <p>Profilod a továbbiakban az email címed és jelszavad megadásával bármikor módosítható.</p>
+                                <p>Profilod a továbbiakban az email címed és jelszavad megadásával bármikor
+                                    módosítható.</p>
                                 <Grid container spacing={3}>
                                     <Grid item xs={6}>
                                         <TextField
@@ -269,7 +312,8 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button variant="contained" size="small" className={classes.Button} onClick={this.handleNext}>
+                                        <Button variant="contained" size="small" className={classes.Button}
+                                                onClick={this.handleNext}>
                                             következő
                                         </Button>
                                     </Box>
@@ -287,7 +331,8 @@ class RegistrationForm extends Component {
                             <Box p={3} mb={3}>
                                 <h5>Címsor</h5>
                                 <hr/>
-                                <p>Figyelemfelkeltő címsor. Megjelenik a találati listában a neved mellett, és az adatlapodon egyaránt.</p>
+                                <p>Figyelemfelkeltő címsor. Megjelenik a találati listában a neved mellett, és az
+                                    adatlapodon egyaránt.</p>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12}>
                                         <TextField
@@ -312,7 +357,8 @@ class RegistrationForm extends Component {
                             <Box p={3} mb={3}>
                                 <h5>Bemutatkozás</h5>
                                 <hr/>
-                                <p>Rövid bemutatkozó szöveg a találati listában jelenik meg. Törekedj tömör, de figyelemfelkeltő szöveg megadására. A részletes
+                                <p>Rövid bemutatkozó szöveg a találati listában jelenik meg. Törekedj tömör, de
+                                    figyelemfelkeltő szöveg megadására. A részletes
                                     bemutatkozást az adatlapod tartalmazza, ez hosszabb, részletesebb leírás.</p>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12}>
@@ -467,7 +513,8 @@ class RegistrationForm extends Component {
                             <Box p={3} mb={3}>
                                 <h5>Közösségi média</h5>
                                 <hr/>
-                                <p>Amennyiben szeretnéd megosztani a közösségi médiás profilodat, itt tudod megadni az elérésüket.</p>
+                                <p>Amennyiben szeretnéd megosztani a közösségi médiás profilodat, itt tudod megadni az
+                                    elérésüket.</p>
                                 <Grid container spacing={3}>
                                     <Grid item xs={6}>
                                         <TextField
@@ -527,12 +574,14 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button variant="outlined" size="small" className={classes.Button} onClick={this.handlePrev}>
+                                        <Button variant="outlined" size="small" className={classes.Button}
+                                                onClick={this.handlePrev}>
                                             előző
                                         </Button>
                                     </Box>
                                     <Box mx={1}>
-                                        <Button variant="contained" size="small" className={classes.Button} onClick={this.handleNext}>
+                                        <Button variant="contained" size="small" className={classes.Button}
+                                                onClick={this.handleNext}>
                                             következő
                                         </Button>
                                     </Box>
@@ -541,7 +590,8 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button type="button" variant="contained" size="small" className={classes.Button} disabled={submitDisabled}
+                                        <Button type="button" variant="contained" size="small"
+                                                className={classes.Button} disabled={submitDisabled}
                                                 onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
                                             {btnLabel}
                                         </Button>
@@ -683,7 +733,12 @@ class RegistrationForm extends Component {
                         <Grid container spacing={3} alignItems="stretch">
                             <Grid item xs={6} style={{display: 'flex'}}>
                                 <Paper elevation={3} bgcolor="#f7f7f7"
-                                       style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'column', width: '100%'}}>
+                                       style={{
+                                           display: 'flex',
+                                           justifyContent: 'space-between',
+                                           flexDirection: 'column',
+                                           width: '100%'
+                                       }}>
                                     <Box p={3} mb={3}>
                                         <h5>Szolgáltatások</h5>
                                         <hr/>
@@ -706,7 +761,12 @@ class RegistrationForm extends Component {
 
                             <Grid item xs={6} style={{display: 'flex'}}>
                                 <Paper elevation={3} bgcolor="#f7f7f7"
-                                       style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'column', width: '100%'}}>
+                                       style={{
+                                           display: 'flex',
+                                           justifyContent: 'space-between',
+                                           flexDirection: 'column',
+                                           width: '100%'
+                                       }}>
                                     <Box p={3} mb={3}>
                                         <h5>Beszélt nyelv</h5>
                                         <hr/>
@@ -734,7 +794,8 @@ class RegistrationForm extends Component {
                                     <Box p={3} mb={3}>
                                         <h5>Kiegészítő szolgáltatások</h5>
                                         <hr/>
-                                        <p>Kiegészítő szolgáltatások, melyeket egyedi megbeszélés alapján el tudsz végezni.
+                                        <p>Kiegészítő szolgáltatások, melyeket egyedi megbeszélés alapján el tudsz
+                                            végezni.
                                             Válaszd ki azokat, melyek igazak rád.</p>
 
                                         <hr/>
@@ -759,7 +820,8 @@ class RegistrationForm extends Component {
                                     <Box p={3} mb={3}>
                                         <h5>Csoportok</h5>
                                         <hr/>
-                                        <p>Kiegészítő szolgáltatások, melyeket egyedi megbeszélés alapján el tudsz végezni.
+                                        <p>Kiegészítő szolgáltatások, melyeket egyedi megbeszélés alapján el tudsz
+                                            végezni.
                                             Válaszd ki azokat, melyek igazak rád.</p>
 
                                         <hr/>
@@ -782,12 +844,14 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button variant="outlined" size="small" className={classes.Button} onClick={this.handlePrev}>
+                                        <Button variant="outlined" size="small" className={classes.Button}
+                                                onClick={this.handlePrev}>
                                             előző
                                         </Button>
                                     </Box>
                                     <Box mx={1}>
-                                        <Button variant="contained" size="small" className={classes.Button} onClick={this.handleNext}>
+                                        <Button variant="contained" size="small" className={classes.Button}
+                                                onClick={this.handleNext}>
                                             következő
                                         </Button>
                                     </Box>
@@ -796,7 +860,8 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button type="button" variant="contained" size="small" className={classes.Button} disabled={submitDisabled}
+                                        <Button type="button" variant="contained" size="small"
+                                                className={classes.Button} disabled={submitDisabled}
                                                 onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
                                             {btnLabel}
                                         </Button>
@@ -822,7 +887,8 @@ class RegistrationForm extends Component {
                             <Box p={3} mb={3}>
                                 <h5>Helyszínek</h5>
                                 <hr/>
-                                <p>A megadott helyszíneken fogsz megjelenni a találati listákban, több helyszín is kiválasztható.</p>
+                                <p>A megadott helyszíneken fogsz megjelenni a találati listákban, több helyszín is
+                                    kiválasztható.</p>
 
                                 <hr/>
 
@@ -843,12 +909,14 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button variant="outlined" size="small" className={classes.Button} onClick={this.handlePrev}>
+                                        <Button variant="outlined" size="small" className={classes.Button}
+                                                onClick={this.handlePrev}>
                                             előző
                                         </Button>
                                     </Box>
                                     <Box mx={1}>
-                                        <Button variant="contained" size="small" className={classes.Button} onClick={this.handleNext}>
+                                        <Button variant="contained" size="small" className={classes.Button}
+                                                onClick={this.handleNext}>
                                             következő
                                         </Button>
                                     </Box>
@@ -857,7 +925,8 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button type="button" variant="contained" size="small" className={classes.Button} disabled={submitDisabled}
+                                        <Button type="button" variant="contained" size="small"
+                                                className={classes.Button} disabled={submitDisabled}
                                                 onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
                                             {btnLabel}
                                         </Button>
@@ -894,7 +963,8 @@ class RegistrationForm extends Component {
                             <Box p={3} mb={3}>
                                 <h5>Díjcsomagok</h5>
                                 <hr/>
-                                <p>Díjcsomag kiválasztása. Hosszabb időtartam jobban megéri. Díjaink már egyetlen egy megkeresés esetén megtérülnek!</p>
+                                <p>Díjcsomag kiválasztása. Hosszabb időtartam jobban megéri. Díjaink már egyetlen egy
+                                    megkeresés esetén megtérülnek!</p>
                                 <Grid container spacing={5}>
                                     <Grid item xs={12}>
 
@@ -903,7 +973,8 @@ class RegistrationForm extends Component {
                                         {packageErrors}
 
                                         <FormControl component="fieldset">
-                                            <RadioGroup aria-label="package" name="package" value={parseInt(this.state.formData.package)}
+                                            <RadioGroup aria-label="package" name="package"
+                                                        value={parseInt(this.state.formData.package)}
                                                         onChange={(event) => this.onRegistrationFormItemChanged(event)}>
                                                 {packages}
                                             </RadioGroup>
@@ -925,7 +996,8 @@ class RegistrationForm extends Component {
                                         {payModeErrors}
 
                                         <FormControl component="fieldset">
-                                            <RadioGroup aria-label="payMode" name="payMode" value={parseInt(this.state.formData.payMode)}
+                                            <RadioGroup aria-label="payMode" name="payMode"
+                                                        value={parseInt(this.state.formData.payMode)}
                                                         onChange={(event) => this.onRegistrationFormItemChanged(event)}>
                                                 {payModes}
                                             </RadioGroup>
@@ -1015,8 +1087,10 @@ class RegistrationForm extends Component {
                             <Box p={3} mb={3}>
                                 <h5>Marketing hozzájárulás</h5>
                                 <hr/>
-                                <p>Nem küldünk spam-et. Viszont folyamatosan azon dolgozunk, hogy sikeresebb bébiszitter légy. Ha ezzel kapcsolatban szívesen
-                                    fogadsz megkeresést tőlünk, engedélyezd a hozzájárulást (később bármikor visszavonható).</p>
+                                <p>Nem küldünk spam-et. Viszont folyamatosan azon dolgozunk, hogy sikeresebb bébiszitter
+                                    légy. Ha ezzel kapcsolatban szívesen
+                                    fogadsz megkeresést tőlünk, engedélyezd a hozzájárulást (később bármikor
+                                    visszavonható).</p>
                                 <Grid item xs={12}>
                                     <Box display="flex" justifyContent="flex-start" mb={0} p={1}>
                                         <Box pr={2}>
@@ -1032,9 +1106,12 @@ class RegistrationForm extends Component {
                                             />
                                         </Box>
                                         <Box pt={0}>
-                                            Szeretnék elektronikus hírlevelet kapni a TUTI bébiszitter-közvetítőtől, amelyben hasznos információkat kapok az
-                                            akciókkal, munkalehetőségekkel és az újdonságokkal kapcsolatban. Így pl. ha valaki közvetlenül minket keres meg,
-                                            hogy bébiszittert szeretne találni, arról is értesülni fogsz. Az adatokat nem adjuk ki harmadik félnek, és
+                                            Szeretnék elektronikus hírlevelet kapni a TUTI bébiszitter-közvetítőtől,
+                                            amelyben hasznos információkat kapok az
+                                            akciókkal, munkalehetőségekkel és az újdonságokkal kapcsolatban. Így pl. ha
+                                            valaki közvetlenül minket keres meg,
+                                            hogy bébiszittert szeretne találni, arról is értesülni fogsz. Az adatokat
+                                            nem adjuk ki harmadik félnek, és
                                             bizalmasan kezeljük.
                                         </Box>
                                     </Box>
@@ -1064,24 +1141,25 @@ class RegistrationForm extends Component {
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
-                                    <Box display="flex" justifyContent="center" mb={3}>
-                                        <Box mx={1}>
-                                            <Button variant="outlined" size="small" className={classes.Button} onClick={this.handlePrev}>
-                                                előző
-                                            </Button>
-                                        </Box>
-                                        <Box mx={1}>
-                                            <Button variant="contained" size="small" className={classes.Button} onClick={this.handleNext}>
-                                                következő
-                                            </Button>
-                                        </Box>
+                                    <Box mx={1}>
+                                        <Button variant="outlined" size="small" className={classes.Button}
+                                                onClick={this.handlePrev}>
+                                            előző
+                                        </Button>
+                                    </Box>
+                                    <Box mx={1}>
+                                        <Button variant="contained" size="small" className={classes.Button}
+                                                onClick={this.handleNext}>
+                                            következő
+                                        </Button>
                                     </Box>
                                 </Box>
                             </Grid>
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button type="button" variant="contained" size="small" className={classes.Button} disabled={submitDisabled}
+                                        <Button type="button" variant="contained" size="small"
+                                                className={classes.Button} disabled={submitDisabled}
                                                 onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
                                             {btnLabel}
                                         </Button>
@@ -1097,16 +1175,56 @@ class RegistrationForm extends Component {
                     <Aux>
                         <Paper elevation={3} bgcolor="#f7f7f7">
                             <Box p={3} mb={3}>
-                                <h5>Képek feltöltése</h5>
-                                <p>Csak húzd be a négyzetbe a képeket a feltöltéshez, vagy kattints a négyzetbe, és a felugró ablakban töltsd fel a képeket.</p>
+                                <h5>Profilkép feltöltése</h5>
+                                <p>Tallózd be a képet a feltöltéshez. Egy darab profilkép feltöltése lehetséges
+                                    legfeljebb 5Mbyte méretben.</p>
 
                                 <hr/>
 
                                 {imageErrors}
 
                                 <Grid container spacing={5}>
-                                    <Grid item xs={12}>
-                                        <DropzoneArea name="images" onChange={(event) => this.onRegistrationFormItemChanged(event)}/>
+                                    <Grid xs={12} item>
+                                        <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                                            <Card sx={{maxWidth: 400, width: '100%'}}>
+                                                <CardActions>
+                                                    <Box sx={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
+                                                        <Button
+                                                            component="label"
+                                                            size="small"
+                                                            variant="outlined"
+                                                            startIcon={<CloudUploadIcon/>}
+                                                            sx={{marginRight: "1rem"}}
+                                                        >
+                                                            Profilkép kiválasztása
+                                                            <input type="file" accept="image/gif, image/png, image/jpeg"
+                                                                   hidden
+                                                                   onChange={(e) => this.handleFileUpload(e)}/>
+                                                        </Button>
+                                                        <Button
+                                                            component="label"
+                                                            size="small"
+                                                            variant="outlined"
+                                                            startIcon={<DeleteForeverIcon/>}
+                                                            sx={{marginRight: "1rem"}}
+                                                            onClick={() => this.removeUploadedFile()}
+                                                        >
+                                                            Törlés
+                                                        </Button>
+                                                    </Box>
+                                                </CardActions>
+                                                <CardMedia
+                                                    component="img"
+                                                    height="auto"
+                                                    image={this.state.path || '/static/images/img_placeholder.png'}
+                                                />
+                                                <CardContent>
+                                                    <small>
+                                                        Kiválasztva: {this.state.file?.name || 'nincs fájl kiválasztva'}
+                                                    </small>
+                                                </CardContent>
+                                            </Card>
+                                        </Box>
                                     </Grid>
                                 </Grid>
                             </Box>
@@ -1116,7 +1234,8 @@ class RegistrationForm extends Component {
                                 <Box display="flex" justifyContent="center">
                                     <Box display="flex" justifyContent="center" mb={2}>
                                         <Box mx={1}>
-                                            <Button variant="outlined" size="small" className={classes.Button} onClick={this.handlePrev}>
+                                            <Button variant="outlined" size="small" className={classes.Button}
+                                                    onClick={this.handlePrev}>
                                                 előző
                                             </Button>
                                         </Box>
@@ -1126,7 +1245,8 @@ class RegistrationForm extends Component {
                             <Grid item xs={12}>
                                 <Box display="flex" justifyContent="center" mb={3}>
                                     <Box mx={1}>
-                                        <Button type="button" variant="contained" size="small" className={classes.Button} disabled={submitDisabled}
+                                        <Button type="button" variant="contained" size="small"
+                                                className={classes.Button} disabled={submitDisabled}
                                                 onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
                                             {btnLabel}
                                         </Button>
@@ -1143,6 +1263,9 @@ class RegistrationForm extends Component {
     }
 
     onRegistrationFormItemChanged(e, subKey = null) {
+
+        console.log('»» change', e, subKey);
+
         if (subKey) {
             let subData = {
                 ...this.state.formData[subKey],
@@ -1267,7 +1390,8 @@ class RegistrationForm extends Component {
 
     render() {
 
-        console.log('»» rendi', this.props);
+        console.log('»» props', this.props);
+        console.log('»» state', this.state);
 
         const stepErrors = [
             !!(this.props.formErrors['name'] || this.props.formErrors['address'] || this.props.formErrors['phone'] || this.props.formErrors['pubAddress'] || this.props.formErrors['username'] || this.props.formErrors['plainPassword']),
