@@ -144,12 +144,12 @@ const reducer = (state = initialState, action) => {
         case actionTypes.REGISTRATION_FORM_SUCCESS: {
             return {
                 ...state,
-                registration: {
-                    ...state.registration,
-                    formErrors: [],
-                    submitDisabled: false,
-                    successRegistration: true
-                }
+                    registration: {
+                        ...state.registration,
+                        formErrors: [],
+                        submitDisabled: false,
+                        successRegistration: true
+                    }
             }
         }
         case actionTypes.REGISTRATION_FORM_FAILED: {

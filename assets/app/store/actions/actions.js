@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import history from "../history/history";
 import * as actionTypes from './actionTypes';
-import {SEARCH_FORM_PAGE_CHANGE} from "./actionTypes";
+import {SEARCH_FORM_PAGE_CHANGE} from './actionTypes';
 
 // *************
 // SEARCH FORM
@@ -73,12 +73,35 @@ export const packagesInit = () => {
     }
 }
 
-export const registrationFormSubmit = (formData) => {
-    console.log('»» regForm submit', formData);
+export const registrationFormSubmit = (formData, file) => {
     return (dispatch) => {
         dispatch({type: 'REGISTRATION_FORM_SUBMITTING'})
         axios
-            .post('/api/registration/register', formData)
+            .post(
+                '/api/registration/register',
+                formData,
+                {
+                    headers: {"content-type": "application/json"}
+                }
+            )
+            .then(response => {
+                    if (!file) {
+                        return;
+                    }
+
+                    let fileData = new FormData();
+                    fileData.append('uuid', response.data.uuid);
+                    fileData.append('file', file)
+                    return axios
+                        .post(
+                            '/api/registration/upload',
+                            fileData,
+                            {
+                                headers: {"Content-Type": "multipart/form-data"},
+                            }
+                        )
+                }
+            )
             .then(result => dispatch({type: 'REGISTRATION_FORM_SUCCESS', result}))
             .catch(err => {
                 console.log('»» err', err.response.data);
@@ -121,7 +144,11 @@ export const buttonClick = (ref) => {
 export const profileLoginFormSubmit = (token) => {
 
     return (dispatch, getState) => {
-        console.log('»» login data', getState(), {username: getState().user.username, password: getState().user.password, token: token});
+        console.log('»» login data', getState(), {
+            username: getState().user.username,
+            password: getState().user.password,
+            token: token
+        });
 
         dispatch({type: 'PROFILE_LOGIN'})
         const headers = {
@@ -166,7 +193,10 @@ export const profileLoginFormChange = (event, target) => {
 // admin login
 export const adminLoginFormSubmit = () => {
     return (dispatch, getState) => {
-        console.log('»» admin login data', getState(), {email: getState().user.email, password: getState().user.password});
+        console.log('»» admin login data', getState(), {
+            email: getState().user.email,
+            password: getState().user.password
+        });
         dispatch({type: 'ADMIN_LOGIN'})
         const headers = {
             'Content-Type': 'application/json',

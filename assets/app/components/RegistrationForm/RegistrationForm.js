@@ -592,7 +592,7 @@ class RegistrationForm extends Component {
                                     <Box mx={1}>
                                         <Button type="button" variant="contained" size="small"
                                                 className={classes.Button} disabled={submitDisabled}
-                                                onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
+                                                onClick={() => this.props.registrationFormSubmit(this.state.formData, this.state.file)}>
                                             {btnLabel}
                                         </Button>
                                     </Box>
@@ -862,7 +862,7 @@ class RegistrationForm extends Component {
                                     <Box mx={1}>
                                         <Button type="button" variant="contained" size="small"
                                                 className={classes.Button} disabled={submitDisabled}
-                                                onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
+                                                onClick={() => this.props.registrationFormSubmit(this.state.formData, this.state.file)}>
                                             {btnLabel}
                                         </Button>
                                     </Box>
@@ -927,7 +927,7 @@ class RegistrationForm extends Component {
                                     <Box mx={1}>
                                         <Button type="button" variant="contained" size="small"
                                                 className={classes.Button} disabled={submitDisabled}
-                                                onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
+                                                onClick={() => this.props.registrationFormSubmit(this.state.formData, this.state.file)}>
                                             {btnLabel}
                                         </Button>
                                     </Box>
@@ -1160,7 +1160,7 @@ class RegistrationForm extends Component {
                                     <Box mx={1}>
                                         <Button type="button" variant="contained" size="small"
                                                 className={classes.Button} disabled={submitDisabled}
-                                                onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
+                                                onClick={() => this.props.registrationFormSubmit(this.state.formData, this.state.file)}>
                                             {btnLabel}
                                         </Button>
                                     </Box>
@@ -1188,7 +1188,11 @@ class RegistrationForm extends Component {
                                         <Box sx={{display: 'flex', justifyContent: 'center'}}>
                                             <Card sx={{maxWidth: 400, width: '100%'}}>
                                                 <CardActions>
-                                                    <Box sx={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
+                                                    <Box sx={{
+                                                        display: 'flex',
+                                                        justifyContent: 'space-around',
+                                                        width: '100%'
+                                                    }}>
                                                         <Button
                                                             component="label"
                                                             size="small"
@@ -1247,7 +1251,7 @@ class RegistrationForm extends Component {
                                     <Box mx={1}>
                                         <Button type="button" variant="contained" size="small"
                                                 className={classes.Button} disabled={submitDisabled}
-                                                onClick={() => this.props.registrationFormSubmit(this.state.formData)}>
+                                                onClick={() => this.props.registrationFormSubmit(this.state.formData, this.state.file)}>
                                             {btnLabel}
                                         </Button>
                                     </Box>
@@ -1440,7 +1444,7 @@ const mapDispatchToProps = dispatch => {
     return {
         packagesInit: () => dispatch(actionCreators.packagesInit()),
         // servicesInit: () => dispatch(actionCreators.searchFormInit()),
-        registrationFormSubmit: (formData) => dispatch(actionCreators.registrationFormSubmit(formData))
+        registrationFormSubmit: (formData, file) => dispatch(actionCreators.registrationFormSubmit(formData, file))
     }
 }
 
