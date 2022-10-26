@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Box,
   Container,
@@ -6,10 +5,12 @@ import {
   makeStyles
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
+import React, { useState } from 'react';
+
 import Page from '../../../components/Page';
-import Toolbar from './Toolbar';
-import ProductCard from './ProductCard';
 import data from './data';
+import ProductCard from './ProductCard';
+import Toolbar from './Toolbar';
 
 const useStyles = makeStyles((theme) => ({
   root: {

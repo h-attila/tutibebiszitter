@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
 
-import classes from './Home.scss';
 
-import HomeSearch from '../../../components/HomeSearch/HomeSearch';
 import Article from '../../../components/Article/Article';
-import Testimonials from "../../../components/Testimonials/Testimonials";
-import Features from "../../../components/Features/Features";
 import Benefits from "../../../components/Benefits/Benefits";
-import ParallaxBlock from "../../../components/ParallaxBlock/ParallaxBlock";
+import Features from "../../../components/Features/Features";
+import HomeSearch from '../../../components/HomeSearch/HomeSearch';
 import NewMembers from '../../../components/NewMembers/NewMembers';
-
+import ParallaxBlock from "../../../components/ParallaxBlock/ParallaxBlock";
+import Testimonials from "../../../components/Testimonials/Testimonials";
 import MainPicture1 from '../../../images/bg_main_2.jpg';
+import classes from './Home.scss';
 
 class Home extends Component {
     render() {

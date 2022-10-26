@@ -5,7 +5,7 @@ import classes from './Contact.scss';
 const contact = () => (
     <ul className={classes.Contact}>
         <li className="mb-1">IQ-Help Kft.</li>
-        <li className="mb-1 page-footer__info-text"><a href="http://www.tutibebiszitter.hu" target="_blank">www.tutibebiszitter.hu</a> - bébiszitter keresés
+        <li className="mb-1 page-footer__info-text"><a href="http://www.tutibebiszitter.hu" target="_blank" rel="noreferrer">www.tutibebiszitter.hu</a> - bébiszitter keresés
             országosan
         </li>
         <li><i className="fa fa-home mt-3 mr-2" aria-hidden="true" />1204 Budapest, Eperjes u. 52.</li>

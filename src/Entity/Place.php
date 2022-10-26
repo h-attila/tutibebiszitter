@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=PlaceRepository::class)
  *
- * @Table(indexes={@Index(name="search_idx", columns={"stateCode", "cityCode", "enabled"})})
+ * @Table(indexes={@Index(name="search_idx", columns={"state_code", "city_code", "enabled"})})
  */
 class Place
 {
@@ -75,9 +75,15 @@ class Place
      */
     private $profiles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SearchHistory::class, mappedBy="place")
+     */
+    private $searchHistories;
+
     public function __construct()
     {
         $this->profiles = new ArrayCollection();
+        $this->searchHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +185,36 @@ class Place
     {
         if ($this->profiles->removeElement($profile)) {
             $profile->removePlace($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SearchHistory>
+     */
+    public function getSearchHistories(): Collection
+    {
+        return $this->searchHistories;
+    }
+
+    public function addSearchHistory(SearchHistory $searchHistory): self
+    {
+        if (!$this->searchHistories->contains($searchHistory)) {
+            $this->searchHistories[] = $searchHistory;
+            $searchHistory->setPlace($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSearchHistory(SearchHistory $searchHistory): self
+    {
+        if ($this->searchHistories->removeElement($searchHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($searchHistory->getPlace() === $this) {
+                $searchHistory->setPlace(null);
+            }
         }
 
         return $this;

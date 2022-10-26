@@ -1,11 +1,10 @@
 import React from 'react';
 
-import classes from './Footer.scss';
-
 import Contact from './Contact/Contact';
+import Facebook from './Facebook/Facebook';
+import classes from './Footer.scss';
 import NewMembers from "./NewMembers/NewMembers";
 import Pages from './Pages/Pages';
-import Facebook from './Facebook/Facebook';
 
 const footer = (props) => {
     const y = new Date().getFullYear();
@@ -59,7 +58,7 @@ const footer = (props) => {
 
             <div className={[classes.Copyright, "text-center py-3"].join(' ')}>
                 <p className="mb-0">
-                    © {y} <a href="http://www.tutibebiszitter.hu" target="_blank" className="mr-1 ml-1">www.tutibebiszitter.hu</a>
+                    © {y} <a href="http://www.tutibebiszitter.hu" target="_blank" className="mr-1 ml-1" rel="noreferrer">www.tutibebiszitter.hu</a>
                     - minden jog fenntartva
                 </p>
             </div>

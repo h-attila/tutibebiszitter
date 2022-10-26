@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 
-import Article from '../Article/Article';
 
-import classes from './Features.scss';
 
 import Img1 from '../../images/babysitter_bg_1.jpg';
 import Img2 from '../../images/babysitter_bg_2.jpg';
 import Img3 from '../../images/babysitter_bg_3.jpg';
 import Img4 from '../../images/babysitter_bg_4.jpg';
+import Article from '../Article/Article';
+import classes from './Features.scss';
 
 class Features extends Component {
 

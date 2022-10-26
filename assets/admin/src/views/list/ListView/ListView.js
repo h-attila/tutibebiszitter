@@ -1,22 +1,23 @@
-import React, {Component} from 'react';
-import PerfectScrollbar from "react-perfect-scrollbar";
 import {Box, Card, Container, Table, TableBody, TableCell, TableHead, TablePagination, TableRow} from "@material-ui/core";
-import moment from "moment";
-import Switch from "@material-ui/core/Switch";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Switch from "@material-ui/core/Switch";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
 import EditIcon from "@material-ui/icons/Edit";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
-import Page from "../../../components/Page";
-import axios from "axios";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content'
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import MoodIcon from "@material-ui/icons/Mood";
 import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
-import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
-import AuthService from "../../../AuthService";
+import axios from "axios";
+import moment from "moment";
+import React, {Component} from 'react';
+import PerfectScrollbar from "react-perfect-scrollbar";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+
 import history from "../../../../../app/store/history/history";
+import AuthService from "../../../AuthService";
+import Page from "../../../components/Page";
 
 class ListView extends Component {
 
@@ -75,7 +76,7 @@ class ListView extends Component {
         }
 
         axios
-            .put('/admin/api/list-items/' + this.props.name + '/set-enabled', postData, {headers: AuthService.getAuthHeader()})
+            .put('admin/api/list-items/' + this.props.name + '/set-enabled', postData, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 if (response.status === 200) {
                     tmpData[index].disabled = false;
@@ -107,7 +108,7 @@ class ListView extends Component {
         }
 
         axios
-            .put('/admin/api/list-items/' + this.props.name + '/set-public', postData, {headers: AuthService.getAuthHeader()})
+            .put('admin/api/list-items/' + this.props.name + '/set-public', postData, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 if (response.status === 200) {
                     tmpData[index].disabled = false;
@@ -141,7 +142,7 @@ class ListView extends Component {
         }
 
         axios
-            .post('/admin/api/list-items/' + this.props.name + '/pre-check-delete', {id: id}, {headers: AuthService.getAuthHeader()})
+            .post('admin/api/list-items/' + this.props.name + '/pre-check-delete', {id: id}, {headers: AuthService.getAuthHeader()})
             .then(response => {
 
                 console.log('»» pre-check-del resp', response);
@@ -182,7 +183,7 @@ class ListView extends Component {
                             });
 
                             axios
-                                .delete('/admin/api/list-items/' + this.props.name + '/delete', {data: {id: id}, headers: AuthService.getAuthHeader()})
+                                .delete('admin/api/list-items/' + this.props.name + '/delete', {data: {id: id}, headers: AuthService.getAuthHeader()})
                                 .then(response => {
                                     if (response.status === 200) {
                                         let data = [...this.state.data];
@@ -273,7 +274,7 @@ class ListView extends Component {
                 }
 
                 axios
-                    .put('api/list-items/' + this.props.name + '/edit/' + data.value.id, data.value, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/list-items/' + this.props.name + '/edit/' + data.value.id, data.value, {headers: AuthService.getAuthHeader()})
                     .then(response => {
 
                         console.log('resp status: ', response.status);
@@ -373,7 +374,7 @@ class ListView extends Component {
                 }
 
                 axios
-                    .put('api/list-items/' + this.props.name + '/add', data.value, {headers: AuthService.getAuthHeader()})
+                    .put('admin/api/list-items/' + this.props.name + '/add', data.value, {headers: AuthService.getAuthHeader()})
                     .then(response => {
                         if (response.status === 200) {
 
@@ -418,7 +419,7 @@ class ListView extends Component {
         }
 
         axios
-            .get('/admin/api/list-items/' + this.props.name + '/get-list/' + filter, {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/' + this.props.name + '/get-list/' + filter, {headers: AuthService.getAuthHeader()})
             .then(response => {
                 if (response.status === 200 && response.data.length > 0) {
 

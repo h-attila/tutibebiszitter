@@ -1,0 +1,19 @@
+<h1>Kedves Admin</h1>
+
+<p>
+    {{ sender|raw }} az alábbi üzenetet küldte neked a TUTI Bébiszitter Közvetítőn található Üzenő formon keresztül:
+</p>
+<p>
+    {{ message|raw }}
+</p>
+<p>
+    Ezeken az elérhetőségeken tudod felvenni vele a kapcsolatot:
+</p>
+<ul>
+    <li>e-mail: <strong>{{ email_address|raw }}</strong></li>
+    <li>telefon: <strong>{{ phone|raw }}</strong></li>
+</ul>
+<p>
+    Üdvözlettel,<br>
+    Tuti Bébiszitter Közvetító csapata
+</p>

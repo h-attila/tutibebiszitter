@@ -1,11 +1,11 @@
 @import "../../styles/colors";
 
 .Button {
-  color: $white-color;
-  background-color: $purple-color;
+  color: $white;
+  background-color: $primaryColor;
   font-weight: 300;
 }
 
 .Button:hover {
-  color: $purple-color-light25;
+  color: $colorFour;
 }

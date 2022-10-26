@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\App\Api;
 
 use App\Service\TestimonialsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,12 +21,10 @@ class TestimonialsController extends AbstractController
      */
     public function getTestimonials(TestimonialsService $testimonialsService, SerializerInterface $serializer): Response
     {
-        $testimonials = $testimonialsService->getList('active');
+        $testimonials = $testimonialsService->getList('active-front');
 
         $json = $serializer->serialize($testimonials, 'json', ['groups' => ['public']]);
 
         return JsonResponse::fromJsonString($json, Response::HTTP_OK);
-
-//        return new JsonResponse($testimonials, Response::HTTP_OK);
     }
 }

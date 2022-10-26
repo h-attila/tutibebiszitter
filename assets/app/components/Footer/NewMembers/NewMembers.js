@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Link from '../Link/Link';
 import Aux from '../../../hoc/Aux';
+import Link from '../Link/Link';
 
 const newMembers = (props) => {
     let newMembers = null;

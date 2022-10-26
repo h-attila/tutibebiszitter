@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Language[]    findAll()
  * @method Language[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LanguaneRepository extends ServiceEntityRepository
+class LanguageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

@@ -1,52 +1,87 @@
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import MapIcon from '@mui/icons-material/Map';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import SavingsIcon from '@mui/icons-material/Savings';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
 import React from 'react';
+
 
 import classes from './Item.scss';
 
-import Badge from './Badge/Badge';
-
 const item = (props) => {
     let badges = [];
-
-    for (let i = 0; i < props.services.length; i++) {
-        badges.push(<Badge key={i}>{props.services[i].label}</Badge>);
+    let cardClass = null;
+    if (props.newMember) {
+        badges.push(<Badge key='newMember' className={[classes.Badge, classes.Orange].join(' ')}><NewReleasesIcon
+            fontSize='small' className={[classes.White, 'mr-1'].join(' ')}/>Új tag</Badge>);
+        cardClass = classes.CardHighlighted;
+    }
+    if (props.highlighted) {
+        badges.push(<Badge key='highlighted' className={[classes.Badge, classes.Orange].join(' ')}><LoyaltyIcon
+            fontSize='small' className={[classes.White, 'mr-1'].join(' ')}/>Kiemelt</Badge>);
+        cardClass = classes.CardHighlighted;
     }
 
-    return (
-        <div className={[classes.Item, "mb-3 d-flex"].join(' ')}>
+    for (let i = 0; i < props.services.length; i++) {
+        badges.push(<Badge key={i}
+                           className={[classes.Badge, classes.Normal].join(' ')}>{props.services[i].label}</Badge>);
+    }
 
-            <div className={[classes.Thumbnail, "d-flex justify-content-center"].join(' ')}>
-                {/*<img src={props.image} alt={props.name}/>*/}
-                <img className={classes.Img} src="upload/testimonials/kecskemeti_zsuzsi.jpeg" alt={props.name}/>
-            </div>
+    let title = props.name;
+    if (props.label) {
+        title += ' - ' + props.label;
+    }
 
-            <div className={[classes.InfoBox, "m-3 d-flex flex-column"].join(' ')}>
+    return (<div className={[classes.Item, cardClass, "mb-2 d-flex"].join(' ')}>
+
+        <div className={[classes.Thumbnail, "d-flex justify-content-center"].join(' ')}>
+            <img className={classes.Img} src="upload/testimonials/kecskemeti_zsuzsi.jpeg" alt={props.name}/>
+        </div>
+
+        <div className={[classes.InfoBox, "m-2 d-flex flex-column"].join(' ')}>
+            <div>
+                <Link href={`../bebiszitter/${props.slug}`} className={classes.Link}>
+                    <h5 className={classes.Title}>{title}</h5>
+                </Link>
+                <hr className="mb-2 mt-2"/>
                 <div>
-                    <h5 className="card-title">{props.name}</h5>
-                    <hr/>
-                    <div className="search-results__badges">
-                        {badges}
-                    </div>
-                    <div className="text-justify my-2">
-                        <p className="m-0">
-                            {props.shortIntroduction}
-                        </p>
-                    </div>
+                    {badges}
                 </div>
-                <div className={"mt-auto"}>
-                    <div>
-                        <small className="d-flex text-muted">
-                        <span className="search-item__card-address mb-0 pb-0 mr-4">
-                            <i className="fa fa-home mr-1" aria-hidden="true"/>{props.pubAddress}
-                        </span>
-                        <span className="search-item__card-phone ml-auto mb-0 pb-0">
-                            <i className="fa fa-phone-square mr-1" aria-hidden="true"/>{props.phone}
-                        </span>
-                        </small>
-                    </div>
+                <div className="text-justify my-2">
+                    <p className="m-0">
+                        {props.shortIntroduction}
+                    </p>
+                </div>
+            </div>
+            <div className={"mt-auto"}>
+                <div className="d-flex text-muted">
+                    <Box className="mb-0 pb-0 mr-2">
+                        <p className={classes.SubInfo}>
+                            <MapIcon className='mr-1' fontSize="small"/>{props.pubAddress}
+                        </p>
+                        <p className={classes.SubInfo}>
+                            <SavingsIcon className='mr-1' fontSize="small"/>{props.hourlyRate}
+                        </p>
+                    </Box>
+                    <Box className="ml-auto" sx={{
+                        display: 'flex',
+                        flexDirection: 'row-reverse',
+                        alignItems: 'flex-end',
+                        mr: 0,
+                        mt: 1,
+                        mb: 0
+                    }}>
+                        <Button className={classes.Button} href={`../bebiszitter/${props.slug}`} variant="outlined" size="small">Megnézem<KeyboardDoubleArrowRightIcon
+                            fontSize="small"/></Button>
+                    </Box>
                 </div>
             </div>
         </div>
-    );
+    </div>);
 }
 
 export default item;

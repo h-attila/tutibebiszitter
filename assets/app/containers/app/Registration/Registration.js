@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
-import Loadable from 'react-loadable';
-import Spinner from '../../../components/UI/Spinner/Spinner';
-
+import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Alert from '@material-ui/lab/Alert';
-import Box from '@material-ui/core/Box';
+import React, {Component} from 'react';
+import Loadable from 'react-loadable';
+
+import Spinner from '../../../components/UI/Spinner/Spinner';
+
 
 const RegistrationForm = Loadable({
     loader: () => import('../../../components/RegistrationForm/RegistrationForm'),
@@ -19,7 +20,7 @@ class Registration extends Component {
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Box mt={5}>
-                            <h1 class="text-center mt-5 mb-3" align="center">Jelentkezem bébiszitternek - TUTI bébiszitter-közvetítő</h1>
+                            <h1 className="text-center mt-5 mb-3" align="center">Jelentkezem bébiszitternek - TUTI bébiszitter-közvetítő</h1>
                         </Box>
                         <Box mt={1}>
                             <h3 align="center">Regisztrálj, és legyél Te is tuti bébiszitter!</h3>

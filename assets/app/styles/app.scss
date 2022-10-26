@@ -31,20 +31,20 @@ h4 {
 
 a {
     display: inline-block;
-    color: $purple-color;
+    color: $primaryColor;
 }
 
 a:hover {
     text-decoration: none;
-    color: $purple-color-light75;
+    color: $colorTwo;
 }
 
 svg {
-    color: $purple-color!important;
+    color: $primaryColor!important;
 }
 
 .shadow {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 0.5rem 1rem $bgShadow!important;
 }
 
 .btn-sm {
@@ -52,11 +52,11 @@ svg {
 }
 
 .purple-btn {
-    color: $white-color;
-    background-color: $purple-color;
+    color: $white;
+    background-color: $primaryColor;
 
     :hover {
-        background-color: $purple-color-light75;
+        background-color: $colorTwo;
     }
 }
 
@@ -69,7 +69,7 @@ svg {
 }
 
 .bg-purple {
-    background-color: $purple-color-light50;
+    background-color: $colorThree;
 }
 
 .navbar-nav {

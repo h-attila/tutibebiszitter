@@ -1,16 +1,17 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {Route, Switch, withRouter} from 'react-router-dom';
 import {ThemeProvider} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {Route, Switch, withRouter} from 'react-router-dom';
+
+import history from "../../app/store/history/history";
+import AuthService from "./../../admin/src/AuthService";
 import GlobalStyles from './../../admin/src/components/GlobalStyles';
 // import './mixins/chartjs';
 import theme from './../../admin/src/theme';
 // import TopBar from "./../../admin/src/layouts/DashboardLayout/TopBar";
 // import NavBar from "./../../admin/src/layouts/DashboardLayout/NavBar";
 import Account from "./view/account/AccountView";
-import AuthService from "./../../admin/src/AuthService";
-import history from "../../app/store/history/history";
 // import LoginViewProfile from './../../admin/src/views/auth/LoginViewProfile';
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\App\Api;
 
 use App\Entity\AdditionalService;
 use App\Entity\Group;
@@ -11,6 +11,7 @@ use App\Entity\Place;
 use App\Entity\Profile;
 use App\Entity\Service;
 use App\Form\ProfileFormType;
+use App\Repository\ProfileRepository;
 use App\Service\AdditionalServiceService;
 use App\Service\GroupService;
 use App\Service\LanguageService;
@@ -18,21 +19,28 @@ use App\Service\PackageService;
 use App\Service\PayModeService;
 use App\Service\PlaceService;
 use App\Service\ServiceService;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Symfony\Component\Validator\Constraints\Uuid as UuidConstraint;
+use Symfony\Component\Validator\Validation;
+use Throwable;
 
 /**
  * Class RegistrationController
@@ -42,14 +50,86 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
  */
 class RegistrationController extends AbstractController
 {
+//    protected const MAX_FILE_SIZE = '5120kbyte';      // 5M
+    protected const MAX_FILE_SIZE = '10kbyte';      // 5M
+    protected const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png'];
+    protected const IMG_WIDTH = 400;
+
+    protected Imagine $imagine;
+
     public function __construct(protected EntityManagerInterface     $em,
                                 protected ValidatorInterface         $validator,
                                 protected SluggerInterface           $slugger,
                                 protected SerializerInterface        $serializer,
                                 protected VerifyEmailHelperInterface $emailHelper,
-                                protected MailerInterface            $mailer
+                                protected MailerInterface            $mailer,
+                                protected ProfileRepository          $profileRepository,
+                                protected Filesystem                 $filesystem
     )
-    {}
+    {
+        $this->imagine = new Imagine();
+    }
+
+
+    /**
+     * @Rest\Post("/upload", methods={"POST"}, name="upload")
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function upload(Request $request): Response
+    {
+        /* @var UploadedFile $file */
+        $file = $request->files->get('file');
+        $uuid = $request->get('uuid');
+
+        $validator = Validation::createValidator();
+        $uuidConstraint = new UuidConstraint();
+        $uuidConstraint->message = 'Hiba történt a fájl feltöltés során: érvénytelen azonosító.';
+        $errors = $validator->validate(
+            $uuid,
+            $uuidConstraint
+        );
+
+        try {
+            if (empty($uuid) || empty($file) || count($errors) !== 0) {
+                throw new \Exception('Hiba történt a fájl feltöltés során: azonosító vagy a fájl nem található.');
+            }
+
+            /* @var Profile $profile */
+            $profile = $this->profileRepository->findOneBy(['uuid' => $uuid]);
+            if (empty($profile)) {
+                throw new \Exception('Hiba történt a fájl feltöltés során: a profil beazonosítása sikertelen.');
+            } elseif ($file->getSize() > self::MAX_FILE_SIZE) {
+                throw new \Exception('Hiba történt a fájl feltöltés során: a file mérete túl nagy, legfeljebb 5Mbyte lehet.');
+            } elseif (!in_array($file->guessExtension(), self::ALLOWED_EXTENSIONS)) {
+                throw new \Exception('Hiba történt a fájl feltöltés során: a file tipusa nem megfelelő. Csak "jpg", "jpeg" és "png" lehetséges.');
+            }
+
+            $dir = $this->getParameter('kernel.project_dir') . '/public/profiles/' . $profile->getId();
+            $fileName = 'profile.' . $file->guessExtension();
+
+            if (!$this->filesystem->exists($dir . '/' . $fileName)) {
+                $this->filesystem->mkdir($dir);
+            }
+            $file->move($dir, $fileName);
+
+            list($iheight, $iwidth) = getimagesize($dir . '/' . $fileName);
+            $ratio = $iheight / $iwidth;
+            $height = round($ratio * self::IMG_WIDTH);
+
+            $resized = $this->imagine->open($dir . '/' . $fileName);
+            $resized
+                ->rotate(90)
+                ->resize(new Box(self::IMG_WIDTH, $height))
+                ->save();
+
+        } catch (Throwable $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse(null, Response::HTTP_CREATED);
+    }
 
 
     /**
@@ -65,10 +145,10 @@ class RegistrationController extends AbstractController
 
         $form = $this->createForm(ProfileFormType::class, $profile);
         $data = json_decode($request->getContent(), true);
+
         $form->submit($data);
 
         if ($form->isValid()) {
-            $errors = [];
 
             if ($data['plainPassword'] !== $data['rePlainPassword']) {
                 $errors['plainPassword'] = 'A megadott jelszavak nem egyeznek.';
@@ -233,7 +313,7 @@ class RegistrationController extends AbstractController
 
             if (!empty($errors)) {
                 $response = [
-                  'errors' => $errors
+                    'errors' => $errors
                 ];
 
                 return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
@@ -246,24 +326,18 @@ class RegistrationController extends AbstractController
             $slug = $this->slugger->slug($data['name'], '-', 'de');
 
             $profile
-              ->setUuid($uuid)
-              ->setEnabled(false)
-              ->setActive(false)
-              ->setNewMember(true)
-              ->setSlug($slug)
-              ->setCreated($now)
-              ->setLastUpdate($now)
-              ->setRoles(['ROLE_USER']);
-
-//            $user = new User();
-//            $user->setEmail($data['email'])
-//              ->setRoles(['ROLE_USER'])
-//              ->setUuid($uuid)
-//              ->setProfile($profile);
+                ->setUuid($uuid)
+                ->setEnabled(false)
+                ->setActive(false)
+                ->setNewMember(true)
+                ->setSlug($slug)
+                ->setCreated($now)
+                ->setLastUpdate($now)
+                ->setRoles(['ROLE_USER']);
 
             $hashedPassword = $passwordHasher->hashPassword(
-              $profile,
-              $data['plainPassword']
+                $profile,
+                $data['plainPassword']
             );
 
             $profile->setPassword($hashedPassword);
@@ -298,7 +372,7 @@ class RegistrationController extends AbstractController
 //                return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
 //            }
 
-            return new JsonResponse(null, Response::HTTP_CREATED);
+            return new JsonResponse(['uuid' => $uuid], Response::HTTP_CREATED);
         }
 
         $msg = [];
@@ -309,7 +383,7 @@ class RegistrationController extends AbstractController
         }
 
         $response = [
-          'errors' => $msg
+            'errors' => $msg
         ];
 
         return new JsonResponse($response, Response::HTTP_BAD_REQUEST);

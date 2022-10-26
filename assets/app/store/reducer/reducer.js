@@ -1,5 +1,5 @@
-import * as actionTypes from '../actions/actionTypes';
 import AuthService from '../../../admin/src/AuthService';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
         search: {
@@ -44,7 +44,8 @@ const initialState = {
             error: null
         },
         testimonials: null,
-        packages: null
+        packages: null,
+        profile: null
     }
 ;
 
@@ -65,7 +66,6 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.SEARCH_ITEM_CHANGED: {
-            console.log('»» action', action);
             let value = null;
             if (action.value) {
                 action.value.value = action.value ? action.value.id : null;
@@ -84,7 +84,6 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.SEARCH_FORM_SEARCHING: {
-            console.log('### SEARCH_FORM_SEARCHING', action, state);
             return {
                 ...state,
                 search: {
@@ -143,16 +142,14 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.REGISTRATION_FORM_SUCCESS: {
-            console.log('»» REGISTRATION_FORM_SUCCESS', action, state);
-
             return {
                 ...state,
-                registration: {
-                    ...state.registration,
-                    formErrors: [],
-                    submitDisabled: false,
-                    successRegistration: true
-                }
+                    registration: {
+                        ...state.registration,
+                        formErrors: [],
+                        submitDisabled: false,
+                        successRegistration: true
+                    }
             }
         }
         case actionTypes.REGISTRATION_FORM_FAILED: {
@@ -188,7 +185,6 @@ const reducer = (state = initialState, action) => {
         case actionTypes.PROFILE_LOGIN:
             // case actionTypes.ADMIN_LOGIN:
         {
-            console.log('»» PROFILE_LOGIN');
             return {
                 ...state,
                 user: {
@@ -197,11 +193,10 @@ const reducer = (state = initialState, action) => {
                 }
             }
         }
-        case actionTypes.PROFILE_LOGIN_SUCCESS: {
-            // case actionTypes.ADMIN_LOGIN_SUCCESS: {
-            console.log('»» PROFILE_LOGIN_SUCCESS', action.result.data.token, action.result.data.profile.isAdmin);
+        case actionTypes.PROFILE_LOGIN_SUCCESS:
+        case actionTypes.ADMIN_LOGIN_SUCCESS: {
             if (!action.result.data.token) {
-                return;
+                return;     // todo: ide kell tenni a sikertelen ágat
             }
 
             AuthService.login(action.result.data);
@@ -229,9 +224,7 @@ const reducer = (state = initialState, action) => {
             return AuthService.getCurrentUser();
         }
         case actionTypes.PROFILE_LOGIN_CHANGED:
-            // case actionTypes.ADMIN_LOGIN_CHANGED:
-        {
-            console.log('»» reducer action', action);
+        case actionTypes.ADMIN_LOGIN_CHANGED: {
             return {
                 ...state,
                 user: {
@@ -241,8 +234,7 @@ const reducer = (state = initialState, action) => {
             }
         }
         case actionTypes.PROFILE_LOGIN_FAILED:
-            // case actionTypes.ADMIN_LOGIN_FAILED:
-        {
+        case actionTypes.ADMIN_LOGIN_FAILED: {
             return {
                 ...state,
                 user: {
@@ -252,18 +244,20 @@ const reducer = (state = initialState, action) => {
                     avatar: null,
                     role: null,
                     token: null,
-                    error: ''
+                    error: action.err.response.data.message ?? 'Hiba történt, kérlek, próbáld újra'
                 }
             }
         }
         case actionTypes.SHOW_ERROR_MESSAGE: {
-            console.log('»» hiba történt, hiba modal nyitás');
             return {
                 ...state,
-                registration: {
-                    ...state.registration,
-                    submitDisabled: false
-                }
+                error: 'Hiba történt'
+            }
+        }
+        case actionTypes.CLEAR_ERROR_MESSAGE: {
+            return {
+                ...state,
+                error: null
             }
         }
     }

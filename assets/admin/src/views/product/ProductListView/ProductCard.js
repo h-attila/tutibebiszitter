@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {
   Avatar,
   Box,
@@ -13,6 +10,9 @@ import {
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +69,7 @@ const ProductCard = ({ className, product, ...rest }) => {
       <Box p={2}>
         <Grid
           container
-          justify="space-between"
+          justifyContent="space-between"
           spacing={2}
         >
           <Grid

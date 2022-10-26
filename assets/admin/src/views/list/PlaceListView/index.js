@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from 'react';
 import {Box, Container, makeStyles} from '@material-ui/core';
+import axios from "axios";
+import React, {useEffect, useState} from 'react';
+
+import history from "../../../../../app/store/history/history";
+import AuthService from "../../../AuthService";
 import Page from '../../../components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
-import axios from "axios";
-import AuthService from "../../../AuthService";
-import history from "../../../../../app/store/history/history";
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,7 +34,7 @@ const PlaceListView = () => {
         }
 
         axios
-            .get('/admin/api/list-items/place/get-list/all', {headers: AuthService.getAuthHeader()})
+            .get('admin/api/list-items/place/get-list/all', {headers: AuthService.getAuthHeader()})
             .then(response => {
                 console.log('»» init', response.data);
                 setData(response.data);

@@ -24,7 +24,7 @@ class AdditionalService
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"admin_self", "admin_profile", "user_profile", "public"})
+     * @Groups({"admin_self", "admin_profile", "user_profile", "public_profile", "public"})
      */
     private $id;
 
@@ -43,7 +43,7 @@ class AdditionalService
      *     groups={"admin_admin"}
      *     )
      *
-     * @Groups({"admin_self", "admin_profile", "user_profile", "public"})
+     * @Groups({"admin_self", "admin_profile", "user_profile", "public_profile", "public"})
      */
     private $label;
 

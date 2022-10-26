@@ -1,7 +1,7 @@
 import React from 'react';
 
-import classes from './Spinner.scss';
 import spinnerImg from '../../../images/spinner.gif';
+import classes from './Spinner.scss';
 
 const spinner = () => (
     <div className="w-100">

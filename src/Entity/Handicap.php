@@ -24,7 +24,7 @@ class Handicap
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"admin_self", "admin_profile", "user_profile", "public"})
+     * @Groups({"admin_self", "admin_profile", "user_profile", "public_profile", "public"})
      */
     private $id;
 
@@ -43,7 +43,7 @@ class Handicap
      *     groups={"admin_admin"}
      *     )
      *
-     * @Groups({"admin_self", "admin_profile", "user_profile", "public"})
+     * @Groups({"admin_self", "admin_profile", "user_profile", "public_profile", "public"})
      */
     private $label;
 
@@ -97,9 +97,15 @@ class Handicap
      */
     private $profiles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SearchHistory::class, mappedBy="handicap")
+     */
+    private $searchHistories;
+
     public function __construct()
     {
         $this->profiles = new ArrayCollection();
+        $this->searchHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,6 +191,36 @@ class Handicap
     public function setWeight($weight)
     {
         $this->weight = $weight;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SearchHistory>
+     */
+    public function getSearchHistories(): Collection
+    {
+        return $this->searchHistories;
+    }
+
+    public function addSearchHistory(SearchHistory $searchHistory): self
+    {
+        if (!$this->searchHistories->contains($searchHistory)) {
+            $this->searchHistories[] = $searchHistory;
+            $searchHistory->setHandicap($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSearchHistory(SearchHistory $searchHistory): self
+    {
+        if ($this->searchHistories->removeElement($searchHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($searchHistory->getHandicap() === $this) {
+                $searchHistory->setHandicap(null);
+            }
+        }
+
         return $this;
     }
 }

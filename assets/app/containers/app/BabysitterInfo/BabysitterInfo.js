@@ -1,38 +1,35 @@
-import React, {Component} from 'react';
-
-import * as actionCreators from "../../../store/actions/actions";
-
-import Aux from '../../../hoc/Aux';
-import Article from '../../../components/Article/Article';
-import Button from '../../../components/UI/Button/Button';
-
-import Testimonials from '../../../components/Testimonials/Testimonials';
-import Prices from '../../../components/Prices/Prices';
-import {connect} from "react-redux";
 import CheckIcon from '@material-ui/icons/Check';
+import React, {Component} from 'react';
+import {connect} from "react-redux";
 
+import Article from '../../../components/Article/Article';
+import Prices from '../../../components/Prices/Prices';
+import Testimonials from '../../../components/Testimonials/Testimonials';
+import Button from '../../../components/UI/Button/Button';
+import Aux from '../../../hoc/Aux';
+import * as actionCreators from "../../../store/actions/actions";
 import classes from './BabysitterInfo.scss';
 
 class BabysitterInfo extends Component {
     render() {
         return (
             <Aux>
-                <section className="babysitter-info-page mt-3">
+                <section className={["babysitter-info-page", classes.BabysitterInfo].join(' ')}>
                     <div className="container">
                         <div className="row">
                             <div className="col">
                                 <article>
 
-                                    <h1 className="text-center mt-5 mb-3">Bébiszitter vagyok</h1>
+                                    <h1 className="text-center mb-3">Bébiszitter vagyok</h1>
 
-                                    <h2 className="text-center mt-3">Miért érdemes regisztrálnod a <a href="http://tutibebiszitter.hu"
-                                                                                                      target="_blank">www.tutibebiszitter.hu</a> oldalon ?</h2>
+                                    <h2 className="text-center">Miért érdemes regisztrálnod a <a href="http://tutibebiszitter.hu"
+                                                                                                      target="_blank" rel="noreferrer">www.tutibebiszitter.hu</a> oldalon ?</h2>
                                     <div className="container mt-4">
                                         <p>Amennyiben megtisztelsz bennünket jelentkezéseddel, a következő előnyöket tudjuk Számodra biztosítani:</p>
                                         <ul className="list-unstyled">
                                             <li><CheckIcon className="mr-2"/>Egy egyszerű és gyors regisztrációval bekerülsz
                                                 adatbázisunkba, így adatlapod megjelenik a <a
-                                                    href="http://tutibebiszitter.hu" target="_blank">www.tutibebiszitter.hu</a> oldalon, ahol a saját profilodat
+                                                    href="http://tutibebiszitter.hu" target="_blank" rel="noreferrer">www.tutibebiszitter.hu</a> oldalon, ahol a saját profilodat
                                                 bármikor tudod szerkeszteni.
                                             </li>
                                             <li><CheckIcon className="mr-2"/>Az ügyintézés gyors és rugalmas.</li>
@@ -153,7 +150,7 @@ class BabysitterInfo extends Component {
                                         A kiemelés díját az <strong>IQ-Help Kft.</strong> bankszámlaszámára tudod átutalni: OTP Bank,
                                         <strong>11705998-21300154</strong>.
                                         Kérjük, hogy utaláskor tüntesd fel a <strong>neved a közlemény rovatban</strong>, valamint azt, hogy <a
-                                        href="http://tutibebiszitter.hu" target="_blank">www.tutibebiszitter.hu</a>.
+                                        href="http://tutibebiszitter.hu" target="_blank" rel="noreferrer">www.tutibebiszitter.hu</a>.
                                     </p>
                                 </article>
                             </div>

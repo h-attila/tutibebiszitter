@@ -1,6 +1,6 @@
 import React from 'react';
-import classes from './MainToolBar.scss';
 
+import classes from './MainToolBar.scss';
 import NavLink from './NavLink/NavLink';
 
 const mainToolBar = () => (

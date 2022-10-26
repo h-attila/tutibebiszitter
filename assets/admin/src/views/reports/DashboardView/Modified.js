@@ -1,6 +1,3 @@
-import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import {
   Avatar,
   Card,
@@ -11,9 +8,12 @@ import {
   colors, Box
 } from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import {NavLink} from "react-router-dom";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import EditIcon from '@material-ui/icons/Edit';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React from 'react';
+import {NavLink} from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,7 +37,7 @@ const Modified = ({ className, userStatistics, ...rest }) => {
       <CardContent>
         <Grid
           container
-          justify="space-between"
+          justifyContent="space-between"
           spacing={3}
         >
           <Grid item>

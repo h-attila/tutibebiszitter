@@ -15,9 +15,12 @@ class AdminController extends AbstractController
 {
     /**
      * @Route("/{reactRouting}", name="dashboard", requirements={"reactRouting"="^(?!api).+"}, defaults={"reactRouting": null})
+     *
+     * @return Response
      */
     public function index(): Response
     {
         return $this->render('admin/index.html.twig', []);
     }
+
 }

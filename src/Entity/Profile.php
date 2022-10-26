@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=ProfileRepository::class)
  *
- * @Table(indexes={@Index(name="search_idx", columns={"uuid", "regStart", "regEnd", "enabled", "active", "newMember", "highlighted", "modified", "slug", "lastRenewed", "username"})})
+ * @Table(indexes={@Index(name="search_idx", columns={"uuid", "reg_start", "reg_end", "enabled", "active", "new_member", "highlighted", "modified", "slug", "last_renewed", "username"})})
  *
  * @UniqueEntity(fields="name", message="Ez a név már foglalt, kérjük, módosítsd.")
  * @UniqueEntity(fields="username", message="Ez a felhasználónév már foglalt, kérjük, módosítsd.")
@@ -33,7 +33,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $id;
 
@@ -95,7 +95,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\NotBlank (message="Név megadása kötelező.")
      * @Assert\Length (min=5, minMessage="A névnek legalább {{ limit }} karakter hosszúnak kell lennie.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $name;
 
@@ -118,7 +118,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\Uuid(message="Érvénytelen felhasználó azonosító.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $uuid;
 
@@ -151,7 +151,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     groups={"admin_admin"}
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $pubAddress;
 
@@ -169,7 +169,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Telefonszám hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $phone;
 
@@ -181,7 +181,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Web cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $web;
 
@@ -193,7 +193,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Facebook cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $facebook;
 
@@ -205,7 +205,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Instagram cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $instagram;
 
@@ -220,7 +220,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Rövid bemutatkozás hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search"})
      */
     private $shortIntroduction;
 
@@ -229,7 +229,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\NotBlank (message="Néhány mondatos bemutatkozó szöveg szükséges.")
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $introduction;
 
@@ -241,7 +241,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Számlázási név hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $invoiceName;
 
@@ -253,7 +253,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Számlázási cím hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $invoiceAddress;
 
@@ -290,7 +290,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="boolean", nullable=true)
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $newMember;
 
@@ -299,7 +299,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\Type("DateTime", message="Kiemelés vége dátum '{{value}}' érvénytelen.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $highlighted;
 
@@ -313,35 +313,35 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Service::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $services;
 
     /**
      * @ORM\ManyToMany(targetEntity=Place::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $places;
 
     /**
      * @ORM\ManyToMany(targetEntity=Language::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $languages;
 
     /**
      * @ORM\ManyToMany(targetEntity=Handicap::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $handicaps;
 
     /**
      * @ORM\ManyToMany(targetEntity=Group::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $groups;
 
@@ -350,14 +350,14 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\Type("DateTime", message="Újként nyilvántartva dátum '{{value}}' érvénytelen.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $newMemberSign;
 
     /**
      * @ORM\ManyToMany(targetEntity=AdditionalService::class, inversedBy="profiles")
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $additionalServices;
 
@@ -394,7 +394,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Regex("/^[\w-]+$/",
      *     message="A keresőbarát név ('web adatlap url', vagy SEO név) csak ékezet nélküli betűt, számot, és '-' karaktert tartalmazhat.")
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $slug;
 
@@ -406,7 +406,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="A 'title' hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $title;
 
@@ -418,7 +418,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="A meta leírás hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public_search", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_search", "public_profile"})
      */
     private $meta;
 
@@ -456,7 +456,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      *     maxMessage="Óradíj hossza legfeljebb {{ limit }} karakteres lehet."
      *     )
      *
-     * @Groups({"admin_profile", "user_profile", "public"})
+     * @Groups({"admin_profile", "user_profile", "public_profile"})
      */
     private $hourlyRate;
 
@@ -496,6 +496,39 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $username;
 
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
+     */
+    private $label;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
+     */
+    private $experience;
+
+    /**
+     * @ORM\Column(type="string", length=150, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
+     */
+    private $lookingFor;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Groups({"admin_admin", "admin_profile", "user_profile", "public_profile"})
+     */
+    private $preferredTime;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Hit::class, mappedBy="profile", orphanRemoval=true)
+     */
+    private $hits;
+
     #[Pure] public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -504,6 +537,7 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
         $this->handicaps = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->additionalServices = new ArrayCollection();
+        $this->hits = new ArrayCollection();
     }
 
 //    /**
@@ -1357,6 +1391,112 @@ class Profile implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMeta(string $meta): self
     {
         $this->meta = $meta;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string|null $label
+     * @return $this
+     */
+    public function setLabel(?string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getExperience(): ?string
+    {
+        return $this->experience;
+    }
+
+    /**
+     * @param string|null $experience
+     * @return $this
+     */
+    public function setExperience(?string $experience): self
+    {
+        $this->experience = $experience;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLookingFor(): ?string
+    {
+        return $this->lookingFor;
+    }
+
+    /**
+     * @param string|null $looking_for
+     * @return $this
+     */
+    public function setLookingFor(?string $looking_for): self
+    {
+        $this->lookingFor = $looking_for;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPreferredTime(): ?string
+    {
+        return $this->preferredTime;
+    }
+
+    /**
+     * @param ?string $preferredTime
+     * @return $this
+     */
+    public function setPreferredTime(?string $preferredTime): self
+    {
+        $this->preferredTime = $preferredTime;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Hit>
+     */
+    public function getHits(): Collection
+    {
+        return $this->hits;
+    }
+
+    public function addHit(Hit $hit): self
+    {
+        if (!$this->hits->contains($hit)) {
+            $this->hits[] = $hit;
+            $hit->setProfile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHit(Hit $hit): self
+    {
+        if ($this->hits->removeElement($hit)) {
+            // set the owning side to null (unless already changed)
+            if ($hit->getProfile() === $this) {
+                $hit->setProfile(null);
+            }
+        }
 
         return $this;
     }
